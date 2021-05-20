@@ -1,0 +1,53 @@
+<!--<form:form class="form-signin" name="form" id="form" role="form" modelAttribute="userVO" method="post" onsubmit="" action="${pageContext.request.contextPath}/user/login">-->
+
+
+    <!-- <div class="text-center mb-4">
+        <h1 class="h3 mb-3 font-weight-normal">HELLO WORLD</h1>
+    </div> -->
+{{>layout/header}}
+<style>
+    body {
+
+  padding-top: 70px;
+
+  padding-bottom: 30px;
+
+}
+</style>
+<script>
+		function fn_btnSignupClick(){
+			location.href="/login/signupForm";
+		}
+</script>
+<form>
+    <div>
+        <h2 id="title" onclick="return home();">HELLO WORLD</h2>
+    </div>
+
+    <div class="form-label-group">
+        <label for="uid" class="sr-only">User ID</label>
+        <input type="text" id="uid" name="uid" class="form-control" placeholder="User ID" required autofocus/>
+        <!--<form:input path="uid" id="uid" name="uid" class="form-control" placeholder="User ID" required="" autofocus=""/>-->
+    </div>
+
+    <div class="form-label-group">
+        <label for="password" class="sr-only">User Password</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="User Password" required />
+        <!--<form:password path="password" id="password" class="form-control" placeholder="User Password" required="" />-->
+    </div>
+
+    <!--<div id="remember"><form:checkbox path="rememberID"/>아이디 기억하기</div>-->
+
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+
+    <span style="font-size: 11pt;">
+		<a href="#" onClick="fn_btnSignupClick()">Sign Up</a>
+	</span>
+
+</form>
+
+<head>
+    <title>로그인 페이지</title>
+</head>
+
+{{>layout/footer}}

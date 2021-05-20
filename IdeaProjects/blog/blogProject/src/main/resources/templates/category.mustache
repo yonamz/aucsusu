@@ -1,0 +1,85 @@
+<style type="text/css">
+li a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+li a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
+
+a{
+	cursor: pointer;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    background-color: #f1f1f1;
+}
+li a {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+    #dropdown-content{
+		display: none;
+  		position: absolute;
+  		background-color: #f1f1f1;
+  		min-width: 160px;
+  		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  		z-index: 1;
+	}
+
+	#dropdown-content a {
+  		color: black;
+ 	 	padding: 12px 16px;
+  		text-decoration: none;
+  		display: block;
+	}
+
+	#dropdown-content a:hover {background-color: #ddd; cursor: pointer;}
+
+	#dropdown:hover #dropdown-content {display: block; cursor: pointer;}
+
+	#dropdown:hover #dropbtn {background-color: #3e8e41; cursor: pointer;}
+</style>
+<script type="text/javascript">
+    function confirmUser(){
+        document.getElementById('w').onclick = function(){
+				location.href="/board/boardList";
+				document.getElementById('w').onclick = null;
+			}
+
+			document.getElementById('l').onclick = function(){
+				location.href= "${pageContext.request.contextPath}/user/getUserList";
+				document.getElementById('l').onclick = null;
+			}
+			document.getElementById('m').onclick = function(){
+				location.href="${pageContext.request.contextPath}/message/getMsgList";
+				document.getElementById('m').onclick = null;
+			}
+			document.getElementById('s').onclick = function(){
+				location.href="${pageContext.request.contextPath}/message/getSendList";
+				document.getElementById('s').onclick = null;
+			}
+    }
+</script>
+<div class="category">
+    <ul>
+        <li><a class="active" href="#home">Home</a></li>
+        <li><a onclick="confirmUser();" id="w">글 작성하기</a></li>
+        <li><a onclick="confirmUser();" id="l">회원 목록 보기</a></li>
+        <li id="dropdown">
+            <a>쪽지함</a>
+            <div id="dropdown-content">
+                <a onclick="confirmUser();" id="m">받은 쪽지함</a>
+                <a onclick="confirmUser();" id="s">보낸 쪽지함</a>
+            </div>
+        </li>
+    </ul>
+</div>
