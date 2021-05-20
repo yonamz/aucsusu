@@ -1,2 +1,0 @@
-com/hyeon/book/springboot/Application.java
- com.hyeon.book.springboot.Application

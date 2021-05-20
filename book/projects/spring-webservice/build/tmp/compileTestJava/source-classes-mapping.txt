@@ -1,2 +1,0 @@
-com/hyeon/book/springboot/web/HelloControllerTest.java
- com.hyeon.book.springboot.web.HelloControllerTest
