@@ -1,15 +1,114 @@
 
 {{>layout/header}}
-    {{#user}}
-        {{user}}의 블로그
-        {{user}}님, 환영합니다.
-    {{/user}}
-    {{^user}}
-        <h1>웹페이지 샘플</h1>
-        <p>로그인이 필요합니다.</p>
-        <a href="/login" class="btn btn-info active" role="button">로그인</a>
-    {{/user}}
+<style>
+        h1{
+            text-align : center;
+            margin-top : 70px;
+        }
+        #loginblock{
+            align : right;
+            margin : 10px;
+        }
+        	#logo{
+                position:static;
+                height:100px;
+                top:10px;
+                margin-top:10px;
+                padding-top:20px;
+                margin-bottom:20px;
+                text-align:center;
+                cursor:pointer;
+	        }
+	        a{
+	            cursor: pointer;
+             }
 
-    {{>category}}
+
+
+	#preHR{
+		margin : 50px;
+	}
+	.navbar{
+		width: 90%;
+		margin-left:auto;
+		margin-right: auto;
+	}
+
+	#dropdown-content{
+		display: none;
+  		position: absolute;
+  		background-color: #f1f1f1;
+  		min-width: 160px;
+  		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  		z-index: 1;
+	}
+
+	#dropdown-content a {
+  		color: black;
+ 	 	padding: 12px 16px;
+  		text-decoration: none;
+  		display: block;
+	}
+
+	#dropdown-content a:hover {background-color: #ddd;}
+
+	#dropdown:hover #dropdown-content {display: block;}
+
+	#dropdown:hover #dropbtn {background-color: #3e8e41;}
+
+</style>
+<script>
+	function home(){
+		location.href="/";
+	}
+
+</script>
+<div class="logo">
+
+    {{#member}}
+        <h1 id="logo" onclick="return home();">{{member.name}}의 블로그</h1>
+        <div id="loginblock">
+            <p>{{member.name}}님, 환영합니다.</p>
+            현재 권한 : {{member.role.title}}
+            <a href="/logout" class="btn btn-info active" role="button">Logout</a>
+        </div>
+    {{/member}}
+    {{^member}}
+        <div id="loginblock">
+            <a href="/login/" class="btn btn-info active" role="button">로그인</a>
+            <p>로그인이 필요합니다.</p>
+        </div>
+        <h1 id="logo" onclick="return home();"> HELLO WORLD </h1>
+    {{/member}}
+
+</div>
+
+
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExample03">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/posts/index">글 작성하기 <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/user/getUserList">회원 목록<span class="sr-only">(current)</span></a>
+            </li>
+            <li id="dropdown">
+                <a class="nav-link">쪽지함</a>
+                <div id="dropdown-content">
+                    <a class="nav-link" href="/message/getSendList">보낸 쪽지함</a>
+                    <a class="nav-link" href="/message/getMsgList">받은 쪽지함</a>
+                </div>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-md-0">
+            <input class="form-control" type="text" placeholder="Search">
+        </form>
+    </div>
+</nav>
 
 {{>layout/footer}}

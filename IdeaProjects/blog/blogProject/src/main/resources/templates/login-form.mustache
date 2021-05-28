@@ -1,25 +1,28 @@
-<!--<form:form class="form-signin" name="form" id="form" role="form" modelAttribute="userVO" method="post" onsubmit="" action="${pageContext.request.contextPath}/user/login">-->
-
-
-    <!-- <div class="text-center mb-4">
-        <h1 class="h3 mb-3 font-weight-normal">HELLO WORLD</h1>
-    </div> -->
-{{>layout/header}}
+{{>layout/login_layout}}
 <style>
-    body {
-
-  padding-top: 70px;
-
-  padding-bottom: 30px;
-
-}
+    #title{
+        cursor:pointer;
+    }
+    #signupBtn{
+        margin-top : 15px;
+        margin-bottom : 15px;
+    }
 </style>
 <script>
-		function fn_btnSignupClick(){
+		function signup(){
 			location.href="/login/signupForm";
 		}
+		function home(){
+		    location.href="/";
+	    }
+
 </script>
-<form>
+<head>
+    <title>로그인 페이지</title>
+</head>
+
+<body>
+<form class="form-signin" name="form" id="form" role="form" method="post" action="/login/user">
     <div>
         <h2 id="title" onclick="return home();">HELLO WORLD</h2>
     </div>
@@ -38,16 +41,17 @@
 
     <!--<div id="remember"><form:checkbox path="rememberID"/>아이디 기억하기</div>-->
 
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
 
-    <span style="font-size: 11pt;">
-		<a href="#" onClick="fn_btnSignupClick()">Sign Up</a>
-	</span>
+    <button class="btn btn-lg btn-primary btn-block" type="button" onclick="return signup();">JOIN</button>
+    <!--<span id="signupBtn" style="font-size: 11pt;">
+		<a href="#" onClick="fn_btnSignupClick()">Join as</a>
+	</span>-->
+
+    <br>
+    <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a><br>
+    <a href="/oauth2/authorization/naver" class="btn btn-secondary active" role="button">Naver Login</a>
 
 </form>
+</body>
 
-<head>
-    <title>로그인 페이지</title>
-</head>
-
-{{>layout/footer}}
