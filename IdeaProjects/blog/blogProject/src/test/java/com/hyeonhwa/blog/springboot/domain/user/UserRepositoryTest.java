@@ -33,18 +33,18 @@ public class UserRepositoryTest {
         String reg_date="2021-05-20";
 
         userRepository.save(User.builder()
-        .uid(uid).user_name(user_name)
-        .password(password).confirmpw(password).user_email(user_email)
-        .user_birth(user_birth).reg_date(reg_date).build());
+        .uid(uid).name(user_name)
+        .password(password).email(user_email)
+        .birth(user_birth).reg_date(reg_date).build());
 
         List<User> userList = userRepository.findAll();
 
         User user = userList.get(0);
         assertThat(user.getUid()).isEqualTo(uid);
-        assertThat(user.getUser_name()).isEqualTo(user_name);
+        assertThat(user.getName()).isEqualTo(user_name);
         assertThat(user.getPassword()).isEqualTo(password);
-        assertThat(user.getUser_email()).isEqualTo(user_email);
-        assertThat(user.getUser_birth()).isEqualTo(user_birth);
+        assertThat(user.getEmail()).isEqualTo(user_email);
+        assertThat(user.getBirth()).isEqualTo(user_birth);
         assertThat(user.getReg_date()).isEqualTo(reg_date);
         /* String uid;
     String user_name;

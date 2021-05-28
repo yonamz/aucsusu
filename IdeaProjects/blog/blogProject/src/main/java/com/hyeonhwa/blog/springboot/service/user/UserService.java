@@ -1,0 +1,52 @@
+package com.hyeonhwa.blog.springboot.service.user;
+
+import com.hyeonhwa.blog.springboot.domain.member.Role;
+import com.hyeonhwa.blog.springboot.domain.user.User;
+import com.hyeonhwa.blog.springboot.domain.user.UserRepository;
+import com.hyeonhwa.blog.springboot.web.dto.UserSaveRequestDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+
+@RequiredArgsConstructor
+@Service
+public class UserService implements UserDetailsService{
+
+    private final UserRepository userRepository;
+
+    @Transactional
+    public Long save(UserSaveRequestDto userSaveRequestDto){
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        userSaveRequestDto.setPassword(passwordEncoder.encode(userSaveRequestDto.getPassword()));
+        return userRepository.save(userSaveRequestDto.toEntity()).getId();
+    }
+
+    @Override
+    public User loadUserByUsername(String uid) throws UsernameNotFoundException {
+        User user=userRepository.findByUid(uid)
+                .orElseThrow(()->new UsernameNotFoundException((uid+" 해당 아이디가 존재하지 않음")));
+        //System.out.println("비밀번호 : "+us);
+        return userRepository.findByPassword(user.getUid(), user.getPassword());
+        /* System.out.println(userRepository.findByPassword(uid, user.getPassword()));
+       return userRepository.findByPassword(uid, user.getPassword());*/
+    }
+
+    public User login(String uid, String password) throws UsernameNotFoundException{
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        User user=userRepository.findByUid(uid)
+                .orElseThrow(()->new UsernameNotFoundException((uid+" 해당 아이디가 존재하지 않음")));
+
+        if(encoder.matches(password,user.getPassword())){
+            password=user.getPassword();
+        }
+
+        return userRepository.findByPassword(uid, password);
+    }
+
+}
