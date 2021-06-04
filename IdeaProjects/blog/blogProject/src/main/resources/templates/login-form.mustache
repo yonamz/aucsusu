@@ -44,9 +44,10 @@
     <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
 
     <button class="btn btn-lg btn-primary btn-block" type="button" onclick="return signup();">JOIN</button>
-    <!--<span id="signupBtn" style="font-size: 11pt;">
-		<a href="#" onClick="fn_btnSignupClick()">Join as</a>
-	</span>-->
+
+    {{#error}}
+        <p>로그인 에러</p>
+    {{/error}}
 
     <br>
     <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a><br>

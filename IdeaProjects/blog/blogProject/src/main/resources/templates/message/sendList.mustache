@@ -1,0 +1,59 @@
+{{>layout/header}}
+{{>category}}
+<head>
+    <title>보낸 쪽지함</title>
+
+    <style type="text/css">
+		img{
+			width:30px;
+			height: 30px;
+		}
+
+
+		h2{
+			margin-top : 50px;
+			margin-bottom : 30px;
+			font-family: "My Font";
+			}
+
+
+
+	</style>
+</head>
+<div class="container">
+
+    <h2>보낸 쪽지함</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <colgroup>
+                <col style="width:10%;" />
+                <col style="width:25%;" />
+                <col style="width:25%;" />
+                <col style="width:auto;" />
+            </colgroup>
+            <thead>
+            <tr>
+                <th>받은 사람</th>
+                <th>제목</th>
+                <th>날짜</th>
+                <th>시간</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {{^sendList}}
+                <tr><td colspan="6" text-align="center">쪽지가 없습니다.</td></tr>
+            {{/sendList}}
+
+            {{#sendList}}
+                <td>{{recipient}}</td>
+                <td>{{title}}</td>
+                <td>{{sendDate}}</td>
+                <td>{{sendTime}}</td>
+            {{/sendList}}
+            </tbody>
+        </table>
+
+    </div>
+{{>layout/footer}}
