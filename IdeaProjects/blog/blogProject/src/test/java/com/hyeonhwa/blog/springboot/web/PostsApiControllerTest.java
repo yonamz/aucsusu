@@ -3,8 +3,9 @@ package com.hyeonhwa.blog.springboot.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hyeonhwa.blog.springboot.domain.posts.PostsRepository;
 import com.hyeonhwa.blog.springboot.domain.posts.Posts;
-import com.hyeonhwa.blog.springboot.web.dto.PostsSaveRequestDto;
-import com.hyeonhwa.blog.springboot.web.dto.PostsUpdateRequestDto;
+import com.hyeonhwa.blog.springboot.web.dto.posts.PostsSaveRequestDto;
+import com.hyeonhwa.blog.springboot.web.dto.posts.PostsUpdateRequestDto;
+import com.hyeonhwa.blog.springboot.web.dto.user.UserSaveRequestDto;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -67,6 +68,7 @@ public class PostsApiControllerTest {
         //given
         String title = "title";
         String content = "content";
+        UserSaveRequestDto userSaveRequestDto;
         PostsSaveRequestDto requestDto = PostsSaveRequestDto.builder()
                 .title(title)
                 .content(content)

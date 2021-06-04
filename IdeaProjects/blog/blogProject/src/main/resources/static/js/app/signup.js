@@ -19,8 +19,18 @@ var main2 = {
                         email.focus();
                         return false;
                     }
+                    _this.saveChk();
                     _this.save();
+
                 });
+
+                $('#btnCancel').on('click', function () {
+                     _this.cancel();
+                });
+
+                $('#chkID').on('click', function (){
+                    _this.idChk();
+                })
         },
         check: function(re, what, message){
                if(re.test(what.value)){
@@ -55,7 +65,7 @@ var main2 = {
                 			return false;
                 		}
 
-                     if(name.value==""||name.value==" "){
+                   if(name.value==""||name.value==" "){
                     	 alert("이름을 입력해주세요");
                     	 name.value="";
                     	 name.focus();
@@ -94,7 +104,54 @@ var main2 = {
                 }).fail(function (error) {
                     alert(JSON.stringify(error));
                 });
+            },
+
+            idChk : function(){     //https://1-7171771.tistory.com/78 참고
+                      var id = $('#uid').val();
+
+                       $.ajax({
+                                type : "GET",
+                            	url : "/user/"+id+"/exists",
+                            	data:{id}
+                            }).done(function(result){
+                                if(result==false){
+                                    alert('사용 가능한 아이디 입니다');
+                                }else{
+                                    alert('중복된 아이디 입니다');
+                                }
+                            }).fail(function(error) {
+                            	alert(JSON.stringify(error));
+                            });
+             },
+             saveChk : function(){     //https://1-7171771.tistory.com/78 참고
+                                   var id = $('#uid').val();
+
+                                    $.ajax({
+                                             type : "GET",
+                                         	url : "/user/"+id+"/exists",
+                                         	data:{id},
+                                         	async:false
+                                         }).done(function(result){
+                                             if(result==false){
+                                                 return true;
+                                             }else{
+                                                 alert('중복된 아이디 입니다');
+                                                 return fail;
+                                             }
+                                         }).fail(function(error) {
+                                         	alert(JSON.stringify(error));
+                                         });
+                          },
+
+            cancel : function(){
+                $('#uid').val('');
+                $('#password').val('');
+                $('#confirmpw').val('');
+                $('#name').val('');
+                $('#email').val('');
+                $('#birth').val('');
             }
+
     };
 
 main2.init();

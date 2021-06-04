@@ -1,4 +1,4 @@
-package com.hyeonhwa.blog.springboot.web.dto;
+package com.hyeonhwa.blog.springboot.web.dto.posts;
 
 import lombok.Builder;
 import lombok.Getter;

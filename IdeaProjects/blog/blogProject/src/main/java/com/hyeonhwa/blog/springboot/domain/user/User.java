@@ -10,9 +10,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -26,12 +28,14 @@ public class User implements UserDetails{
     @Column(nullable = false)
     private String uid;
 
+    @NotBlank(message = "아이디를 입력해주세요")
     @Column
     private String name;
 
     @Column
     private String password;
 
+    @Email(message = "올바른 이메일 주소를 입력해주세요.")
     @Column
     private String email;
 
@@ -43,12 +47,12 @@ public class User implements UserDetails{
     private Role role;
 
     @Column
-    private String reg_date;
+    private LocalDate reg_date;
 
 
 
     @Builder
-    public User(String uid, String name, String password,String email, int birth,Role role,String reg_date){
+    public User(String uid, String name, String password,String email, int birth,Role role,LocalDate reg_date){
         this.uid=uid;
         this.name=name;
         this.password=password;

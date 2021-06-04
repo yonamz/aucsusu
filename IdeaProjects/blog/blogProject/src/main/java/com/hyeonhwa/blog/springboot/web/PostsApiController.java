@@ -1,9 +1,9 @@
 package com.hyeonhwa.blog.springboot.web;
 
 import com.hyeonhwa.blog.springboot.service.posts.PostsService;
-import com.hyeonhwa.blog.springboot.web.dto.PostsResponseDto;
-import com.hyeonhwa.blog.springboot.web.dto.PostsSaveRequestDto;
-import com.hyeonhwa.blog.springboot.web.dto.PostsUpdateRequestDto;
+import com.hyeonhwa.blog.springboot.web.dto.posts.PostsResponseDto;
+import com.hyeonhwa.blog.springboot.web.dto.posts.PostsSaveRequestDto;
+import com.hyeonhwa.blog.springboot.web.dto.posts.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

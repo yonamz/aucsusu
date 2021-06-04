@@ -1,4 +1,4 @@
-package com.hyeonhwa.blog.springboot.web.dto;
+package com.hyeonhwa.blog.springboot.web.dto.user;
 
 import com.hyeonhwa.blog.springboot.domain.member.Role;
 import com.hyeonhwa.blog.springboot.domain.user.User;
@@ -6,11 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-
-import java.util.Collection;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -22,10 +19,10 @@ public class UserSaveRequestDto {
     private String email;
     private int birth;
     private Role role;
-    private String reg_date;
+    private LocalDate reg_date;
 
     @Builder
-    public UserSaveRequestDto(String uid, String name, String password,String email, int birth, Role role,String reg_date){
+    public UserSaveRequestDto(String uid, String name, String password,String email, int birth, Role role,LocalDate reg_date){
         this.uid=uid;
         this.name=name;
         this.password=password;
@@ -42,7 +39,7 @@ public class UserSaveRequestDto {
                 .email(email)
                 .password(password).birth(birth)
                 .role(role)
-                .reg_date("2021-05-26").build();
+                .reg_date(LocalDate.now()).build();
     }
 
 

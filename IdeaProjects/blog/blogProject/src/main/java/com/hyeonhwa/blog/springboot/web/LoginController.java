@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +32,7 @@ public class LoginController {
     }
 
     @PostMapping(value = "/user")
-    public String login(HttpServletRequest req, Model model,String uid, String password){
+    public String login(HttpServletRequest req, Model model, String uid, String password, RedirectAttributes rttr){
         HttpSession session = req.getSession();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -39,10 +40,10 @@ public class LoginController {
 
         if(user == null){
             model.addAttribute("member",null);
+            model.addAttribute("error",true);
             System.out.println("로그인 실패");
-            return "redirect:/login/";
+            return "login-form";
         }else{
-            System.out.println("로그인 성공");
             model.addAttribute("member",user);
             session.setAttribute("member", user);
             return "redirect:/";

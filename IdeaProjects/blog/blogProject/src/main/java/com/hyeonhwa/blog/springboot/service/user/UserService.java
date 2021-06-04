@@ -1,16 +1,18 @@
 package com.hyeonhwa.blog.springboot.service.user;
 
-import com.hyeonhwa.blog.springboot.domain.member.Role;
 import com.hyeonhwa.blog.springboot.domain.user.User;
 import com.hyeonhwa.blog.springboot.domain.user.UserRepository;
-import com.hyeonhwa.blog.springboot.web.dto.UserSaveRequestDto;
+import com.hyeonhwa.blog.springboot.web.dto.user.UserResponseDto;
+import com.hyeonhwa.blog.springboot.web.dto.user.UserSaveRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -47,6 +49,17 @@ public class UserService implements UserDetailsService{
         }
 
         return userRepository.findByPassword(uid, password);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserResponseDto> findAllDesc(){
+        return userRepository.findAllDesc().stream()
+                .map(UserResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    public boolean checkUidDuplicate(String uid){
+        return userRepository.existsByUid(uid);
     }
 
 }

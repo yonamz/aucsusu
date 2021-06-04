@@ -5,6 +5,7 @@ import com.hyeonhwa.blog.springboot.domain.user.User;
 import lombok.Getter;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Getter
 public class SessionUser implements Serializable {
@@ -13,7 +14,7 @@ public class SessionUser implements Serializable {
     private String password;
     private String email;
     private int birth;
-    private String reg_date;
+    private LocalDate reg_date;
 
     public SessionUser(User user){
         this.uid=user.getUid();

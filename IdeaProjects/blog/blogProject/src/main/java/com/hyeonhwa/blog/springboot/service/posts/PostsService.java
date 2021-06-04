@@ -2,10 +2,10 @@ package com.hyeonhwa.blog.springboot.service.posts;
 
 import com.hyeonhwa.blog.springboot.domain.posts.Posts;
 import com.hyeonhwa.blog.springboot.domain.posts.PostsRepository;
-import com.hyeonhwa.blog.springboot.web.dto.PostsListResponseDto;
-import com.hyeonhwa.blog.springboot.web.dto.PostsResponseDto;
-import com.hyeonhwa.blog.springboot.web.dto.PostsSaveRequestDto;
-import com.hyeonhwa.blog.springboot.web.dto.PostsUpdateRequestDto;
+import com.hyeonhwa.blog.springboot.web.dto.posts.PostsListResponseDto;
+import com.hyeonhwa.blog.springboot.web.dto.posts.PostsResponseDto;
+import com.hyeonhwa.blog.springboot.web.dto.posts.PostsSaveRequestDto;
+import com.hyeonhwa.blog.springboot.web.dto.posts.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
