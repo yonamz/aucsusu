@@ -46,12 +46,11 @@
     <button class="btn btn-lg btn-primary btn-block" type="button" onclick="return signup();">JOIN</button>
 
     {{#error}}
-        <p>로그인 에러</p>
+        <p style="color:red; align:center;">로그인 에러</p>
+        <p style="color:red; align:center;">아이디와 비밀번호를 다시 입력해주세요</p>
     {{/error}}
 
     <br>
-    <a href="/oauth2/authorization/google" class="btn btn-success active" role="button">Google Login</a><br>
-    <a href="/oauth2/authorization/naver" class="btn btn-secondary active" role="button">Naver Login</a>
 
 </form>
 </body>

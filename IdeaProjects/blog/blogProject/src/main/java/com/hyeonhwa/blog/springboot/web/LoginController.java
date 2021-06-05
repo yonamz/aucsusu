@@ -26,6 +26,11 @@ public class LoginController {
         return "login-form";
     }
 
+    @PostMapping(value = "/")
+    public String errorLoginForm(){
+        return "login-form";
+    }
+
     @GetMapping(value = "/signupForm")
     public String signupForm(){
         return "signupForm";
@@ -39,8 +44,8 @@ public class LoginController {
         User user = userService.login(uid,password);
 
         if(user == null){
-            model.addAttribute("member",null);
-            model.addAttribute("error",true);
+            session.setAttribute("member", null);
+            rttr.addFlashAttribute("error",true);
             System.out.println("로그인 실패");
             return "login-form";
         }else{
