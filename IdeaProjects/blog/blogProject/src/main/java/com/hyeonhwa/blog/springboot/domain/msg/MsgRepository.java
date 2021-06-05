@@ -11,4 +11,6 @@ public interface MsgRepository extends JpaRepository<Message,Long> {
 
     @Query("SELECT m FROM Message m, User u WHERE (m.sender = u.uid) and (m.sender=:uid) ORDER BY m.msgNo desc")
     List<Message> getSendList(String uid);
+
+    Message findByMsgNo(Long msgNo);
 }

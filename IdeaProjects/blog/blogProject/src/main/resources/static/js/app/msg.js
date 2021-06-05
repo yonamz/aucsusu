@@ -5,7 +5,13 @@ var main3 = {
         $('#btnSubmit').on('click', function () {
             _this.submit();
         });
+
+        $('#btn-delete').on('click', function () {
+            _this.delete();
+        });
+
       },
+
       submit: function(){
         var data = {
             title: $('#title').val(),
@@ -27,6 +33,22 @@ var main3 = {
                 alert(JSON.stringify(error));
         });
 
+      },
+
+      delete : function(){
+        var msgNo = $('#msgNo').val();
+
+                $.ajax({
+                    type: 'DELETE',
+                    url: '/message/'+msgNo,
+                    dataType: 'json',
+                    contentType:'application/json; charset=utf-8'
+                }).done(function() {
+                    alert('쪽지가 삭제되었습니다.');
+                    window.location.href = '/message/getMsgList';
+                }).fail(function (error) {
+                    alert(JSON.stringify(error));
+                });
       }
 
 };

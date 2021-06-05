@@ -35,4 +35,14 @@ public class MsgService {
         return msgRepository.getSendList(uid);
     }
 
+    @Transactional
+    public Message findByMsgNo(Long msgNo){
+        return msgRepository.findByMsgNo(msgNo);
+    }
+
+    @Transactional
+    public void delete(Long msgNo){
+        Message msg = msgRepository.findByMsgNo(msgNo);
+        msgRepository.delete(msg);
+    }
 }

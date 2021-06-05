@@ -16,19 +16,23 @@ import javax.servlet.http.HttpSession;
 @RequiredArgsConstructor
 @Controller
 @RequestMapping(value = "/message")
-public class messageController {
+public class MessageController {
 
     private final MsgService msgService;
 
     private final UserRepository userRepository;
 
-    @GetMapping("/writeMsg/{uid}")
-    public String writeMsg(@PathVariable String uid, Message msg, Model model){
-        //request.setCharacterEncoding("UTF-8");
-        model.addAttribute("sender",userRepository.findByUid(uid).get());
+    @GetMapping(value = "/writeMsg/{uid}")
+    public String writeMsg(@PathVariable String uid, Model model){
+        model.addAttribute("sender",userRepository.findByUid(uid).get());   //path=uid;
         return "/message/writeMsg";
     }
 
+    @GetMapping(value = "/writeReMsg/{sender}")
+    public String writeReMsg(@PathVariable String sender, Model model){
+        model.addAttribute("sender", userRepository.findByUid(sender).get());
+        return "/message/writeMsg";
+    }
 
     @GetMapping(value = "/getMsgList")
     public String getMsgList(Model model, HttpServletRequest request, HttpSession session){
@@ -60,5 +64,18 @@ public class messageController {
         return "/message/sendList";
     }
 
+    @GetMapping(value = "/msgView/{msgNo}")
+    public String msgView(@PathVariable Long msgNo,Model model){
+        model.addAttribute("msgDetail",msgService.findByMsgNo(msgNo));
+
+        return "/message/msgView";
+    }
+
+    @GetMapping(value = "/sendView/{msgNo}")
+    public String sendView(@PathVariable Long msgNo, Model model){
+        model.addAttribute("msgDetail", msgService.findByMsgNo(msgNo));
+
+        return "/message/sendView";
+    }
 
 }

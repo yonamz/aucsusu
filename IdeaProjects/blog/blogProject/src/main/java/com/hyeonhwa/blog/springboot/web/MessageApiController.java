@@ -23,4 +23,10 @@ public class MessageApiController {
         String sender = user.getUid();
         return msgService.save(msg,sender);
     }
+
+    @DeleteMapping(value = "/{msgNo}")
+    public Long delete(@PathVariable Long msgNo){
+        msgService.delete(msgNo);
+        return msgNo;
+    }
 }

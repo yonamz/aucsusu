@@ -47,13 +47,15 @@
             {{/sendList}}
 
             {{#sendList}}
-                <td>{{recipient}}</td>
-                <td>{{title}}</td>
-                <td>{{sendDate}}</td>
-                <td>{{sendTime}}</td>
+                <tr>
+                    <td>{{recipient}}</td>
+                    <td><a href="/message/sendView/{{msgNo}}">{{title}}</a></td>
+                    <td>{{sendDate}}</td>
+                    <td>{{sendTime}}</td>
+                </tr>
             {{/sendList}}
             </tbody>
         </table>
 
     </div>
-{{>layout/footer}}
+{{>layout/msg-footer}}
