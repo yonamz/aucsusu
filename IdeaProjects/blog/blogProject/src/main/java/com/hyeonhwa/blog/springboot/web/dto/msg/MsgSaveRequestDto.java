@@ -21,15 +21,19 @@ public class MsgSaveRequestDto {
     String content;
     LocalDate sendDate;
     LocalTime sendTime;
+    Boolean confirmRead;
+    Boolean delMsg;
 
     @Builder
-    public MsgSaveRequestDto(String sender,String recipient, String title, String content, LocalDate sendDate, LocalTime sendTime){
+    public MsgSaveRequestDto(String sender,String recipient, String title, String content, LocalDate sendDate, LocalTime sendTime,Boolean confirmRead,Boolean delMsg){
         this.title = title;
         this.content = content;
         this.sender=sender;
         this.recipient=recipient;
         this.sendDate=sendDate;
         this.sendTime=sendTime;
+        this.confirmRead=confirmRead;
+        this.delMsg=delMsg;
     }
 
     public Message toEntity(String sender1){
@@ -40,6 +44,8 @@ public class MsgSaveRequestDto {
                 .sender(sender1)
                 .sendDate(LocalDate.now())
                 .sendTime(LocalTime.now())
+                .confirmRead(false)
+                .delMsg(false)
                 .build();
     }
 }

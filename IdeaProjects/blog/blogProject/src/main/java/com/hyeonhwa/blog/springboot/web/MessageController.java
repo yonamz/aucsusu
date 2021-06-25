@@ -41,7 +41,8 @@ public class MessageController {
         User user = (User) session.getAttribute("member");
         String uid = user.getUid();
         model.addAttribute("msgList", msgService.getMsgList(uid));
-        //model.addAttribute("allcnt",msgService.readMsgCnt(uid));
+        model.addAttribute("countMsg",msgService.countMsg(uid));
+        model.addAttribute("readMsg",msgService.countReadMsg(uid));
         //model.addAttribute("noReadMsg",msgService.confirmRead(uid));
 
         return "/message/msgList";
@@ -66,7 +67,7 @@ public class MessageController {
 
     @GetMapping(value = "/msgView/{msgNo}")
     public String msgView(@PathVariable Long msgNo,Model model){
-        model.addAttribute("msgDetail",msgService.findByMsgNo(msgNo));
+        model.addAttribute("msgDetail",msgService.findBysendMsgNo(msgNo));
 
         return "/message/msgView";
     }
@@ -77,5 +78,7 @@ public class MessageController {
 
         return "/message/sendView";
     }
+
+
 
 }

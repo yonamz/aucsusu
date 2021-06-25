@@ -37,14 +37,24 @@ public class Message {
 
     LocalTime sendTime;
 
+    Boolean confirmRead;
+
+    Boolean delMsg;
+
     @Builder
-    public Message( String sender, String recipient, String title, String content, LocalDate sendDate, LocalTime sendTime){
+    public Message( String sender, String recipient, String title, String content, LocalDate sendDate, LocalTime sendTime, Boolean confirmRead, Boolean delMsg){
         this.title = title;
         this.content = content;
         this.sender=sender;
         this.recipient=recipient;
         this.sendDate=sendDate;
         this.sendTime=sendTime;
+        this.confirmRead=confirmRead;
+        this.delMsg = delMsg;
+    }
+
+    public void updateRead(Boolean confirmRead){
+        this.confirmRead=confirmRead;
     }
 
 }

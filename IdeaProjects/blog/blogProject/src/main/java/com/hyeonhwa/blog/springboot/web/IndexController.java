@@ -1,5 +1,6 @@
 package com.hyeonhwa.blog.springboot.web;
 
+import com.hyeonhwa.blog.springboot.config.auth.dto.SessionUser;
 import com.hyeonhwa.blog.springboot.domain.user.User;
 import com.hyeonhwa.blog.springboot.service.posts.PostsService;
 import com.hyeonhwa.blog.springboot.service.user.UserService;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +30,7 @@ public class IndexController {
     public String index(Model model){
         model.addAttribute("posts", postsService.findAllDesc());
         User user = (User)httpSession.getAttribute("member");
+        //SessionUser user1 = (SessionUser) httpSession.getAttribute("user");
         if(user!=null){
             model.addAttribute("member",user);
         }
@@ -35,11 +38,12 @@ public class IndexController {
     }
 
     @GetMapping(value = "/logout")
-    public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
         new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
         httpSession.invalidate();
         return "redirect:/";
     }
+
 
     @GetMapping(value="/posts/index")
     public String postsIndex(Model model){
@@ -65,5 +69,17 @@ public class IndexController {
     public String getUserList(Model model){
         model.addAttribute("userList",userService.findAllDesc());
         return "user-list";
+    }
+
+    @GetMapping(value = "/user/updateView")
+    public String updateView(Model model, HttpSession session){
+        model.addAttribute("user",session.getAttribute("member"));
+        return "user-update";
+    }
+
+    @GetMapping(value = "/user/deleteView")
+    public String deleteUser(Model model, HttpSession session){
+        model.addAttribute("user", session.getAttribute("member"));
+        return "user-delete";
     }
 }

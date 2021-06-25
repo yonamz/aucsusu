@@ -7,8 +7,18 @@ var main3 = {
         });
 
         $('#btn-delete').on('click', function () {
+            if(confirm("쪽지를 삭제하시겠습니까?") == false){
+                return;
+            }
             _this.delete();
         });
+
+        $('#deleteMsg').on('click', function () {
+              if(confirm("쪽지를 삭제하시겠습니까?") == false){
+                  return;
+              }
+                 _this.deleteMsg();
+          });
 
       },
 
@@ -49,7 +59,23 @@ var main3 = {
                 }).fail(function (error) {
                     alert(JSON.stringify(error));
                 });
-      }
+      },
+
+      deleteMsg : function(){
+                        var msgNo = $('#msgNo').val();
+
+                                $.ajax({
+                                    type: 'DELETE',
+                                    url: '/message/delete/'+msgNo,
+                                    dataType: 'json',
+                                    contentType:'application/json; charset=utf-8'
+                                }).done(function() {
+                                    alert('쪽지가 삭제되었습니다.');
+                                    window.location.href = '/message/getSendList';
+                                }).fail(function (error) {
+                                    alert(JSON.stringify(error));
+                                });
+                      }
 
 };
 

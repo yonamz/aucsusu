@@ -4,6 +4,7 @@ import com.hyeonhwa.blog.springboot.domain.user.User;
 import com.hyeonhwa.blog.springboot.domain.user.UserRepository;
 import com.hyeonhwa.blog.springboot.web.dto.user.UserResponseDto;
 import com.hyeonhwa.blog.springboot.web.dto.user.UserSaveRequestDto;
+import com.hyeonhwa.blog.springboot.web.dto.user.UserUpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,6 +63,25 @@ public class UserService implements UserDetailsService{
 
     public boolean checkUidDuplicate(String uid){
         return userRepository.existsByUid(uid);
+    }
+
+
+    @Transactional
+    public void update(String uid, UserUpdateDto requestDto){
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        User user = userRepository.findByUid(uid).orElseThrow();
+
+        String password = encoder.encode(requestDto.getPassword());
+
+        user.update(requestDto.getName(), password, requestDto.getEmail());
+
+    }
+
+    @Transactional
+    public void delete(String uid){
+        User user = userRepository.findByUid(uid).orElseThrow();
+        userRepository.delete(user);
     }
 
 }

@@ -11,6 +11,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUid(String uid);
 
+    Optional<User> findByEmail(String email);
+
     @Query("SELECT u FROM User u ORDER BY u.id DESC")
     List<User> findAllDesc();
 
@@ -18,5 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByPassword(String uid, String password);
 
     boolean existsByUid(String uid);
+
 
 }

@@ -31,6 +31,7 @@
                 <col style="width:25%;" />
                 <col style="width:25%;" />
                 <col style="width:auto;" />
+                <col style="width:10%;" />
             </colgroup>
             <thead>
             <tr>
@@ -38,10 +39,11 @@
                 <th>제목</th>
                 <th>날짜</th>
                 <th>시간</th>
+                <th>수신 확인</th>
+                <th>발송 취소</th>
             </tr>
             </thead>
             <tbody>
-
             {{^sendList}}
                 <tr><td colspan="6" text-align="center">쪽지가 없습니다.</td></tr>
             {{/sendList}}
@@ -52,6 +54,19 @@
                     <td><a href="/message/sendView/{{msgNo}}">{{title}}</a></td>
                     <td>{{sendDate}}</td>
                     <td>{{sendTime}}</td>
+                    <td>
+                        {{#confirmRead}}
+                            check
+                            <td></td>
+                        {{/confirmRead}}
+                        {{^confirmRead}}
+                            noncheck
+                            <td>
+                                <input type="hidden" id="msgNo" value="{{msgNo}}">
+                                <a href="#" id="deleteMsg">취소</a>
+                            </td>
+                        {{/confirmRead}}
+                    </td>
                 </tr>
             {{/sendList}}
             </tbody>

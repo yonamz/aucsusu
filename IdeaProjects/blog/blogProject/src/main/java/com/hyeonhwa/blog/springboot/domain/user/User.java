@@ -25,10 +25,9 @@ public class User implements UserDetails{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String uid;
 
-    @NotBlank(message = "아이디를 입력해주세요")
     @Column
     private String name;
 
@@ -101,4 +100,14 @@ public class User implements UserDetails{
         return true;
     }
 
+    public void update(String name,String password,String email) {
+        this.name=name;
+        this.password=password;
+        this.email=email;
+    }
+
+    public User update(String name) {
+        this.name=name;
+        return this;
+    }
 }

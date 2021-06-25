@@ -26,6 +26,12 @@ public class MessageApiController {
 
     @DeleteMapping(value = "/{msgNo}")
     public Long delete(@PathVariable Long msgNo){
+        msgService.deleteMsg(msgNo);
+        return msgNo;
+    }
+
+    @DeleteMapping(value = "/delete/{msgNo}")
+    public Long deleteMsg(@PathVariable Long msgNo){
         msgService.delete(msgNo);
         return msgNo;
     }

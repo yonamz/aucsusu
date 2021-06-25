@@ -39,13 +39,12 @@ public class LoginController {
     @PostMapping(value = "/user")
     public String login(HttpServletRequest req, Model model, String uid, String password, RedirectAttributes rttr){
         HttpSession session = req.getSession();
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         User user = userService.login(uid,password);
 
         if(user == null){
             session.setAttribute("member", null);
-            rttr.addFlashAttribute("error",true);
+            model.addAttribute("error",true);
             System.out.println("로그인 실패");
             return "login-form";
         }else{

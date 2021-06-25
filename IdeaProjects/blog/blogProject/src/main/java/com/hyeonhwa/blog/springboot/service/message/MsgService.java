@@ -36,8 +36,22 @@ public class MsgService {
     }
 
     @Transactional
+    public Message findBysendMsgNo(Long msgNo){
+        Message msg= msgRepository.findByMsgNo(msgNo);
+        msg.updateRead(true);
+        return msg;
+    }
+
+    @Transactional
     public Message findByMsgNo(Long msgNo){
-        return msgRepository.findByMsgNo(msgNo);
+        Message msg= msgRepository.findByMsgNo(msgNo);
+        return msg;
+    }
+
+    @Transactional
+    public void deleteMsg(Long msgNo){
+        Message msg = msgRepository.findByMsgNo(msgNo);
+        msg.setDelMsg(true);
     }
 
     @Transactional
@@ -45,4 +59,13 @@ public class MsgService {
         Message msg = msgRepository.findByMsgNo(msgNo);
         msgRepository.delete(msg);
     }
+
+    public Long countMsg(String uid){
+        return msgRepository.countMsg(uid);
+    }
+
+    public Long countReadMsg(String uid){
+        return msgRepository.readMsg(uid);
+    }
+
 }

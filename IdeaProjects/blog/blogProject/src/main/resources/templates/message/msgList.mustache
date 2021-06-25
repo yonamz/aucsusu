@@ -1,9 +1,6 @@
-{{>layout/header}}
-{{>category}}
-<head>
-    <title>받은 쪽지함 ()</title>
+<title>받은 쪽지함 ({{countMsg}})</title>
 
-    <style type="text/css">
+<style type="text/css">
 		img{
 			width:30px;
 			height: 30px;
@@ -27,11 +24,17 @@
 			left: 10%;
 		}
 	</style>
+
 </head>
+<body>
+{{>layout/header}}
+{{>category}}
+
 <div class="container">
 
     <h2>쪽지함</h2>
 
+    <p>읽지않은 쪽지가 <span style="color:red;">{{readMsg}}</span>개 있습니다.</p>
 
 
     <div class="table-responsive">
