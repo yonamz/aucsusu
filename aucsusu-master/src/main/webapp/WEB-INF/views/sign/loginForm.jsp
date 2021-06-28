@@ -62,7 +62,7 @@
     	border-bottom-right-radius: 0;
     }
 
-    <style>
+
         #title{
             cursor:pointer;
         }
@@ -80,7 +80,7 @@
     	    }
     </script>
 
-    </style>
+
     <title>AUCSUSU MARKET</title>
 </head>
 <body>
