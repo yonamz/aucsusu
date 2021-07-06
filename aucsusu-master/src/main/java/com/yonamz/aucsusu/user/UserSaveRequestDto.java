@@ -1,40 +1,25 @@
 package com.yonamz.aucsusu.user;
 
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 
 @Getter
+@Setter
 @NoArgsConstructor
-@Entity
-public class User {
+public class UserSaveRequestDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column
     private String uid;
-
-    @Column
     private String name;
-
-    @Column
     private String password;
-
-    @Column
     private String email;
-
-    @Column
     private String phoneNumber;
 
-
     @Builder
-    public User(String uid, String name, String password,String email, String phoneNumber){
+    public UserSaveRequestDto(String uid, String name, String password, String email, String phoneNumber){
         this.uid=uid;
         this.name=name;
         this.password=password;
@@ -42,9 +27,12 @@ public class User {
         this.phoneNumber=phoneNumber;
     }
 
-    public void update(String name,String password,String email) {
-        this.name=name;
-        this.password=password;
-        this.email=email;
+    public User toEntity(){
+        return User.builder()
+                .uid(uid)
+                .name(name)
+                .email(email)
+                .password(password).phoneNumber(phoneNumber).build();
     }
+
 }
