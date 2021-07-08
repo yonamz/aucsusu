@@ -77,9 +77,9 @@ var main = {
         $.ajax({
                  type: 'POST',
                  url: '/user/update/'+uid,
+                 data: 'text',
                  contentType:'application/json; charset=utf-8',
-                 data: JSON.stringify(data),
-                 async:false
+                 data: JSON.stringify(data)
         }).done(function() {
             alert('정보가 수정되었습니다.');
             window.location.href = '/logout';
@@ -95,8 +95,9 @@ var main = {
         $.ajax({
                             type: 'DELETE',
                             url: '/user/delete/'+uid,
-                            dataType: 'json',
-                            contentType:'application/json; charset=utf-8'
+                            dataType: 'text',
+                            contentType:'application/json; charset=utf-8',
+                            data: JSON.stringify(uid)
                         }).done(function() {
                             alert('탈퇴되었습니다.');
                             window.location.href = '/logout';

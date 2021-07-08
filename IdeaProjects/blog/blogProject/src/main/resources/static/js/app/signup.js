@@ -107,12 +107,12 @@ var main2 = {
             },
 
             idChk : function(){     //https://1-7171771.tistory.com/78 참고
-                      var id = $('#uid').val();
+                      var uid = $('#uid').val();
 
                        $.ajax({
                                 type : "GET",
-                            	url : "/user/"+id+"/exists",
-                            	data:{id}
+                            	url : "/user/"+uid+"/exists",
+                            	data:{uid}
                             }).done(function(result){
                                 if(result==false){
                                     alert('사용 가능한 아이디 입니다');

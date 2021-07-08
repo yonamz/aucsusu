@@ -33,8 +33,7 @@ public class UserService implements UserDetailsService{
 
     @Override
     public User loadUserByUsername(String uid) throws UsernameNotFoundException {
-        User user=userRepository.findByUid(uid)
-                .orElseThrow(()->new UsernameNotFoundException((uid+" 해당 아이디가 존재하지 않음")));
+        User user=userRepository.findByUid(uid);
         //System.out.println("비밀번호 : "+us);
         return userRepository.findByPassword(user.getUid(), user.getPassword());
         /* System.out.println(userRepository.findByPassword(uid, user.getPassword()));
@@ -44,9 +43,11 @@ public class UserService implements UserDetailsService{
     public User login(String uid, String password) throws UsernameNotFoundException{
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        User user=userRepository.findByUid(uid)
-                .orElseThrow(()->new UsernameNotFoundException((uid+" 해당 아이디가 존재하지 않음")));
+        User user=userRepository.findByUid(uid);
 
+        if(user==null){
+            return null;
+        }
         if(encoder.matches(password,user.getPassword())){
             password=user.getPassword();
         }
@@ -70,7 +71,7 @@ public class UserService implements UserDetailsService{
     public void update(String uid, UserUpdateDto requestDto){
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        User user = userRepository.findByUid(uid).orElseThrow();
+        User user = userRepository.findByUid(uid);
 
         String password = encoder.encode(requestDto.getPassword());
 
@@ -80,7 +81,7 @@ public class UserService implements UserDetailsService{
 
     @Transactional
     public void delete(String uid){
-        User user = userRepository.findByUid(uid).orElseThrow();
+        User user = userRepository.findByUid(uid);
         userRepository.delete(user);
     }
 

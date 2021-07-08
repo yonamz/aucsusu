@@ -24,13 +24,13 @@ public class MessageController {
 
     @GetMapping(value = "/writeMsg/{uid}")
     public String writeMsg(@PathVariable String uid, Model model){
-        model.addAttribute("sender",userRepository.findByUid(uid).get());   //path=uid;
+        model.addAttribute("sender",userRepository.findByUid(uid));   //path=uid;
         return "/message/writeMsg";
     }
 
     @GetMapping(value = "/writeReMsg/{sender}")
     public String writeReMsg(@PathVariable String sender, Model model){
-        model.addAttribute("sender", userRepository.findByUid(sender).get());
+        model.addAttribute("sender", userRepository.findByUid(sender));
         return "/message/writeMsg";
     }
 
