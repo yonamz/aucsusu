@@ -8,7 +8,6 @@ var main = {
                         _this.save2();
                     }
 
-
                 });
 
                 $('#btnCancel').on('click', function () {
@@ -18,6 +17,17 @@ var main = {
                 $('#chkID').on('click', function (){
                     _this.idChk();
                 });
+
+                $('#phoneNumber').bind("keyup",function(event){
+                    var regNumber=/^[0-9]*$/;
+                    var temp = $("#phoneNumber").val();
+                    if(!regNumber.test(temp)){
+                        alert("숫자만 입력하세요");
+                        $("#phoneNumber").val(temp.replace(/[^0-9]/g,""));
+                    }
+                });
+
+
         },
         check: function(re, what, message){
                if(re.test(what.value)){
@@ -28,8 +38,9 @@ var main = {
                what.focus();
         },
         save1 : function(){
-                                            var re = /^[a-zA-Z0-9]{4,12}$/;
-                                            var re2 = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+                                            var idTest = /^[a-zA-Z0-9]{4,12}$/;
+                                            var emailTest = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
 
                                             var data = {
                                                 uid: $('#uid').val(),
@@ -40,7 +51,7 @@ var main = {
                                                 email: $('#email').val()
                                             };
 
-                                            if(!this.check(re,uid,"아이디는 4~12자의 영문 대소문자와 숫자로만 입력")){
+                                            if(!this.check(idTest,uid,"아이디는 4~12자의 영문 대소문자와 숫자로만 입력")){
                                                                   return false;
                                             }
 
@@ -78,12 +89,13 @@ var main = {
                                                             return false;
                                                         }
 
+
                                                         if(phoneNumber.value.length!=11){
                                                             alert("폰번호는 - 제외 입력해주세요");
                                                             phoneNumber.focus();
                                                             return false;
                                                         }
-                                                        if(!this.check(re2,email,"이메일 형식이 올바르지 않습니다.")){
+                                                        if(!this.check(emailTest,email,"이메일 형식이 올바르지 않습니다.")){
                                                             email.focus();
                                                             return false;
                                                         }

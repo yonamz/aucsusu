@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h2 th:text="${itemForm.title}"></h2>
+<p>작성일 : <p th:text="${itemForm.reg_date}" /> </p>
+<p>작성자 : [[${itemForm.writer}]]</p>
+<img th:src="@{'/images/'+${file.fileName}}">
+<p th:text="${itemForm.content}"></p>
+
+<!-- 수정/삭제 -->
+<div>
+  <form id="update-form" th:action="@{'/items/' + ${itemForm.item_no}}" method="post">
+    <input type="hidden" name="_method" value="put"/>
+    <button id="update-btn">수정</button>
+  </form>
+
+
+  <form id="delete-form" th:action="@{'/items/' + ${itemForm.item_no}}" method="post">
+    <input type="hidden" name="_method" value="delete"/>
+    <button id="delete-btn">삭제</button>
+  </form>
+</div>
+
+
+</body>
+</html>

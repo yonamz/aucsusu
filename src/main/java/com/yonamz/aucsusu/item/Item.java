@@ -1,39 +1,49 @@
 package com.yonamz.aucsusu.item;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.Date;
+import java.time.LocalDate;
 
-@Data
+
+@Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="item_no")
-    private Long itemNo;
+    private Long item_no;
 
-    @Column(name = "title")
+    @Column
     private String title;
-
-    @Column(name = "starting_bid")
-    private Long startingBid;
-
-    @Column(name = "deadline")
-    private String deadline;
-
-    @Column(name = "content")
-    private String content;
-
-    @Column(name = "writer")
+    @Column
     private String writer;
-
+    @Column
+    private String content;
+    @Column
+    private int starting_bid;
+    @Column
+    private Date deadline;
+    @Column
     @CreationTimestamp
-    @Column(name = "reg_date")
-    private Timestamp regDate;
+    private Timestamp reg_date;
 
-
+    @Builder
+    public Item(Long item_no, String title, String writer, String content, int starting_bid, Date deadline, Timestamp reg_date) {
+        this.item_no = item_no;
+        this.title = title;
+        this.writer = writer;
+        this.content = content;
+        this.starting_bid = starting_bid;
+        this.deadline = deadline;
+        this.reg_date=reg_date;
+    }
 }

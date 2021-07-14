@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container">
+  <table>
+    <thead>
+    <tr>
+      <th>item list</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${items}">
+      <td th:text="${item.item_no}"></td>
+      <td>
+        <a th:href="@{'/items/' + ${item.item_no}}">
+          <span th:text="${item.writer}"> </span>
+        </a>
+      </td>
+      <td>
+        <a th:href="@{'/items/'+${item.item_no}}">
+          <span th:text="${item.content}"></span>
+        </a>
+        <!--<td th:text="${item.title}" th:href="@{'/items/'+${item.item_no}}">-->
+      </td>
+      <td><textarea th:text="${item.content}"></textarea></td>
+      <td th:text="${item.deadline}"></td>
+      <td th:text="${item.starting_bid}"></td>
+      <td th:text="${item.reg_date}"></td>
+
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
