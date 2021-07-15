@@ -8,7 +8,15 @@
 <h2 th:text="${itemForm.title}"></h2>
 <p>작성일 : <p th:text="${itemForm.reg_date}" /> </p>
 <p>작성자 : [[${itemForm.writer}]]</p>
-<img th:src="@{'/images/'+${file.fileName}}">
+
+<!--<img th:src="@{'/images/'}+${file.fileName}" style="width: 300px; height:auto;">-->
+<table>
+  <tr th:each="file : ${filesList}">
+    <td>
+      <img th:src="@{'/images/'}+${file.fileName}" style="width: 300px; height:auto;">
+    </td>
+  </tr>
+</table>
 <p th:text="${itemForm.content}"></p>
 
 <!-- 수정/삭제 -->

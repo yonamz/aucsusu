@@ -14,6 +14,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -35,51 +36,47 @@ public class ItemController {
     }
 
     @PostMapping(value = "/items/new")
-    public String register(ItemForm itemForm, @RequestParam MultipartFile files, RedirectAttributes redirectAttributes,HttpServletRequest rq) throws Exception {
+    public String register(ItemForm itemForm, @RequestParam List<MultipartFile> files, HttpServletRequest rq) throws Exception {
 
         HttpSession session = rq.getSession();
         User user = (User) session.getAttribute("user");
 
-        itemService.create(itemForm,user.getUid());
+        Long itemNo = itemService.create(itemForm,user.getUid());
 
-        Files file = new Files();
+        for(MultipartFile multipartFile : files) {
+            Files file = new Files();
 
-        String sourceFileName = file.getFileName();
-        File destinationFile;
-        String destinationFileName;
-        String fileUrl = "C:/spring/oksusu/src/main/resources/static/images/";
+            //String sourceFileName = file.getFileName();
+            File destinationFile;
+            String destinationFileName;
+            String fileUrl = "C:/spring/aucsusu/src/main/resources/static/images/";
 
-        do{
-            destinationFileName = RandomStringUtils.randomAlphanumeric(32);
-            destinationFile = new File(fileUrl + destinationFileName);
-        } while (destinationFile.exists());
+            do {
+                destinationFileName = RandomStringUtils.randomAlphanumeric(32);
+                destinationFile = new File(fileUrl + destinationFileName);
+            } while (destinationFile.exists());
 
-        destinationFile.getParentFile().mkdirs();
-        files.transferTo(destinationFile);
+            destinationFile.getParentFile().mkdirs();
+            multipartFile.transferTo(destinationFile);
+            //files.transFerTo(destinationFile);
 
-        file.setFileName(destinationFileName);
-        file.setFileUrl(fileUrl);
-        file.setItemNo(itemForm.getItem_no()); //여기가 문제인가?
+            file.setFileName(destinationFileName);
+            file.setFileUrl(fileUrl);
+            file.setItemNo(itemNo);
 
-        redirectAttributes.addFlashAttribute("file",file);
+            filesService.save(file);
+        }
 
         return "redirect:/items";
     }
 
-    @PostMapping("/items/files") //안된다.
-    public String register(@RequestParam("file") Files file){
-        /*try {
-            filesService.save(file);
-        } catch (NumberFormatException e){
-            System.out.println("java.lang.NumberFormatException 발생");
-        }*/
-        return "redirect:/";
-    }
 
     @GetMapping("/items")
     public String list(Model model){
         List<ItemForm> items = itemService.getItemList();
+        List<Files> files = filesService.getFilesList();
         model.addAttribute("items", items);
+        model.addAttribute("files", files);
         return "items/itemsList";
     }
 
@@ -90,9 +87,11 @@ public class ItemController {
         User user = (User)session.getAttribute("user");
 
         ItemForm itemForm = itemService.getPost(item_no, user.getUid());
-        Files files = filesService.findByItemNo(item_no);
+        //Files files = filesService.findByItemNo(item_no);
+        List<Files> filesList = filesService.findAllByItemNo(item_no);
+
         model.addAttribute("itemForm",itemForm);
-        model.addAttribute("file", files);
+        model.addAttribute("filesList", filesList);
         return "items/detail";
     }
 
