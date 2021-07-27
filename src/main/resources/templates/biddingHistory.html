@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>경매 참가 내역</title>
+</head>
+<body>
+<h2><p>나의 경매 참가 내역</p></h2>
+<div class="container">
+    <table>
+        <thead>
+        </thead>
+        <tbody>
+        <tr>
+            <th>상품사진</th>
+            <th>판매자</th>
+            <th>상품명</th>
+            <th>마감기한</th>
+            <th>시작가</th>
+            <th>현재가</th>
+            <th>나의 제시가</th>
+        </tr>
+        <tr th:each="item : ${items}">
+            <td th:if="${item.fileName}">
+                <img th:src="@{'/images/'}+${item.fileName}" style="width: 50px; height:50px;">
+            </td>
+            <td th:unless="${item.fileName}">
+                <img th:src="@{'/images/noImage.jpg'}" style="width: 50px; height:50px;">
+            </td>
+            <td>
+                <a th:href="@{'/userItemHistory/' + ${item.writer}}">
+                    <span th:text="${item.writer}"> </span>
+                </a>
+            </td>
+            <td>
+                <a th:href="@{'/items/'+${item.item_no}}">
+                    <span th:text="${item.title}"></span>
+                </a>
+                <!--<td th:text="${item.title}" th:href="@{'/items/'+${item.item_no}}">-->
+            </td>
+            <td th:text="${item.deadline}"></td>
+            <td th:text="${item.starting_bid}"/>
+            <td th:text="${item.winning_bid}"></td>
+            <div th:each="bidding : ${biddings}">
+                <td th:if="${item.item_no == bidding.itemNo}">
+                   <span th:text="${bidding.biddingPrice}"/>
+                </td>
+            </div>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
