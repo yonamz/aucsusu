@@ -128,7 +128,7 @@ public class ItemService {
     }
 
     @Transactional
-    public ItemForm getPost(Long item_no){
+    public ItemForm getPost(Long item_no, String sessionUser){
 
         Optional<Item> itemWrapper = itemRepository.findById(item_no);
         Item item = itemWrapper.get();
