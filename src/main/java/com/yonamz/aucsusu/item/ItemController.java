@@ -131,10 +131,6 @@ public class ItemController {
 
         HttpSession session = hsrq.getSession();
         User user = (User)session.getAttribute("user");
-      
-        ItemForm itemForm = itemService.getPost(item_no);
-        //Files files = filesService.findByItemNo(item_no);
-        List<Files> filesList = filesService.findAllByItemNo(item_no);
 
         ItemForm itemForm = itemService.getPost(item_no, user.getUid());
         //Files files = filesService.findByItemNo(item_no);
