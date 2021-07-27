@@ -36,8 +36,11 @@ public class Item {
     @CreationTimestamp
     private Timestamp reg_date;
 
+    @Column
+    private String category;
+
     @Builder
-    public Item(Long item_no, String title, String writer, String content, int starting_bid, Date deadline, Timestamp reg_date) {
+    public Item(Long item_no, String title, String writer, String content, int starting_bid, Date deadline, Timestamp reg_date, String category) {
         this.item_no = item_no;
         this.title = title;
         this.writer = writer;
@@ -45,5 +48,6 @@ public class Item {
         this.starting_bid = starting_bid;
         this.deadline = deadline;
         this.reg_date=reg_date;
+        this.category=category;
     }
 }

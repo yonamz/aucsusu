@@ -1,4 +1,4 @@
-package page;
+package com.yonamz.aucsusu.page;
 
 import lombok.Data;
 
