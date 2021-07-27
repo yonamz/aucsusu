@@ -65,6 +65,10 @@ public class ItemController {
             file.setItemNo(itemNo);
 
             filesService.save(file);
+
+            //대표이미지 저장
+            if(multipartFile.equals(files.get(0)))
+                itemService.saveFisrtFile(file.getFileName(), itemNo);
         }
 
         return "redirect:/items";
@@ -74,9 +78,8 @@ public class ItemController {
     @GetMapping("/items")
     public String list(Model model){
         List<ItemForm> items = itemService.getItemList();
-        List<Files> files = filesService.getFilesList();
         model.addAttribute("items", items);
-        model.addAttribute("files", files);
+        //model.addAttribute("file", file);
         return "items/itemsList";
     }
 
@@ -89,9 +92,13 @@ public class ItemController {
         ItemForm itemForm = itemService.getPost(item_no, user.getUid());
         //Files files = filesService.findByItemNo(item_no);
         List<Files> filesList = filesService.findAllByItemNo(item_no);
+        String writer = itemService.getWriter(item_no);
 
+        model.addAttribute("writer", writer);
+        model.addAttribute("user",user);
         model.addAttribute("itemForm",itemForm);
         model.addAttribute("filesList", filesList);
+        model.addAttribute("soldOut", itemForm.isSoldOut());
         return "items/detail";
     }
 

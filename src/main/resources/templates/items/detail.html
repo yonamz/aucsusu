@@ -3,11 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function (){
+      $('button#btnBidding').on('click', function (){
+        var biddingPrice = $('input#biddingPrice').val();
+        if(biddingPrice == "")
+          alert('제시할 금액을 입력하세요');
+          history.back();
+      });
+
+      /*$('#btnSell').on('click', function () {
+        $('#btnBidding').attr('disabled', true);
+        $('#btnSell').attr('disabled', true);
+      });*/
+    });
+
+  </script>
 </head>
 <body>
 <h2 th:text="${itemForm.title}"></h2>
-<p>작성일 : <p th:text="${itemForm.reg_date}" /> </p>
-<p>작성자 : [[${itemForm.writer}]]</p>
+<p>작성일 : <span th:text="${itemForm.reg_date}" /> </p>
+<p>작성자 : <span th:text="${writer}"/></p>
+
+<p>
+시작가 : <span th:text="${itemForm.starting_bid}"/> <br>
+현재가 : <span th:text="${itemForm.winning_bid}"/>
+<div th:if="${itemForm.soldOut}">
+  <button type="button">판매완료</button>
+</div>
+</p>
+
+<div th:if="${user.getUid()==writer} and ${itemForm.soldOut==false}" >
+  <form action="/sell" method="post">
+    <input type="hidden" name="itemNo" th:value="${itemForm.item_no}"/>
+    <button type="submit" id="btnSell">낙찰</button>
+  </form>
+</div>
+
+<div th:if="!${user.getUid()==writer} and ${itemForm.soldOut==false}">
+  <form action="/bidding" method="post">
+    <input type="hidden" name="itemNo" th:value="${itemForm.item_no}"/>
+    <input type="hidden" name="uid" th:value="${user.uid}"/>
+    <input type="text" name="biddingPrice" id="biddingPrice" placeholder="제안할 가격"/>
+    <button type="submit" id="btnBidding">제시</button>
+  </form>
+</div>
 
 <!--<img th:src="@{'/images/'}+${file.fileName}" style="width: 300px; height:auto;">-->
 <table>
@@ -33,6 +74,18 @@
   </form>
 </div>
 
+
+<!--<script src="/js/app/sell.js"></script>-->
+
+<!--<script type="text/javascript">
+        function sell(){
+        const btnBidding = document.getElementById('btnBidding');
+        const btnSell = document.getElementById('btnSell');
+        alert(btnBidding);
+        btnBidding.disabled = 'disabled';
+        btnSell.disabled = 'disabled';
+      }
+</script>-->
 
 </body>
 </html>

@@ -55,4 +55,9 @@ public class IndexController {
         model.addAttribute(user);
         return "delete-user";
     }
+
+    @GetMapping("/faq")
+    public String faq(){
+        return "faq";
+    }
 }
