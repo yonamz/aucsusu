@@ -32,13 +32,11 @@ public class FilesService {
     public List<Files> findAllByItemNo(Long item_no) {
         List<Files> filesList = filesRepository.findAllByItemNo(item_no);
         //System.out.println("파일리스트 : "+filesList);
-       return filesList;
+        return filesList;
     }
 
-    /*public List<Files> getFilesList() {
+    /* public List<Files> getFilesList() {
         List<Files> files = filesRepository.findAll();
         return  files;
     }*/
-
-
 }

@@ -114,8 +114,13 @@
           <a class="nav-link" href="/faq" onclick="return val();">FAQ</a>
         </li>
       </ul>
-      <form class="form-inline my-2 my-md-0">
-        <input class="form-control" type="text" placeholder="상품 검색">
+      <form class="form-inline my-2 my-md-0" action="/items/search" method="GET">
+        <select name="search_category">
+          <option value="writer">글쓴이</option>
+          <option value="title">제목</option>
+        </select>
+        <input name="keyword" class="form-control" type="text" placeholder="상품 검색">
+        <button class="btn btn-warning">검색하기</button>
       </form>
     </div>
   </nav>

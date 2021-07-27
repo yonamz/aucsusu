@@ -48,9 +48,13 @@ public class Item {
     @ColumnDefault("false")
     private boolean soldOut;
 
+    @Column
+    private String category;
+
     @Builder
     public Item(Long item_no, String title, String writer, String content, int starting_bid, int winning_bid,
-                String bidder, Date deadline, Timestamp reg_date, String fileName, Boolean soldOut) {
+                String bidder, Date deadline, Timestamp reg_date, String category, String fileName, Boolean soldOut) {
+
         this.item_no = item_no;
         this.title = title;
         this.writer = writer;
@@ -59,8 +63,9 @@ public class Item {
         this.winning_bid = winning_bid;
         this.bidder = bidder;
         this.deadline = deadline;
-        this.reg_date = reg_date;
         this.fileName = fileName;
         this.soldOut = soldOut;
+        this.reg_date=reg_date;
+        this.category=category;
     }
 }

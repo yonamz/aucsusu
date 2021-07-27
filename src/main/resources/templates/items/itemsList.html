@@ -1,7 +1,20 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
+
+
+
+<div class="category">
+  <button value="digital"><a th:href="@{/items}">전체</a></button>
+  <button type="button" value="digital" id="digital">디지털 기기</button>
+  <button type="button" value="appliance" id="appliance">가전 제품</button>
+  <button type="button" value="clothing" id="clothing">의류</button>
+  <button type="button" value="book" id="book">도서</button>
+  <button type="button" value="etc" id="etc">기타 물품</button>
+</div>
+
 <div class="container">
+
   <table>
     <thead>
     <tr>
@@ -19,6 +32,9 @@
       </td>
       <td>
         <a th:href="@{'/userItemHistory/' + ${item.writer}}">
+      </td>
+      <td>
+        <a th:href="@{'/items/' + ${item.item_no}}">
           <span th:text="${item.writer}"> </span>
         </a>
       </td>
@@ -28,7 +44,7 @@
         </a>
         <!--<td th:text="${item.title}" th:href="@{'/items/'+${item.item_no}}">-->
       </td>
-      <td><textarea th:text="${item.content}"></textarea></td>
+      <td><textarea th:text="${item.category}"></textarea></td>
       <td th:text="${item.deadline}"></td>
       <td th:text="${item.starting_bid}"></td>
       <td th:text="${item.reg_date}"></td>
@@ -36,6 +52,19 @@
     </tr>
     </tbody>
   </table>
+
+  <div th:if="${searchMode!=true}">
+    <span th:each="pageNum : ${pageList}" th:inline="text">
+      <a th:href="@{'/items/?page='+${pageNum}}">[[${pageNum}]]</a>
+    </span>
+  </div>
+  <div th:if="${searchMode==true}">
+    <span th:each="pageNum : ${pageList}" th:inline="text">
+      <a th:href="@{'/items/search/?page='+${pageNum}+'&keyword='+${keyword}+'&search_category='+${category}}">[[${pageNum}]]</a>
+    </span>
+  </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="/js/app/item.js"></script>
 </body>
 </html>

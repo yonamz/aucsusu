@@ -42,7 +42,6 @@ public class ItemController {
         User user = (User) session.getAttribute("user");
 
         Long itemNo = itemService.create(itemForm,user.getUid());
-
         for(MultipartFile multipartFile : files) {
             Files file = new Files();
 
@@ -76,18 +75,66 @@ public class ItemController {
 
 
     @GetMapping("/items")
-    public String list(Model model){
-        List<ItemForm> items = itemService.getItemList();
+    public String list(Model model, @RequestParam(value = "page", defaultValue = "1") Integer pageNum){
+        List<ItemForm> items = itemService.getItemList(pageNum);
+        Integer[] pageList = itemService.getPageList(pageNum);
+
+        List<Files> files = filesService.getFilesList();
+
+        model.addAttribute("pageList",pageList);
         model.addAttribute("items", items);
         //model.addAttribute("file", file);
+
         return "items/itemsList";
     }
 
+
+    @GetMapping("/items/appliance")
+    public String appliance(Model model){
+        List<ItemForm> items = itemService.getOneItemList("appliance");
+        model.addAttribute("items",items);
+        return "items/itemsList";
+    }
+
+    @GetMapping("/items/digital")
+    public String digital(Model model){
+        List<ItemForm> items = itemService.getOneItemList("digital");
+        model.addAttribute("items",items);
+        return "items/itemsList";
+    }
+
+
+    @GetMapping("/items/etc")
+    public String etc(Model model){
+        List<ItemForm> items = itemService.getOneItemList("etc");
+        model.addAttribute("items",items);
+        return "items/itemsList";
+    }
+
+    @GetMapping("/items/book")
+    public String book(Model model){
+        List<ItemForm> items = itemService.getOneItemList("book");
+        model.addAttribute("items",items);
+        return "items/itemsList";
+    }
+
+    @GetMapping("/items/clothing")
+    public String clothing(Model model){
+        List<ItemForm> items = itemService.getOneItemList("clothing");
+        model.addAttribute("items",items);
+        return "items/itemsList";
+    }
+
+
     @GetMapping("/items/{item_no}")
-    public String detail(@PathVariable("item_no") Long item_no, HttpServletRequest hsrq, Model model){
+    public String detail(@PathVariable("item_no") Long item_no, Model model){
 
         HttpSession session = hsrq.getSession();
         User user = (User)session.getAttribute("user");
+      
+        ItemForm itemForm = itemService.getPost(item_no);
+        //Files files = filesService.findByItemNo(item_no);
+        List<Files> filesList = filesService.findAllByItemNo(item_no);
 
         ItemForm itemForm = itemService.getPost(item_no, user.getUid());
         //Files files = filesService.findByItemNo(item_no);
@@ -99,20 +146,20 @@ public class ItemController {
         model.addAttribute("itemForm",itemForm);
         model.addAttribute("filesList", filesList);
         model.addAttribute("soldOut", itemForm.isSoldOut());
+
         return "items/detail";
     }
 
     @GetMapping("/items/edit/{item_no}")
-    public String edit(@PathVariable("item_no") Long item_no, HttpServletRequest hsrq, Model model){
-        HttpSession session = hsrq.getSession();
-        User user = (User)session.getAttribute("user");
-        ItemForm itemForm = itemService.getPost(item_no, user.getUid());
+    public String edit(@PathVariable("item_no") Long item_no, Model model){
+
+        ItemForm itemForm = itemService.getPost(item_no);
 
         model.addAttribute("itemForm",itemForm);
         return "items/update";
     }
 
-    @RequestMapping(value = "/item/edit/{item_no}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/items/edit/{item_no}", method = RequestMethod.PUT)
     public String update(ItemForm itemForm, HttpServletRequest rq){
         HttpSession session = rq.getSession();
         User user = (User) session.getAttribute("user");
@@ -125,6 +172,28 @@ public class ItemController {
         itemService.deletePost(item_no);
         return "redirect:/";
     }
+
+
+
+    @GetMapping("/items/search")
+    public String search(@RequestParam(value = "keyword") String keyword,
+                         @RequestParam(value = "search_category") String category,
+                         @RequestParam(value = "page", defaultValue = "1") Integer pageNum,
+                         Model model){
+        List<ItemForm> items = itemService.getItemList(pageNum);
+        Integer[] pageList = itemService.getSearchList(pageNum,keyword,category);
+
+        List<ItemForm> itemFormList = itemService.searchItems(keyword,category);
+
+        model.addAttribute("searchMode",true);
+        model.addAttribute("pageList",pageList);
+        model.addAttribute("items", itemFormList);
+        model.addAttribute("keyword",keyword);
+        model.addAttribute("category",category);
+
+        return "items/itemsList";
+    }
+
 
 
 }
