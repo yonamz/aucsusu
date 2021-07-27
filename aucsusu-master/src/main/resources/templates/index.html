@@ -64,6 +64,15 @@
     function logout(){
       location.href="/logout";
     }
+      function val() {
+
+        if([[${user==null}]]){
+          alert("로그인이 필요한 서비스입니다.");
+          location.href="/login";
+          return false;
+        }
+       }
+
   </script>
 </head>
 <body>
@@ -88,21 +97,26 @@
     <div class="collapse navbar-collapse" id="navbarsExample03">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" href="/item/all">전체 상품</a>
+          <a class="nav-link" href="/items" onclick="return val();">전체 상품</a>
         </li>
         <li>
-          <a class="nav-link" th:href="@{/item/addItem}">상품 등록</a>
+          <a class="nav-link" onclick="return val();" th:href="@{/items/new}">상품 등록</a>
         </li>
         <li id="dropdown">
           <a class="nav-link">마이페이지</a>
           <div id="dropdown-content">
-            <a class="nav-link" href="#">참여 내역</a>
-            <a class="nav-link" href="/userInfo">내 정보</a>
+            <a class="nav-link" href="#" onclick="return val();">참여 내역</a>
+            <a class="nav-link" href="/userInfo" onclick="return val();">내 정보</a>
           </div>
         </li>
       </ul>
-      <form class="form-inline my-2 my-md-0">
-        <input class="form-control" type="text" placeholder="상품 검색">
+      <form class="form-inline my-2 my-md-0" action="/items/search" method="GET">
+        <select name="search_category">
+          <option value="writer">글쓴이</option>
+          <option value="title">제목</option>
+        </select>
+        <input name="keyword" class="form-control" type="text" placeholder="상품 검색">
+        <button class="btn btn-warning">검색하기</button>
       </form>
     </div>
   </nav>

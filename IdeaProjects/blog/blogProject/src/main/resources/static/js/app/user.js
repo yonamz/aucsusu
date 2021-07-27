@@ -39,7 +39,7 @@ var main = {
              if(confirm("탈퇴 하시겠습니까?") == false){
                   return;
              }
-            _this.delete();
+            _this.deleteUser();
         });
 
     },
@@ -89,7 +89,7 @@ var main = {
         });
     },
 
-    delete : function(){
+    deleteUser : function(){
         var uid = $("#uid").val();
 
         $.ajax({

@@ -14,9 +14,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserController {
     private final UserService userService;
 
-    @DeleteMapping(value = "/delete/{uid}")
-    public String deleteUser(@PathVariable String uid){
-        userService.delete(uid);
-        return uid;
-    }
+
 }

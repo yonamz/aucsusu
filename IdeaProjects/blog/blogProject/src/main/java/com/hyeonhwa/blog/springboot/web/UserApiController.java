@@ -52,4 +52,10 @@ public class UserApiController {
         return a;
     }
 
+    @DeleteMapping(value = "/delete/{uid}")
+    public String deleteUser(@PathVariable String uid){
+        userService.delete(uid);
+        return uid;
+    }
+
 }
