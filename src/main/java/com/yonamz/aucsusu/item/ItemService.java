@@ -53,6 +53,7 @@ public class ItemService {
                     .winning_bid(item.getWinning_bid())
                     .reg_date(item.getReg_date())
                     .fileName(item.getFileName())
+                    .category(item.getCategory())
                     .build();
 
             itemForms.add(itemForm);
@@ -75,6 +76,7 @@ public class ItemService {
                     .winning_bid(item.getWinning_bid())
                     .reg_date(item.getReg_date())
                     .fileName(item.getFileName())
+                    .category(item.getCategory())
                     .build();
 
             itemForms.add(itemForm);
@@ -128,7 +130,7 @@ public class ItemService {
     }
 
     @Transactional
-    public ItemForm getPost(Long item_no, String sessionUser){
+    public ItemForm getPost(Long item_no){
 
         Optional<Item> itemWrapper = itemRepository.findById(item_no);
         Item item = itemWrapper.get();

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>경매 등록 내역</title>
+</head>
+<body>
+<div class="container">
+    <h2><p th:text="${seller}+'의 경매 등록 내역'"></p></h2>
+    <br>
+    <table>
+        <thead>
+        </thead>
+        <tbody>
+        <tr>
+            <th>상품사진</th>
+            <th>상품명</th>
+            <th>마감기한</th>
+            <th>시작가</th>
+            <th>현재가</th>
+        </tr>
+        <tr th:each="item : ${items}">
+            <td th:if="${item.fileName}">
+                <img th:src="@{'/images/'}+${item.fileName}" style="width: 50px; height:50px;">
+            </td>
+            <td th:unless="${item.fileName}">
+                <img th:src="@{'/images/noImage.jpg'}" style="width: 50px; height:50px;">
+            </td>
+            <td>
+                <a th:href="@{'/items/'+${item.item_no}}">
+                    <span th:text="${item.title}"></span>
+                </a>
+                <!--<td th:text="${item.title}" th:href="@{'/items/'+${item.item_no}}">-->
+            </td>
+            <td th:text="${item.deadline}"></td>
+            <td th:text="${item.starting_bid}"/>
+            <td th:text="${item.winning_bid}"></td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
