@@ -105,9 +105,13 @@
         <li id="dropdown">
           <a class="nav-link">마이페이지</a>
           <div id="dropdown-content">
-            <a class="nav-link" href="#" onclick="return val();">참여 내역</a>
+            <a class="nav-link" href="/myItemHistory" onclick="return val();">등록 내역</a>
+            <a class="nav-link" href="/biddingHistory" onclick="return val();">입찰 내역</a>
             <a class="nav-link" href="/userInfo" onclick="return val();">내 정보</a>
           </div>
+        </li>
+        <li>
+          <a class="nav-link" href="/faq" onclick="return val();">FAQ</a>
         </li>
       </ul>
       <form class="form-inline my-2 my-md-0" action="/items/search" method="GET">

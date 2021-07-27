@@ -14,6 +14,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -35,35 +36,39 @@ public class ItemController {
     }
 
     @PostMapping(value = "/items/new")
-    public String register(ItemForm itemForm, @RequestParam MultipartFile files, RedirectAttributes redirectAttributes,HttpServletRequest rq) throws Exception {
+    public String register(ItemForm itemForm, @RequestParam List<MultipartFile> files, HttpServletRequest rq) throws Exception {
 
         HttpSession session = rq.getSession();
         User user = (User) session.getAttribute("user");
 
         Long itemNo = itemService.create(itemForm,user.getUid());
+        for(MultipartFile multipartFile : files) {
+            Files file = new Files();
 
-        Files file = new Files();
+            //String sourceFileName = file.getFileName();
+            File destinationFile;
+            String destinationFileName;
+            String fileUrl = "C:/spring/aucsusu/src/main/resources/static/images/";
 
-        String sourceFileName = file.getFileName();
-        File destinationFile;
-        String destinationFileName;
-        String fileUrl = "D:/aucsusu-master/src/main/resources/static/images/";
+            do {
+                destinationFileName = RandomStringUtils.randomAlphanumeric(32);
+                destinationFile = new File(fileUrl + destinationFileName);
+            } while (destinationFile.exists());
 
-        do{
-            destinationFileName = RandomStringUtils.randomAlphanumeric(32);
-            destinationFile = new File(fileUrl + destinationFileName);
-        } while (destinationFile.exists());
+            destinationFile.getParentFile().mkdirs();
+            multipartFile.transferTo(destinationFile);
+            //files.transFerTo(destinationFile);
 
-        destinationFile.getParentFile().mkdirs();
-        files.transferTo(destinationFile);
+            file.setFileName(destinationFileName);
+            file.setFileUrl(fileUrl);
+            file.setItemNo(itemNo);
 
-        file.setFileName(destinationFileName);
-        file.setFileUrl(fileUrl);
-        file.setItemNo(itemNo);
+            filesService.save(file);
 
-        filesService.save(file);
-
-        redirectAttributes.addFlashAttribute("file",file);
+            //대표이미지 저장
+            if(multipartFile.equals(files.get(0)))
+                itemService.saveFisrtFile(file.getFileName(), itemNo);
+        }
 
         return "redirect:/items";
     }
@@ -78,7 +83,7 @@ public class ItemController {
 
         model.addAttribute("pageList",pageList);
         model.addAttribute("items", items);
-        model.addAttribute("files", files);
+        //model.addAttribute("file", file);
 
         return "items/itemsList";
     }
@@ -124,12 +129,24 @@ public class ItemController {
     @GetMapping("/items/{item_no}")
     public String detail(@PathVariable("item_no") Long item_no, Model model){
 
+        HttpSession session = hsrq.getSession();
+        User user = (User)session.getAttribute("user");
+      
         ItemForm itemForm = itemService.getPost(item_no);
         //Files files = filesService.findByItemNo(item_no);
         List<Files> filesList = filesService.findAllByItemNo(item_no);
 
+        ItemForm itemForm = itemService.getPost(item_no, user.getUid());
+        //Files files = filesService.findByItemNo(item_no);
+        List<Files> filesList = filesService.findAllByItemNo(item_no);
+        String writer = itemService.getWriter(item_no);
+
+        model.addAttribute("writer", writer);
+        model.addAttribute("user",user);
         model.addAttribute("itemForm",itemForm);
         model.addAttribute("filesList", filesList);
+        model.addAttribute("soldOut", itemForm.isSoldOut());
+
         return "items/detail";
     }
 

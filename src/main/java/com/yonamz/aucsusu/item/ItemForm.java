@@ -19,9 +19,13 @@ public class ItemForm {
     private String content;
     private Date deadline;
     private int starting_bid;
+    private int winning_bid;
+    private String bidder;
     private Timestamp reg_date;
-    private String picture_url;
+    private String fileName;
+    private boolean soldOut;
     private String category;
+
 
 
 
@@ -32,22 +36,31 @@ public class ItemForm {
                 .title(title)
                 .content(content)
                 .starting_bid(starting_bid)
+                .winning_bid(winning_bid)
+                .bidder(bidder)
                 .deadline(deadline)
                 .reg_date(reg_date)
+                .fileName(fileName)
+                .soldOut(soldOut)
                 .category(category)
                 .build();
         return build;
     }
 
     @Builder
-    public ItemForm(long item_no, String writer, String title, String content, Date deadline, int starting_bid, Timestamp reg_date,String category) {
+    public ItemForm(long item_no, String writer, String title, String content, Date deadline,
+                    int starting_bid, int winning_bid, String bidder, Timestamp reg_date, String category, String fileName, boolean soldOut) {
         this.item_no = item_no;
         this.writer = writer;
         this.title = title;
         this.content = content;
         this.deadline = deadline;
         this.starting_bid = starting_bid;
-        this.reg_date=reg_date;
+        this.winning_bid = winning_bid;
+        this.bidder = bidder;
+        this.reg_date = reg_date;
+        this.fileName = fileName;
+        this.soldOut = soldOut;
         this.category=category;
     }
 }

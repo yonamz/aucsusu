@@ -1,5 +1,6 @@
 package com.yonamz.aucsusu.item;
 
+import com.yonamz.aucsusu.File.Files;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +29,10 @@ public class ItemService {
         return itemRepository.save(itemForm.toEntity(sessionUser)).getItem_no();
     }
 
+    public String getWriter(Long itemNo) {
+        return itemRepository.findByItem_no(itemNo).getWriter();
+    }
+
     @Transactional
     public List<ItemForm> getItemList(Integer pageNum){
 
@@ -45,7 +50,53 @@ public class ItemService {
                     .writer(item.getWriter())
                     .deadline(item.getDeadline())
                     .starting_bid(item.getStarting_bid())
+                    .winning_bid(item.getWinning_bid())
                     .reg_date(item.getReg_date())
+                    .fileName(item.getFileName())
+                    .build();
+
+            itemForms.add(itemForm);
+        }
+        return itemForms;
+    }
+
+    @Transactional
+    public List<ItemForm> getBiddingHistory(String uid) {
+        List<Item> items = itemRepository.findBiddingItemsByUid(uid); //경매참여내역
+        List<ItemForm> itemForms = new ArrayList<>();
+        for(Item item : items){
+            ItemForm itemForm = ItemForm.builder()
+                    .item_no(item.getItem_no())
+                    .title(item.getTitle())
+                    .content(item.getContent())
+                    .writer(item.getWriter())
+                    .deadline(item.getDeadline())
+                    .starting_bid(item.getStarting_bid())
+                    .winning_bid(item.getWinning_bid())
+                    .reg_date(item.getReg_date())
+                    .fileName(item.getFileName())
+                    .build();
+
+            itemForms.add(itemForm);
+        }
+        return itemForms;
+    }
+
+    @Transactional
+    public List<ItemForm> getItemHistory(String uid) {
+        List<Item> items = itemRepository.findItemsByUid(uid); //물품등록내역
+        List<ItemForm> itemForms = new ArrayList<>();
+        for(Item item : items){
+            ItemForm itemForm = ItemForm.builder()
+                    .item_no(item.getItem_no())
+                    .title(item.getTitle())
+                    .content(item.getContent())
+                    .writer(item.getWriter())
+                    .deadline(item.getDeadline())
+                    .starting_bid(item.getStarting_bid())
+                    .winning_bid(item.getWinning_bid())
+                    .reg_date(item.getReg_date())
+                    .fileName(item.getFileName())
                     .category(item.getCategory())
                     .build();
 
@@ -89,7 +140,9 @@ public class ItemService {
                 .content(item.getContent())
                 .deadline(item.getDeadline())
                 .starting_bid(item.getStarting_bid())
+                .winning_bid(item.getWinning_bid())
                 .reg_date(item.getReg_date())
+                .soldOut(item.isSoldOut())
                 .category(item.getCategory())
                 .build();
         return itemForm;
@@ -169,8 +222,14 @@ public class ItemService {
         itemRepository.deleteById(item_no);
     }
 
+    @Transactional
+    public void saveFisrtFile(String fileName, Long itemNo) {
+        itemRepository.saveFirstFile(fileName, itemNo);
+    }
 
     @Transactional
+    public void setSoldOut(Long itemNo) { itemRepository.setSoldOut(itemNo); }
+
     public List<ItemForm> searchItems(String keyword, String category){
         List<Item> items;
         System.out.println("category : "+category);
@@ -211,8 +270,6 @@ public class ItemService {
                 .category(item.getCategory())
                 .build();
     }
-
-
 
 
 }
