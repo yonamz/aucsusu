@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel = "stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>AUCSUSU MARKET</title>
+
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+        </script>
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+              integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+              crossorigin="anonymous">
+
+
+        <style>
+        html, body{
+        height : 100%;
+    }
+    body{
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align:center;
+        align-items: center;
+        padding-top:40px;
+        padding-bottom: 40px;
+        margin-left:auto;
+        margin-right:auto;
+    }
+    form{
+        margin-left:auto;
+        margin-right:auto;
+    }
+    .form-signin{
+        width:50%;
+        max-width: 330px;
+        padding: 15px;
+        margin: auto;
+    }
+    .form-signin .checkbox{
+        font-weight: 400;
+    }
+    .form-signin .form-control{
+        position: relative;
+        box-sizing: border-box;
+        height:auto;
+        padding:10px;
+        font-size:16px;
+    }
+    .form-signin .form-control:focus{
+        z-index: 2;
+    }
+    .form-signin input[id="uid"]{
+        margin-bottom: -1px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+    .form-signin input[id="password"]{
+        margin-bottom: 10px;
+        border-top-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    </style>
+</head>
+<style>
+    #title{
+        cursor:pointer;
+    }
+    #signupBtn{
+        margin-top : 15px;
+        margin-bottom : 15px;
+    }
+</style>
+<script>
+		function signup(){
+			location.href="/signup";
+		}
+		function home(){
+		    location.href="/";
+	    }
+</script>
+<head>
+    <title>로그인 페이지</title>
+</head>
+<body>
+<form class="form-signin" name="form" id="form" role="form" method="post" action="/user/login">
+    <div>
+        <h2 id="title" onclick="return home();">HELLO WORLD</h2>
+    </div>
+    <div class="form-label-group">
+        <label for="uid" class="sr-only">User ID</label>
+        <input type="text" id="uid" name="uid" class="form-control" placeholder="User ID" required autofocus/>
+        <!--<form:input path="uid" id="uid" name="uid" class="form-control" placeholder="User ID" required="" autofocus=""/>-->
+    </div>
+    <div class="form-label-group">
+        <label for="password" class="sr-only">User Password</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="User Password" required />
+        <!--<form:password path="password" id="password" class="form-control" placeholder="User Password" required="" />-->
+    </div>
+    <!--<div id="remember"><form:checkbox path="rememberID"/>아이디 기억하기</div>-->
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+    <button class="btn btn-lg btn-primary btn-block" type="button" onclick="return signup();">JOIN</button>
+    <div th:if="${error}">
+        <p style="color:red; align:center;">로그인 에러</p>
+        <p style="color:red; align:center;">아이디와 비밀번호를 다시 입력해주세요</p>
+    </div>
+    <span th:unless="${error} == 'true'"></span>
+    <br>
+</form>
+</body>
+</html>

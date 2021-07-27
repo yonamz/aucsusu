@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>이미지 확인</title>
+</head>
+<body>
+<div>
+  <img th:src="@{'/images/'+${file.fileName}}">
+</div>
+</body>
+</html>
