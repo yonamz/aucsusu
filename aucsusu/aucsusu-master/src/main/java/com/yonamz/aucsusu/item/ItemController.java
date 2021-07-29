@@ -48,7 +48,7 @@ public class ItemController {
             //String sourceFileName = file.getFileName();
             File destinationFile;
             String destinationFileName;
-            String fileUrl = "C:/spring/aucsusu/src/main/resources/static/images/";
+            String fileUrl = "D:/aucsusu/aucsusu-master/src/main/resources/static/images/";
 
             do {
                 destinationFileName = RandomStringUtils.randomAlphanumeric(32);
@@ -83,7 +83,6 @@ public class ItemController {
 
         model.addAttribute("pageList",pageList);
         model.addAttribute("items", items);
-        //model.addAttribute("file", file);
 
         return "items/itemsList";
     }
@@ -127,16 +126,17 @@ public class ItemController {
 
 
     @GetMapping("/items/{item_no}")
-    public String detail(@PathVariable("item_no") Long item_no,HttpServletRequest hsrq, Model model){
+    public String detail(@PathVariable("item_no") Long item_no, HttpServletRequest hsrq, Model model){
 
         HttpSession session = hsrq.getSession();
         User user = (User)session.getAttribute("user");
 
-
-        ItemForm itemForm = itemService.getPost(item_no, user.getUid());
+        ItemForm itemForm = itemService.getPost(item_no);
         //Files files = filesService.findByItemNo(item_no);
         List<Files> filesList = filesService.findAllByItemNo(item_no);
         String writer = itemService.getWriter(item_no);
+
+
 
         model.addAttribute("writer", writer);
         model.addAttribute("user",user);
@@ -148,17 +148,15 @@ public class ItemController {
     }
 
     @GetMapping("/items/edit/{item_no}")
-    public String edit(@PathVariable("item_no") Long item_no, Model model,HttpServletRequest rq){
+    public String edit(@PathVariable("item_no") Long item_no, Model model){
 
-        HttpSession session = rq.getSession();
-        User user = (User)session.getAttribute("user");
-        ItemForm itemForm = itemService.getPost(item_no,user.getUid());
+        ItemForm itemForm = itemService.getPost(item_no);
 
         model.addAttribute("itemForm",itemForm);
         return "items/update";
     }
 
-    @PutMapping(value = "/items/edit/{item_no}")
+    @RequestMapping(value = "/items/edit/{item_no}", method = RequestMethod.PUT)
     public String update(ItemForm itemForm, HttpServletRequest rq){
         HttpSession session = rq.getSession();
         User user = (User) session.getAttribute("user");
@@ -171,7 +169,6 @@ public class ItemController {
         itemService.deletePost(item_no);
         return "redirect:/";
     }
-
 
 
 

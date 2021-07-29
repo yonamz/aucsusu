@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script th:inline="javascript">
+    $(document).ready(function (){
+      $('button#btnBidding').on('click', function (){
+        var biddingPrice = $('input#biddingPrice').val();
+        if(biddingPrice == "")
+          alert('제시할 금액을 입력하세요');
+          history.back();
+      });
+
+      var roomName=[[${roomName}]];
+
+      if(roomName!=null)
+        alert(roomName+"방이 개설됨");
+
+      $(".btn-create").on("click",function(e){
+        var name=$("input[name='name']").val();
+
+        if(name=="") {alert("name write");}
+        else {$("form").submit();}
+      });
+});
+
+  </script>
+</head>
+<body>
+<div>
+    <ul th:each="room:${list}">
+        <li><a th:href="@{/chat/room(roomId=${room.roomId})}">[[${room.name}]]</a></li>
+    </ul>
+    <form id="chat" th:action="@{/chat/room}" method="post">
+        <input type="text" name="name" class="form-control">
+        <button class="btn btn-create">개설하기</button>
+    </form>
+</div>
+</body>
+</html>

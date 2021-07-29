@@ -1,10 +1,14 @@
 package com.yonamz.aucsusu.item;
 
 
+import com.yonamz.aucsusu.File.Files;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +40,7 @@ public class ItemService {
         Page<Item> page = itemRepository.findAll(PageRequest.of(pageNum-1,PAGE_POST_COUNT));
 
         List<Item> items = page.getContent();
+        //List<Item> items = itemRepository.findAll();
         List<ItemForm> itemForms = new ArrayList<>();
 
         for(Item item : items){
@@ -126,7 +131,7 @@ public class ItemService {
     }
 
     @Transactional
-    public ItemForm getPost(Long item_no,String sessionUser){
+    public ItemForm getPost(Long item_no){
 
         Optional<Item> itemWrapper = itemRepository.findById(item_no);
         Item item = itemWrapper.get();

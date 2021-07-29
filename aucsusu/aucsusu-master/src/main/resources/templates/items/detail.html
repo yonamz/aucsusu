@@ -4,7 +4,12 @@
   <meta charset="UTF-8">
   <title>Title</title>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-  <script type="text/javascript">
+  <script>
+    function chatPopup(){
+        var open = window.open("/chat","판매자에게 연락하기",'width=700px,height=800px');
+      }
+  </script>
+  <script th:inline="javascript">
     $(document).ready(function (){
       $('button#btnBidding').on('click', function (){
         var biddingPrice = $('input#biddingPrice').val();
@@ -13,11 +18,18 @@
           history.back();
       });
 
-      /*$('#btnSell').on('click', function () {
-        $('#btnBidding').attr('disabled', true);
-        $('#btnSell').attr('disabled', true);
-      });*/
-    });
+      var roomName=[[${roomName}]];
+
+      if(roomName!=null)
+        alert(roomName+"방이 개설됨");
+
+      $(".btn-create").on("click",function(e){
+        var name=$("input[name='name']").val();
+
+        if(name=="") {alert("name write");}
+        else {$("#chat").submit();}
+      });
+});
 
   </script>
 </head>
@@ -27,8 +39,8 @@
 <p>작성자 : <span th:text="${writer}"/></p>
 
 <p>
-시작가 : <span th:text="${itemForm.starting_bid}"/> <br>
-현재가 : <span th:text="${itemForm.winning_bid}"/>
+  시작가 : <span th:text="${itemForm.starting_bid}"/> <br>
+  현재가 : <span th:text="${itemForm.winning_bid}"/>
 <div th:if="${itemForm.soldOut}">
   <button type="button">판매완료</button>
 </div>
@@ -50,6 +62,11 @@
   </form>
 </div>
 
+
+<a href="/chat/go">채팅</a>
+<!--<div th:if="${user.getUid()!=writer}">
+  <button onclick="chatPopup()">채팅하기</button>
+</div>-->
 <!--<img th:src="@{'/images/'}+${file.fileName}" style="width: 300px; height:auto;">-->
 <table>
   <tr th:each="file : ${filesList}">
@@ -61,30 +78,19 @@
 <p th:text="${itemForm.content}"></p>
 
 <!-- 수정/삭제 -->
-<div>
+
+<div th:if="${user.getUid()==writer}">
   <a th:href="@{'/items/edit/' + ${itemForm.item_no}}">
     <button class="btn btn-outline-warning">수정</button>
   </a>
-
-
   <form id="delete-form" th:action="@{'/items/' + ${itemForm.item_no}}" method="post">
     <input type="hidden" name="_method" value="delete"/>
-    <button id="delete-btn">삭제</button>
+    <button class="btn btn-outline-warning" id="delete-btn">삭제</button>
   </form>
 </div>
 
 
-<!--<script src="/js/app/sell.js"></script>-->
 
-<!--<script type="text/javascript">
-        function sell(){
-        const btnBidding = document.getElementById('btnBidding');
-        const btnSell = document.getElementById('btnSell');
-        alert(btnBidding);
-        btnBidding.disabled = 'disabled';
-        btnSell.disabled = 'disabled';
-      }
-</script>-->
 
 </body>
 </html>
