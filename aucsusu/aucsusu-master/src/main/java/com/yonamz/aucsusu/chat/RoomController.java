@@ -32,22 +32,29 @@ public class RoomController {
         return mv;
     }
 
-    @PostMapping("/room")
-    public String create(RedirectAttributes rttr, @RequestParam String name){
+    @GetMapping("/room/{writer}")
+    public String create(RedirectAttributes rttr, @PathVariable("writer") String name,Model model, HttpServletRequest rq){
         log.info("#Create Chat Room, name : "+name);
         rttr.addFlashAttribute("roomName", repository.createChatRoomDTO(name));
-        return "redirect:/chat/rooms";
-    }
 
-    //채팅방 조회
-    @GetMapping("/room")
-    public void getRoom(String roomId, Model model, HttpServletRequest rq){
-        log.info("#get chat Room, roomID : "+roomId);
-
+        //System.out.println(repository.findRoomById(name));
         HttpSession session  = rq.getSession();
         User user = (User)session.getAttribute("user");
+        log.info("#get chat Room, roomID : "+name);
+
+        model.addAttribute("user",user);
+        model.addAttribute("room",repository.findRoomById(name));
+        return "chat/room";
+    }
+
+    /*//채팅방 조회
+    @GetMapping("/room")
+    public void getRoom(Model model, HttpServletRequest rq){
+        HttpSession session  = rq.getSession();
+        User user = (User)session.getAttribute("user");
+        log.info("#get chat Room, roomID : "+name);
 
         model.addAttribute("user",user);
         model.addAttribute("room",repository.findRoomById(roomId));
-    }
+    }*/
 }

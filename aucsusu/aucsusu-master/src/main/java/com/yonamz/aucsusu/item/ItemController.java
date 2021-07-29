@@ -2,6 +2,7 @@ package com.yonamz.aucsusu.item;
 
 import com.yonamz.aucsusu.File.Files;
 import com.yonamz.aucsusu.File.FilesService;
+import com.yonamz.aucsusu.chat.ChatRoomRepository;
 import com.yonamz.aucsusu.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import java.util.List;
 public class ItemController {
 
     private final ItemService itemService;
+
 
     @Autowired
     FilesService filesService;

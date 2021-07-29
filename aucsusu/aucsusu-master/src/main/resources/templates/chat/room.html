@@ -13,7 +13,7 @@
             var roomId = [[${room.roomId}]];
             var username = [[${user.name}]];
 
-            var sockJs = new SockJS("/stomp/chat",null,{transports:["websocket","xhr-streaming","xhr-polling"]});
+            var sockJs = new SockJS("/stomp/chat");
             var stomp = Stomp.over(sockJs);
 
             stomp.connect({},function(){
@@ -28,25 +28,26 @@
                     if(writer==username){
                         str = "<div class='col-6'>";
                         str += "<div class='alert alert-secondary'>";
-                        str += "<b>"+username+" : "+message+"</b>";
+                        str += "<b>"+writer+" : "+message+"</b>";
                         str += "</div></div>";
                         $("#msgArea").append(str);
                     }else{
                         //alert("username!=writer");
                         str = "<div class='col-6'>";
                         str += "<div class='alert alert-warning'>";
-                        str += "<b>"+username+" : "+message+"</b>";
+                        str += "<b>"+writer+" : "+message+"</b>";
                         str += "</div></div>";
+
                         $("#msgArea").append(str);
                     }
-                    $("#msgArea").append(str);
+
                 });
                 stomp.send('/pub/chat/enter',{},JSON.stringify({roomId:roomId, writer:username}));
             });
 
             $("#button-send").on("click", function(e){
                 var msg = document.getElementById("msg");
-                //console.log(username+":"+msg.value);
+                console.log(username+":"+msg.value);
                 stomp.send('/pub/chat/message',{},JSON.stringify({roomId:roomId,message:msg.value, writer:username}));
                 msg.value='';
             });

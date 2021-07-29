@@ -5,9 +5,9 @@
   <title>Title</title>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script>
-    function chatPopup(){
-        var open = window.open("/chat","판매자에게 연락하기",'width=700px,height=800px');
-      }
+    <!--function chatPopup(){
+        var open = window.open("/chat/room/"+[[${itemForm.item_no}]],"판매자에게 연락하기",'width=700px,height=800px');
+      }-->
   </script>
   <script th:inline="javascript">
     $(document).ready(function (){
@@ -18,17 +18,6 @@
           history.back();
       });
 
-      var roomName=[[${roomName}]];
-
-      if(roomName!=null)
-        alert(roomName+"방이 개설됨");
-
-      $(".btn-create").on("click",function(e){
-        var name=$("input[name='name']").val();
-
-        if(name=="") {alert("name write");}
-        else {$("#chat").submit();}
-      });
 });
 
   </script>
@@ -63,10 +52,9 @@
 </div>
 
 
-<a href="/chat/go">채팅</a>
-<!--<div th:if="${user.getUid()!=writer}">
-  <button onclick="chatPopup()">채팅하기</button>
-</div>-->
+<div th:if="${user.getUid()!=writer}">
+  <button><a th:href="@{'/chat/room/'+${itemForm.writer}}">채팅하기</a></button>
+</div>
 <!--<img th:src="@{'/images/'}+${file.fileName}" style="width: 300px; height:auto;">-->
 <table>
   <tr th:each="file : ${filesList}">
