@@ -1,5 +1,26 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+  /*$(document).ready(function (){
+    $('a#title').on('click', function (){
+      var report = $('input#report').val();
+      if(report>=2){
+        alert('숨김처리된 게시글입니다.');
+        history.back();
+        return false;
+      }
+    });
+  });*/
+
+  function report(reportNum){
+    if(reportNum >= 2){
+      alert('숨김처리된 게시글입니다.');
+      history.back();
+      return false;
+    }
+  }
+</script>
 <body>
 
 
@@ -32,19 +53,22 @@
       </td>
       <td>
         <a th:href="@{'/userItemHistory/' + ${item.writer}}">
-      </td>
-      <td>
-        <a th:href="@{'/items/' + ${item.item_no}}">
           <span th:text="${item.writer}"> </span>
         </a>
       </td>
       <td>
-        <a th:href="@{'/items/'+${item.item_no}}">
-          <span th:text="${item.title}"></span>
+        <a id="title" th:href="@{'/items/'+${item.item_no}}" th:onclick="|javascript:report('${item.report}')|" >
+         <div th:if="${item.soldOut}">
+            <span th:text="${item.title}"></span>[판매완료]
+          </div>
+          <div th:unless="${item.soldOut}">
+            <span th:text="${item.title}"></span>
+          </div>
+          <!--<input type="hidden" id="report" th:value="${item.report}"/>  &lt;!&ndash;첫번째거만 들어감&ndash;&gt;-->
         </a>
         <!--<td th:text="${item.title}" th:href="@{'/items/'+${item.item_no}}">-->
       </td>
-      <td><textarea th:text="${item.category}"></textarea></td>
+      <!--<td><textarea th:text="${item.category}"></textarea></td>-->
       <td th:text="${item.deadline}"></td>
       <td th:text="${item.starting_bid}"></td>
       <td th:text="${item.reg_date}"></td>

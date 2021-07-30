@@ -52,8 +52,10 @@ public class ItemService {
                     .starting_bid(item.getStarting_bid())
                     .winning_bid(item.getWinning_bid())
                     .reg_date(item.getReg_date())
+                    .soldOut(item.isSoldOut())
                     .fileName(item.getFileName())
                     .category(item.getCategory())
+                    .report(item.getReport())
                     .build();
 
             itemForms.add(itemForm);
@@ -75,8 +77,10 @@ public class ItemService {
                     .starting_bid(item.getStarting_bid())
                     .winning_bid(item.getWinning_bid())
                     .reg_date(item.getReg_date())
+                    .soldOut(item.isSoldOut())
                     .fileName(item.getFileName())
                     .category(item.getCategory())
+                    .report(item.getReport())
                     .build();
 
             itemForms.add(itemForm);
@@ -98,8 +102,10 @@ public class ItemService {
                     .starting_bid(item.getStarting_bid())
                     .winning_bid(item.getWinning_bid())
                     .reg_date(item.getReg_date())
+                    .soldOut(item.isSoldOut())
                     .fileName(item.getFileName())
                     .category(item.getCategory())
+                    .report(item.getReport())
                     .build();
 
             itemForms.add(itemForm);
@@ -121,7 +127,9 @@ public class ItemService {
                     .deadline(item.getDeadline())
                     .starting_bid(item.getStarting_bid())
                     .reg_date(item.getReg_date())
+                    .soldOut(item.isSoldOut())
                     .category(item.getCategory())
+                    .report(item.getReport())
                     .build();
 
             itemForms.add(itemForm);
@@ -146,6 +154,7 @@ public class ItemService {
                 .reg_date(item.getReg_date())
                 .soldOut(item.isSoldOut())
                 .category(item.getCategory())
+                .report(item.getReport())
                 .build();
         return itemForm;
     }
@@ -230,7 +239,7 @@ public class ItemService {
     }
 
     @Transactional
-    public void setSoldOut(Long itemNo) { itemRepository.setSoldOut(itemNo); }
+    public void setSoldOut(Long itemNo, boolean soldOut) { itemRepository.setSoldOut(itemNo, soldOut); }
 
     public List<ItemForm> searchItems(String keyword, String category){
         List<Item> items;
@@ -270,8 +279,12 @@ public class ItemService {
                 .starting_bid(item.getStarting_bid())
                 .reg_date(item.getReg_date())
                 .category(item.getCategory())
+                .report(item.getReport())
                 .build();
     }
 
 
+    public void itemReport(Long itemNo) {
+        itemRepository.itemReport(itemNo);
+    }
 }

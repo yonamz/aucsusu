@@ -35,8 +35,8 @@ public class FilesService {
         return filesList;
     }
 
-    /* public List<Files> getFilesList() {
+    public List<Files> getFilesList() {
         List<Files> files = filesRepository.findAll();
         return  files;
-    }*/
+    }
 }

@@ -79,7 +79,7 @@ public class ItemController {
         List<ItemForm> items = itemService.getItemList(pageNum);
         Integer[] pageList = itemService.getPageList(pageNum);
 
-        List<Files> files = filesService.getFilesList();
+        //List<Files> files = filesService.getFilesList();
 
         model.addAttribute("pageList",pageList);
         model.addAttribute("items", items);
@@ -166,6 +166,12 @@ public class ItemController {
     @DeleteMapping("/items/{item_no}")
     public String delete(@PathVariable("item_no") Long item_no){
         itemService.deletePost(item_no);
+        return "redirect:/";
+    }
+
+    @RequestMapping("/items/report")
+    public String report(Long itemNo){
+        itemService.itemReport(itemNo);
         return "redirect:/";
     }
 

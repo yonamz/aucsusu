@@ -33,10 +33,10 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     void saveFirstFile(String fileName, Long itemNo);
 
 
-    @Query("update Item item set item.soldOut = true where item.item_no = :itemNo")
+    @Query("update Item item set item.soldOut = :soldOut where item.item_no = :itemNo")
     @Modifying
     @Transactional
-    void setSoldOut(Long itemNo);
+    void setSoldOut(Long itemNo, boolean soldOut);
 
     @Query("select i from Item i where category=:category")
     List<Item> findByCategory(String category);
@@ -44,4 +44,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findByWriterContaining(String keyword);
     List<Item> findByTitleContaining(String keyword);
 
+    @Query("update Item item set item.report = item.report+1 where item.item_no = :itemNo")
+    @Modifying
+    @Transactional
+    void itemReport(Long itemNo);
 }
