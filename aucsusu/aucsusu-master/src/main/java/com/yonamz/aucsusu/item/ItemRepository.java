@@ -45,4 +45,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findByWriterContaining(@Param("keyword")String keyword);
     List<Item> findByTitleContaining(@Param("keyword")String keyword);
 
+    @Query("select i from Item i order by i.reg_date desc")
+    List<Item> findAllDesc();
+
 }

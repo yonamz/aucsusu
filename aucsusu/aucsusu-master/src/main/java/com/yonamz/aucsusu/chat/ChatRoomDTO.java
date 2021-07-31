@@ -6,7 +6,6 @@ import org.springframework.web.socket.WebSocketSession;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,11 +14,12 @@ public class ChatRoomDTO {
     private String name;
     private Set<WebSocketSession> sessions = new HashSet<>();
 
-    public static ChatRoomDTO create(String name){
+    public static ChatRoomDTO create(String name,String roomId){
         ChatRoomDTO room = new ChatRoomDTO();
 
+
         //room.roomId= UUID.randomUUID().toString();
-        room.roomId=name;
+        room.roomId=roomId;
         room.name = name;
         return room;
     }

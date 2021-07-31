@@ -149,6 +149,35 @@ public class ItemController {
         return "items/detail";
     }
 
+    @GetMapping("/items/latest")
+    public String latest(Model model, @RequestParam(value = "page", defaultValue = "1") Integer pageNum){
+        List<ItemForm> items = itemService.getItemList(pageNum);
+
+        Integer[] pageList = itemService.getPageList(pageNum);
+
+        List<Files> files = filesService.getFilesList();
+
+        model.addAttribute("pageList",pageList);
+        model.addAttribute("items", itemService.findAllDesc(items));
+
+        return "items/itemsList";
+    }
+
+    @GetMapping("/items/view")
+    public String view(Model model, @RequestParam(value = "page", defaultValue = "1") Integer pageNum){
+        List<ItemForm> items = itemService.getItemList(pageNum);
+
+        Integer[] pageList = itemService.getPageList(pageNum);
+
+        List<Files> files = filesService.getFilesList();
+
+        model.addAttribute("pageList",pageList);
+        model.addAttribute("items", itemService.findAllDesc(items));
+
+        return "items/itemsList";
+    }
+
+
     @GetMapping("/items/edit/{item_no}")
     public String edit(@PathVariable("item_no") Long item_no, Model model){
 

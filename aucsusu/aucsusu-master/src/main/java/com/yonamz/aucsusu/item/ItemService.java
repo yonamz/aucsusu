@@ -274,5 +274,10 @@ public class ItemService {
                 .build();
     }
 
+    @Transactional
+    public List<Item> findAllDesc(List<ItemForm> items){
+        return itemRepository.findAllDesc();
+    }
+
 
 }

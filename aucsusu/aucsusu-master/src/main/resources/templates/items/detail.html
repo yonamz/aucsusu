@@ -5,9 +5,9 @@
   <title>Title</title>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script>
-    <!--function chatPopup(){
-        var open = window.open("/chat/room/"+[[${itemForm.item_no}]],"판매자에게 연락하기",'width=700px,height=800px');
-      }-->
+    function chatPopup(){
+        window.open('/chat/room?writer=[[${itemForm.writer}]]&itemNo=[[${itemForm.item_no}]]',"판매자에게 연락하기",'width=700px,height=800px');
+      }
   </script>
   <script th:inline="javascript">
     $(document).ready(function (){
@@ -15,7 +15,7 @@
         var biddingPrice = $('input#biddingPrice').val();
         if(biddingPrice == "")
           alert('제시할 금액을 입력하세요');
-          history.back();
+          return false;
       });
 
 });
@@ -53,7 +53,7 @@
 
 
 <div th:if="${user.getUid()!=writer}">
-  <button><a th:href="@{'/chat/room/'+${itemForm.writer}}">채팅하기</a></button>
+  <button onclick="return chatPopup();">판매자와 대화하기</button>
 </div>
 <!--<img th:src="@{'/images/'}+${file.fileName}" style="width: 300px; height:auto;">-->
 <table>

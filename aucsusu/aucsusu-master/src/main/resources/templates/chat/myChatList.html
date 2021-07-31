@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+
+    </script>
+
+</head>
+<body>
+<div>
+    <ul th:each="room:${message}">
+        <li><a href="#" th:onclick="window.open('/chat/croom?roomId='+[[${room.roomId}]],'_blank','width=700px,height=800px')">[[${room.user1}]]</a></li>
+    </ul>
+    <ul th:each="room:${list}">
+        <li><a href="#" th:onclick="window.open('/chat/croom?roomId='+[[${room.roomId}]],'_blank','width=700px,height=800px')">[[${room.user2}]]</a></li>
+    </ul>
+</div>
+</body>
+</html>

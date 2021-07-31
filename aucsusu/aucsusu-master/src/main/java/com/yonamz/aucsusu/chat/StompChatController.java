@@ -1,16 +1,20 @@
 package com.yonamz.aucsusu.chat;
 
+import com.yonamz.aucsusu.File.FilesService;
+import com.yonamz.aucsusu.item.Item;
+import com.yonamz.aucsusu.item.ItemForm;
+import com.yonamz.aucsusu.item.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 
 @Controller
 @RequiredArgsConstructor
 public class StompChatController {
     //특정 브로커로 메시지 전달
     private final SimpMessagingTemplate template;
+
 
     @MessageMapping(value = "/chat/enter")
     public void enter(ChatMessageDTO message){
