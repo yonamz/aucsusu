@@ -17,9 +17,10 @@
 
       $('button#btnReport').on('click', function (){
         var check = confirm('이 게시글을 신고하시겠습니까?');
-        if(!check)
+        if(!check){
           history.back();
           return false;
+        }
       });
 
       /*$('#btnSell').on('click', function () {
@@ -78,10 +79,12 @@
 </table>
 <p th:text="${itemForm.content}"></p>
 
-<form action="/items/report" method="post">
-  <input type="hidden" name="itemNo" th:value="${itemForm.item_no}"/>
-  <button type="submit" id="btnReport">신고</button>
-</form>
+<div th:unless="${user.getUid()==writer}">
+  <form action="/items/report" method="post">
+    <input type="hidden" name="itemNo" th:value="${itemForm.item_no}"/>
+    <button type="submit" id="btnReport">신고</button>
+  </form>
+</div>
 <!-- 수정/삭제 -->
 <div th:if="${user.getUid()==writer}">
   <a th:href="@{'/items/edit/' + ${itemForm.item_no}}">

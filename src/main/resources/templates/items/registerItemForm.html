@@ -1,5 +1,16 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+  function report(reportNum){
+    if(reportNum >= 1){
+      alert('신고처리 된 이용자는 상품을 등록할 수 없습니다..');
+      history.back();
+      return false;
+    }
+  }
+</script>
+
 <body>
 <h2> 상품 등록 </h2>
 <div class="container">
@@ -22,7 +33,7 @@
       <textarea id="content" name="content" placeholder="상품 설명"></textarea>
       <br>
     </div>
-    <button type="submit">save</button>
+    <button th:onclick="|javascript:report('${userReport}')|" type="submit">save</button>
     <!--
             <button type="button" th:onclick="'location.href=\''+@{${/items}}+'\''">이전으로</button>
     -->

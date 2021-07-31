@@ -31,7 +31,10 @@ public class ItemController {
     }
 
     @GetMapping(value="/items/new")
-    public String registerForm(){
+    public String registerForm(HttpServletRequest hsrq, Model model){
+        User user = (User) hsrq.getSession().getAttribute("user");
+        int userReport = user.getReport();
+        model.addAttribute("userReport", userReport);
         return "items/registerItemForm";
     }
 
@@ -169,7 +172,7 @@ public class ItemController {
         return "redirect:/";
     }
 
-    @RequestMapping("/items/report")
+    @PostMapping("/items/report")
     public String report(Long itemNo){
         itemService.itemReport(itemNo);
         return "redirect:/";
