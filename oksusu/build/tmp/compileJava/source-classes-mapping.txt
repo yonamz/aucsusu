@@ -1,8 +1,0 @@
-com/yonamz/user/domain/UserRepository.java
- com.yonamz.user.domain.UserRepository
-com/yonamz/Application.java
- com.yonamz.Application
-com/yonamz/user/domain/User.java
- com.yonamz.user.domain.User
-com/yonamz/controller/IndexController.java
- com.yonamz.controller.IndexController
