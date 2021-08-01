@@ -45,5 +45,10 @@ public class UserController {
 
 
 
-
+    @PostMapping(value = "/report")
+    public String report(String uid){
+        System.out.println(uid);
+        userService.userReport(uid);
+        return "redirect:/";
+    }
 }

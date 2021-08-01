@@ -2,7 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <!-- <link href="starter-template.css" th:href="@{/starter-template.css}" rel="stylesheet"> -->
+
+
+  <title>상세조회</title>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script type="text/javascript">
     $(document).ready(function (){
@@ -40,6 +48,9 @@
 <h2 th:text="${itemForm.title}"></h2>
 <p>작성일 : <span th:text="${itemForm.reg_date}" /> </p>
 <p>작성자 : <span th:text="${writer}"/></p>
+
+<p id="deadline_data" data-th-align="${itemForm.deadline}" th:type="hidden"></p>
+<div th:id="contentArea"></div>
 
 <p>
 시작가 : <span th:text="${itemForm.starting_bid}"/> <br>
@@ -116,6 +127,39 @@
         btnSell.disabled = 'disabled';
       }
 </script>-->
+<script>
+  $(document).ready(function () {
+    var deadline1 = document.getElementById("deadline_data");
+    var deadline = deadline1.getAttribute("align");
 
+
+    setInterval(function (){
+
+      var end = new Date(deadline);
+      end.setHours(0);
+      var now = new Date();
+      var distance = end - now;
+
+      var _second = 1000;
+      var _minute = _second * 60;
+      var _hour = _minute * 60;
+      var _day = _hour * 24;
+
+      if (distance < 0) {
+        clearInterval();
+        document.getElementById("contentArea").innerHTML = '마감되었습니다.';
+        return;
+      }
+
+      var days = Math.floor(distance / _day);
+      var hours = Math.floor((distance % _day) / _hour);
+      var minutes = Math.floor((distance % _hour) / _minute);
+      var seconds = Math.floor((distance % _minute) / _second);
+
+      document.getElementById("contentArea").innerHTML = days + '일 ' + hours + '시간 ' + minutes + '분 ' + seconds + '초';
+
+    },1000);
+  })
+</script>
 </body>
 </html>

@@ -5,6 +5,7 @@ import com.yonamz.aucsusu.File.Files;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
 
@@ -48,4 +49,9 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     @Modifying
     @Transactional
     void itemReport(Long itemNo);
+
+    @Modifying
+    @Query("update Item i set i.cnt = i.cnt + 1 where i.item_no = :item_no")
+    int updateCount(@Param("item_no") Long item_no);
+
 }

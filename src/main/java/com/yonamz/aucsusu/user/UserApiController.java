@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 @RequestMapping(value = "/user")
 public class UserApiController {
 
@@ -53,11 +53,6 @@ public class UserApiController {
         return uid;
     }
 
-    @PostMapping(value = "/report")
-    public String report(String uid){
-        System.out.println(uid);
-        userService.userReport(uid);
-        return "redirect:/";
-    }
+
 
 }

@@ -1,10 +1,8 @@
 package com.yonamz.aucsusu.item;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.yonamz.aucsusu.user.User;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -14,20 +12,21 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 
 
-@Getter
+@Getter @Setter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@Table(name = "item")
 public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long item_no;
 
-    @Column
+    @Column(length = 100, nullable = false)
     private String title;
-    @Column
+    @Column(length = 100, nullable = false)
     private String writer;
-    @Column
+    @Column(length = 100, nullable = false)
     private String content;
     @Column
     @ColumnDefault("0")
@@ -39,7 +38,7 @@ public class Item {
     private String bidder;
     @Column
     private Date deadline;
-    @Column
+    @Column(length = 100, nullable = false, updatable = false)
     @CreationTimestamp
     private Timestamp reg_date;
     @Column
@@ -52,10 +51,16 @@ public class Item {
     @Column
     @ColumnDefault("0")
     private int report;
+    @Column(length = 100, nullable = false, updatable = false)
+    private int cnt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Builder
     public Item(Long item_no, String title, String writer, String content, int starting_bid, int winning_bid,
-                String bidder, Date deadline, Timestamp reg_date, String category, String fileName, Boolean soldOut, int report) {
+                String bidder, Date deadline, Timestamp reg_date, String category, String fileName, Boolean soldOut, int report, int cnt) {
 
         this.item_no = item_no;
         this.title = title;
@@ -70,5 +75,6 @@ public class Item {
         this.reg_date = reg_date;
         this.category = category;
         this.report = report;
+        this.cnt = cnt;
     }
 }

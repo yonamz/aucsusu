@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,6 +57,7 @@ public class ItemService {
                     .fileName(item.getFileName())
                     .category(item.getCategory())
                     .report(item.getReport())
+                    .cnt(item.getCnt())
                     .build();
 
             itemForms.add(itemForm);
@@ -81,6 +83,7 @@ public class ItemService {
                     .fileName(item.getFileName())
                     .category(item.getCategory())
                     .report(item.getReport())
+                    .cnt(item.getCnt())
                     .build();
 
             itemForms.add(itemForm);
@@ -106,6 +109,7 @@ public class ItemService {
                     .fileName(item.getFileName())
                     .category(item.getCategory())
                     .report(item.getReport())
+                    .cnt(item.getCnt())
                     .build();
 
             itemForms.add(itemForm);
@@ -131,6 +135,7 @@ public class ItemService {
                     .fileName(item.getFileName())
                     .category(item.getCategory())
                     .report(item.getReport())
+                    .cnt(item.getCnt())
                     .build();
 
             itemForms.add(itemForm);
@@ -156,6 +161,7 @@ public class ItemService {
                 .soldOut(item.isSoldOut())
                 .category(item.getCategory())
                 .report(item.getReport())
+                .cnt(item.getCnt())
                 .build();
         return itemForm;
     }
@@ -281,6 +287,7 @@ public class ItemService {
                 .reg_date(item.getReg_date())
                 .category(item.getCategory())
                 .report(item.getReport())
+                .cnt(item.getCnt())
                 .build();
     }
 
@@ -288,4 +295,13 @@ public class ItemService {
     public void itemReport(Long itemNo) {
         itemRepository.itemReport(itemNo);
     }
+
+    @Transactional
+    public int updateCount(Long item_no){
+        return itemRepository.updateCount(item_no);
+    }
+
+
+    public Date getDeadline(long item_no){ return itemRepository.findByItem_no(item_no).getDeadline();}
+
 }

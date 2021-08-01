@@ -26,7 +26,7 @@ public class ItemForm {
     private boolean soldOut;
     private String category;
     private int report;
-
+    private int cnt;
 
 
 
@@ -45,6 +45,7 @@ public class ItemForm {
                 .soldOut(soldOut)
                 .category(category)
                 .report(report)
+                .cnt(cnt)
                 .build();
         return build;
     }
@@ -52,7 +53,7 @@ public class ItemForm {
     @Builder
     public ItemForm(long item_no, String writer, String title, String content, Date deadline,
                     int starting_bid, int winning_bid, String bidder, Timestamp reg_date, String category,
-                    String fileName, boolean soldOut, int report) {
+                    String fileName, boolean soldOut, int report, int cnt) {
         this.item_no = item_no;
         this.writer = writer;
         this.title = title;
@@ -66,5 +67,6 @@ public class ItemForm {
         this.soldOut = soldOut;
         this.category = category;
         this.report = report;
+        this.cnt = cnt;
     }
 }

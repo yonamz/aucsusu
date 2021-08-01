@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -143,12 +144,15 @@ public class ItemController {
         //Files files = filesService.findByItemNo(item_no);
         List<Files> filesList = filesService.findAllByItemNo(item_no);
         String writer = itemService.getWriter(item_no);
+        Date deadline = itemService.getDeadline(item_no);
 
         model.addAttribute("writer", writer);
         model.addAttribute("user",user);
         model.addAttribute("itemForm",itemForm);
         model.addAttribute("filesList", filesList);
         model.addAttribute("soldOut", itemForm.isSoldOut());
+        model.addAttribute("deadline", deadline);
+        model.addAttribute("count",itemService.updateCount(item_no));
 
         return "items/detail";
     }
@@ -185,7 +189,7 @@ public class ItemController {
                 String sourceFileName = multipartFile.getOriginalFilename();
                 File destinationFile;
                 String destinationFileName;
-                String fileUrl = "C:/spring/aucsusu/src/main/resources/static/images/";
+                String fileUrl = "C:/aucsusu/src/main/resources/static/images/";
 
                 do {
                     destinationFileName = RandomStringUtils.randomAlphanumeric(32);
