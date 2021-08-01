@@ -29,7 +29,13 @@
   작성자 : <input type="text" name="writer" th:value="${itemForm.writer}"> <br>
   시작가 : <input type="number" name="starting_bid" th:value="${itemForm.starting_bid}"> <br>
   마감기한 : <input type="date" name="deadline" th:value="${itemForm.deadline}"> <br>
-
+  <select name="category">
+    <option value="digital">디지털 기기</option>
+    <option value="appliance">가전 제품</option>
+    <option value="book">도서</option>
+    <option value="clothing">의류</option>
+    <option value="etc">기타 물품</option>
+  </select>
   <textarea name="content" th:text="${itemForm.content}"></textarea><br>
 
   <input type="submit" value="수정">
