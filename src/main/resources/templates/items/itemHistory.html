@@ -4,11 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <title>경매 등록 내역</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function (){
+            $('button#btnReport').on('click', function () {
+                var check = confirm('이 사용자를 신고하시겠습니까?');
+
+                if (!check){
+                    history.back();
+                    return false;
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 <div class="container">
     <h2><p th:text="${seller}+'의 경매 등록 내역'"></p></h2>
+    <div th:if="${userReportNum >= 2}">
+        신고된 이용자입니다.
+    </div>
     <br>
+    <div th:unless="${seller==session.user.uid}">
+    <form action="/user/report" method="post">
+        <input type="hidden" name="uid" th:value="${seller}"/>
+        <button type="submit" id="btnReport">사용자 신고</button>
+    </form>
+    </div>
     <table>
         <thead>
         </thead>

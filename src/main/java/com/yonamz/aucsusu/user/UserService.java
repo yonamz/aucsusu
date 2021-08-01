@@ -37,4 +37,13 @@ public class UserService {
         userRepository.delete(user);
     }
 
+    @Transactional
+    public void userReport(String uid) {
+        userRepository.userReport(uid);
+    }
+
+    @Transactional
+    public int getUserReportNum(String uid) {
+        return userRepository.getUserReportNum(uid);
+    }
 }

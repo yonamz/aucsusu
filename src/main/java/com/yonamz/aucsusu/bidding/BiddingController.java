@@ -32,8 +32,14 @@ public class BiddingController {
     }
 
     @PostMapping("/sell")
-    public String sell(Long itemNo){
-        itemService.setSoldOut(itemNo);
+    public String sell(Long itemNo, boolean soldOut){
+        itemService.setSoldOut(itemNo, soldOut);
+        return "redirect:/items/"+itemNo;
+    }
+
+    @PostMapping("/sellCancel")
+    public String sellCancel(Long itemNo, boolean soldOut){
+        itemService.setSoldOut(itemNo, soldOut);
         return "redirect:/items/"+itemNo;
     }
 }

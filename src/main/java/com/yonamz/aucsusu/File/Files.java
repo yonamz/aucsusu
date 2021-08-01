@@ -14,6 +14,9 @@ public class Files {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int fno;
     String fileName;
+    String fileOriName;
     String fileUrl;
     long itemNo;
+
+    //https://url.kr/fis4un 참고
 }
