@@ -76,7 +76,7 @@
 </div>
 
 <!--<img th:src="@{'/images/'}+${file.fileName}" style="width: 300px; height:auto;">-->
-<div th:if="${filesList}">
+
   <table>
     <tr th:each="file : ${filesList}">
       <td>
@@ -84,7 +84,7 @@
       </td>
     </tr>
   </table>
-</div>
+
 <p th:text="${itemForm.content}"></p>
 
 <div th:unless="${user.getUid()==writer}">

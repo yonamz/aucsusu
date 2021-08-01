@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
   function report(reportNum){
@@ -53,7 +53,6 @@
           <div th:unless="${item.soldOut}">
             <span th:text="${item.title}"></span>
           </div>
-          <!--<input type="hidden" id="report" th:value="${item.report}"/>  &lt;!&ndash;첫번째거만 들어감&ndash;&gt;-->
         </a>
         <!--<td th:text="${item.title}" th:href="@{'/items/'+${item.item_no}}">-->
       </td>

@@ -128,6 +128,7 @@ public class ItemService {
                     .starting_bid(item.getStarting_bid())
                     .reg_date(item.getReg_date())
                     .soldOut(item.isSoldOut())
+                    .fileName(item.getFileName())
                     .category(item.getCategory())
                     .report(item.getReport())
                     .build();
