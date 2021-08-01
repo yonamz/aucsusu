@@ -1,5 +1,6 @@
 package com.yonamz.aucsusu.chat;
 
+import com.yonamz.aucsusu.item.Item;
 import com.yonamz.aucsusu.item.ItemForm;
 import com.yonamz.aucsusu.item.ItemRepository;
 import com.yonamz.aucsusu.item.ItemService;
@@ -29,6 +30,7 @@ public class RoomController {
     private final ChatRoomRepository repository;
     private final MessageService messageService;
     private final UserRepository userRepository;
+    private final ItemRepository itemRepository;
 
 
     //채팅방 목록 조회
@@ -51,7 +53,7 @@ public class RoomController {
         HttpSession session  = rq.getSession();
         User user1 = (User)session.getAttribute("user");    //user1 = 내 계정
         User user2 = userRepository.findByUid(writer);          //user2 = 채팅 보낼 사람
-
+        Message msg;
 
         String roomId;
 
@@ -67,9 +69,9 @@ public class RoomController {
             System.err.println("exist 실행");
             roomId = UUID.randomUUID().toString();
             rttr.addFlashAttribute("roomName", repository.createChatRoomDTO(writer,roomId));
-            String name = writer;
-            Message message = new Message(roomId,name,user1.getUid(),user2.getUid());
-            messageService.save(message);
+            String name = writer+"와 "+user1.getUid()+"의 채팅";
+            msg = new Message(roomId,name,user1.getUid(),user2.getUid());
+            messageService.save(msg);
             System.err.println(roomId);
         }else{
             System.err.println("else 실행");
@@ -89,6 +91,7 @@ public class RoomController {
                 rttr.addFlashAttribute("roomName", repository.createChatRoomDTO(writer,roomId));
             }
         }
+
 
         model.addAttribute("room",repository.findRoomById(roomId));
         model.addAttribute("user",user1);
@@ -134,6 +137,8 @@ public class RoomController {
             System.err.println("roomId : "+roomId);
             rttr.addFlashAttribute("roomName", repository.createChatRoomDTO(writer,roomId));
         }
+        ChatRoomDTO room=repository.findRoomById(roomId);
+        //room.setName(msg.getName());
         model.addAttribute("room",repository.findRoomById(roomId));
         model.addAttribute("user",user1);
         return "chat/room";

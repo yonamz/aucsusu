@@ -1,61 +1,86 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <!-- <link href="starter-template.css" th:href="@{/starter-template.css}" rel="stylesheet"> -->
+
+
+  <title>게시판</title>
+</head>
+
 <body>
-
-
-
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <div class="category">
   <button value="digital"><a th:href="@{/items}">전체</a></button>
-  <button type="button" value="digital" id="digital">디지털 기기</button>
-  <button type="button" value="appliance" id="appliance">가전 제품</button>
-  <button type="button" value="clothing" id="clothing">의류</button>
-  <button type="button" value="book" id="book">도서</button>
-  <button type="button" value="etc" id="etc">기타 물품</button>
+  <button type="button" value="digital" id="digital"><a th:href="@{/items/digital}">디지털 기기</a></button>
+  <button type="button" value="appliance" id="appliance"><a th:href="@{/items/appliance}">가전 제품</a></button>
+  <button type="button" value="clothing" id="clothing"><a th:href="@{/items/clothing}">의류</a></button>
+  <button type="button" value="book" id="book"><a th:href="@{/items/book}">도서</a></button>
+  <button type="button" value="etc" id="etc"><a th:href="@{/items/etc}">기타 물품</a></button>
 </div>
 <div>
   <button><a href="/items/latest">최신순</a></button>
+  <button><a href="/items/orderByView">조회순</a></button>
+  <button><a href="/items/orderByDeadline">마감임박순</a></button>
 </div>
 
 <div class="container">
-
-  <table>
+  <h2>게시판 목록</h2>
+  <table class="table table-striped">
     <thead>
     <tr>
-      <th>item list</th>
+      <th scope="col">번호</th>
+      <th scope="col">이미지</th>
+      <th scope="col">작성자</th>
+      <th scope="col">제목</th>
+      <th scope="col">내용</th>
+      <th scope="col">마감기한</th>
+      <th scope="col">시작가</th>
+      <th scope="col">등록일</th>
+      <th scope="col">조회수</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="item : ${items}">
       <td th:text="${item.item_no}"></td>
       <td th:if="${item.fileName}">
-          <img th:src="@{'/images/'}+${item.fileName}" style="width: 50px; height:50px;">
+        <img th:src="@{'images/'}+${item.fileName}" style="width: 50px; height:50px;"/>
       </td>
       <td th:unless="${item.fileName}">
         <img th:src="@{'/images/noImage.jpg'}" style="width: 50px; height:50px;">
       </td>
-      <td>
+<!--      <td>
         <a th:href="@{'/userItemHistory/' + ${item.writer}}"/>
-      </td>
+      </td>-->
       <td>
         <a th:href="@{'/items/' + ${item.item_no}}">
           <span th:text="${item.writer}"> </span>
         </a>
       </td>
       <td>
-        <a th:href="@{'/items/'+${item.item_no}}">
-          <span th:text="${item.title}"></span>
+        <a th:href="@{'/items/' + ${item.item_no}}">
+          <span th:text="${item.title}"> </span>
         </a>
-        <!--<td th:text="${item.title}" th:href="@{'/items/'+${item.item_no}}">-->
       </td>
-      <td><textarea th:text="${item.category}"></textarea></td>
+      <td><textarea th:text="${item.content}"></textarea></td>
       <td th:text="${item.deadline}"></td>
       <td th:text="${item.starting_bid}"></td>
-      <td th:text="${item.reg_date}"></td>
-
+      <td th:text="${#dates.format(item.reg_date, 'yyyy-MM-dd')}"></td>
+      <td th:text="${item.cnt}"></td>
     </tr>
+
     </tbody>
   </table>
-
+  <a th:href="@{'/items/new'}">
+    <button class="btn btn-outline-warning">등록</button>
+  </a>
   <div th:if="${searchMode!=true}">
     <span th:each="pageNum : ${pageList}" th:inline="text">
       <a th:href="@{'/items/?page='+${pageNum}}">[[${pageNum}]]</a>
@@ -67,7 +92,8 @@
     </span>
   </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="/js/app/item.js"></script>
+
+<script src="/js/app/items.js"></script>
 </body>
+
 </html>

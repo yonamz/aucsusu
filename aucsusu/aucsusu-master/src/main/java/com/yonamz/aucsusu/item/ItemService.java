@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,6 +55,7 @@ public class ItemService {
                     .winning_bid(item.getWinning_bid())
                     .reg_date(item.getReg_date())
                     .fileName(item.getFileName())
+                    .cnt(item.getCnt())
                     .category(item.getCategory())
                     .build();
 
@@ -77,6 +79,7 @@ public class ItemService {
                     .winning_bid(item.getWinning_bid())
                     .reg_date(item.getReg_date())
                     .fileName(item.getFileName())
+                    .cnt(item.getCnt())
                     .category(item.getCategory())
                     .build();
 
@@ -100,6 +103,7 @@ public class ItemService {
                     .winning_bid(item.getWinning_bid())
                     .reg_date(item.getReg_date())
                     .fileName(item.getFileName())
+                    .cnt(item.getCnt())
                     .category(item.getCategory())
                     .build();
 
@@ -122,6 +126,8 @@ public class ItemService {
                     .deadline(item.getDeadline())
                     .starting_bid(item.getStarting_bid())
                     .reg_date(item.getReg_date())
+                    .fileName(item.getFileName())
+                    .cnt(item.getCnt())
                     .category(item.getCategory())
                     .build();
 
@@ -131,7 +137,7 @@ public class ItemService {
     }
 
     @Transactional
-    public ItemForm getPost(Long item_no){
+    public ItemForm getPost(Long item_no,String sessionUser){
 
         Optional<Item> itemWrapper = itemRepository.findById(item_no);
         Item item = itemWrapper.get();
@@ -139,16 +145,23 @@ public class ItemService {
         ItemForm itemForm = ItemForm.builder()
                 .item_no(item.getItem_no())
                 .title(item.getTitle())
-                .writer(item.getWriter())
+                .writer(sessionUser)
                 .content(item.getContent())
                 .deadline(item.getDeadline())
                 .starting_bid(item.getStarting_bid())
                 .winning_bid(item.getWinning_bid())
                 .reg_date(item.getReg_date())
                 .soldOut(item.isSoldOut())
+                .fileName(item.getFileName())
+                .cnt(item.getCnt())
                 .category(item.getCategory())
                 .build();
         return itemForm;
+    }
+
+    @Transactional
+    public int updateCount(Long item_no){
+        return itemRepository.updateCount(item_no);
     }
 
     @Transactional
@@ -225,6 +238,9 @@ public class ItemService {
         itemRepository.deleteById(item_no);
     }
 
+
+    public Date getDeadline(long item_no){ return itemRepository.findByItem_no(item_no).getDeadline();}
+
     @Transactional
     public void saveFisrtFile(String fileName, Long itemNo) {
         itemRepository.saveFirstFile(fileName, itemNo);
@@ -270,13 +286,28 @@ public class ItemService {
                 .deadline(item.getDeadline())
                 .starting_bid(item.getStarting_bid())
                 .reg_date(item.getReg_date())
+                .fileName(item.getFileName())
+                .cnt(item.getCnt())
                 .category(item.getCategory())
                 .build();
     }
 
     @Transactional
     public List<Item> findAllDesc(List<ItemForm> items){
+
         return itemRepository.findAllDesc();
+    }
+
+    @Transactional
+    public List<Item> findAllByCnt(List<ItemForm> items){
+        List<Item> item = itemRepository.findAll(Sort.by(Sort.Direction.DESC,"cnt"));
+        return item;
+    }
+
+    @Transactional
+    public List<Item> findAllByDeadline(List<ItemForm> items){
+        List<Item> item = itemRepository.findAll(Sort.by(Sort.Direction.ASC,"deadline"));
+        return item;
     }
 
 

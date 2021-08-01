@@ -1,6 +1,7 @@
 package com.yonamz.aucsusu.item;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.yonamz.aucsusu.user.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,12 +49,17 @@ public class Item {
     @ColumnDefault("false")
     private boolean soldOut;
 
+    @Column(length = 100, nullable = false, updatable = false)
+    private int cnt;
+
     @Column
     private String category;
 
+
+
     @Builder
     public Item(Long item_no, String title, String writer, String content, int starting_bid, int winning_bid,
-                String bidder, Date deadline, Timestamp reg_date, String category, String fileName, Boolean soldOut) {
+                String bidder, Date deadline, Timestamp reg_date, String category, String fileName, Boolean soldOut, int cnt) {
 
         this.item_no = item_no;
         this.title = title;
@@ -66,6 +72,7 @@ public class Item {
         this.fileName = fileName;
         this.soldOut = soldOut;
         this.reg_date=reg_date;
+        this.cnt=cnt;
         this.category=category;
     }
 }

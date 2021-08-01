@@ -14,6 +14,10 @@ import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
+    @Modifying
+    @Query("update Item i set i.cnt = i.cnt + 1 where i.item_no = :item_no")
+    int updateCount(@Param("item_no") Long item_no);
+
     @Query("select item from Item item where item_no = :item_no")
     Item findByItem_no(@Param("item_no") Long item_no);
 
@@ -47,5 +51,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     @Query("select i from Item i order by i.reg_date desc")
     List<Item> findAllDesc();
+
 
 }

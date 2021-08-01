@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -86,6 +87,7 @@ public class ItemController {
         model.addAttribute("pageList",pageList);
         model.addAttribute("items", items);
 
+
         return "items/itemsList";
     }
 
@@ -133,17 +135,17 @@ public class ItemController {
         HttpSession session = hsrq.getSession();
         User user = (User)session.getAttribute("user");
 
-        ItemForm itemForm = itemService.getPost(item_no);
-        //Files files = filesService.findByItemNo(item_no);
+        ItemForm itemForm = itemService.getPost(item_no, user.getUid());
         List<Files> filesList = filesService.findAllByItemNo(item_no);
         String writer = itemService.getWriter(item_no);
+        Date deadline = itemService.getDeadline(item_no);
 
-
-
-        model.addAttribute("writer", writer);
-        model.addAttribute("user",user);
         model.addAttribute("itemForm",itemForm);
         model.addAttribute("filesList", filesList);
+        model.addAttribute("count", itemService.updateCount(item_no));
+        model.addAttribute("user", user);
+        model.addAttribute("writer", writer);
+        model.addAttribute("deadline", deadline);
         model.addAttribute("soldOut", itemForm.isSoldOut());
 
         return "items/detail";
@@ -159,6 +161,34 @@ public class ItemController {
 
         model.addAttribute("pageList",pageList);
         model.addAttribute("items", itemService.findAllDesc(items));
+
+        return "items/itemsList";
+    }
+
+    @GetMapping("/items/orderByView")
+    public String orderByView(Model model, @RequestParam(value = "page", defaultValue = "1") Integer pageNum){
+        List<ItemForm> items = itemService.getItemList(pageNum);
+
+        Integer[] pageList = itemService.getPageList(pageNum);
+
+        List<Files> files = filesService.getFilesList();
+
+        model.addAttribute("pageList",pageList);
+        model.addAttribute("items",itemService.findAllByCnt(items));
+
+        return "items/itemsList";
+    }
+
+    @GetMapping("/items/orderByDeadline")
+    public String orderByDeadline(Model model, @RequestParam(value = "page", defaultValue = "1") Integer pageNum){
+        List<ItemForm> items = itemService.getItemList(pageNum);
+
+        Integer[] pageList = itemService.getPageList(pageNum);
+
+        List<Files> files = filesService.getFilesList();
+
+        model.addAttribute("pageList",pageList);
+        model.addAttribute("items",itemService.findAllByDeadline(items));
 
         return "items/itemsList";
     }
@@ -179,9 +209,10 @@ public class ItemController {
 
 
     @GetMapping("/items/edit/{item_no}")
-    public String edit(@PathVariable("item_no") Long item_no, Model model){
-
-        ItemForm itemForm = itemService.getPost(item_no);
+    public String edit(@PathVariable("item_no") Long item_no,HttpServletRequest hsrq, Model model){
+        HttpSession session = hsrq.getSession();
+        User user = (User)session.getAttribute("user");
+        ItemForm itemForm = itemService.getPost(item_no, user.getUid());
 
         model.addAttribute("itemForm",itemForm);
         return "items/update";

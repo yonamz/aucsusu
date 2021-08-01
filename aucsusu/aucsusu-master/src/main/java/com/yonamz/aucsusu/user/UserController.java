@@ -19,9 +19,14 @@ public class UserController {
 
     @PostMapping(value = "/login")
     public String login(HttpServletRequest req, Model model, String uid, String password, RedirectAttributes rttr){
-        HttpSession session = req.getSession();
 
+
+        HttpSession session = req.getSession();
         User user = userService.login(uid,password);
+
+/*        String dest = (String)session.getAttribute("dest");
+        String redirect = (dest == null)?"/index":dest;
+        return "redirect:"+redirect;*/
 
         if(user == null){
             session.setAttribute("user",null);

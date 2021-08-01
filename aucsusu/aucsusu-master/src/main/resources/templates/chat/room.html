@@ -3,15 +3,22 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 </head>
 <body>
+<!-- toastr js 라이브러리 -->
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 <script th:inline="javascript">
+
+
         $(document).ready(function(){
             var roomName = [[${room.name}]];
             var roomId = [[${room.roomId}]];
             var username = [[${user.name}]];
+
 
             var sockJs = new SockJS("/stomp/chat");
             var stomp = Stomp.over(sockJs);
@@ -19,11 +26,14 @@
             stomp.connect({},function(){
                 console.log("STOMP Connection");
 
+
+
                 stomp.subscribe("/sub/chat/room/"+roomId, function(chat){
                     var content = JSON.parse(chat.body);
                     var message = content.message;
                     var writer = content.writer;
                     var str = '';
+                    var toast='';
 
                     if(writer==username){
                         str = "<div class='col-6'>";
@@ -37,21 +47,53 @@
                         str += "<div class='alert alert-warning'>";
                         str += "<b>"+writer+" : "+message+"</b>";
                         str += "</div></div>";
-
                         $("#msgArea").append(str);
+
+                        self.addEventListener('notificationclick', function(event) {
+                            let url = 'https://localhost:8080/chat/myChat';
+                            console.log("event 실행");
+                            event.notification.close(); // Android needs explicit close.
+                            event.waitUntil(
+                                clients.matchAll({type: 'window'}).then( windowClients => {
+                                    // Check if there is already a window/tab open with the target URL
+                                    for (var i = 0; i < windowClients.length; i++) {
+                                        var client = windowClients[i];
+                                        // If so, just focus it.
+                                        if (client.url === url && 'focus' in client) {
+                                            return client.focus();
+                                        }
+                                    }
+                                    // If not, then open the target URL in a new window/tab.
+                                    if (clients.openWindow) {
+                                        return clients.openWindow(url);
+                                    }
+                                })
+                            );
+                        });
                     }
 
+                        Notification.requestPermission();
+                        new Notification(writer+"에게 메시지 도착", {body:content.message});
+
                 });
-                stomp.send('/pub/chat/enter',{},JSON.stringify({roomId:roomId, writer:username}));
+
+                   stomp.send('/pub/chat/enter',{},JSON.stringify({roomId:roomId, writer:username}));
+
+
             });
+
+
 
             $("#button-send").on("click", function(e){
                 var msg = document.getElementById("msg");
                 //console.log(username+":"+msg.value);
+
                 stomp.send('/pub/chat/message',{},JSON.stringify({roomId:roomId,message:msg.value, writer:username}));
                 msg.value='';
             });
         });
+
+
 
     </script>
     <div class="container">
@@ -71,7 +113,7 @@
         </div>
             <div class="col-6"></div>
     </div>
-
+<div id="msgStack"></div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
