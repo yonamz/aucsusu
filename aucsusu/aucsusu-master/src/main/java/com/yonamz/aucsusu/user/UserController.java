@@ -36,8 +36,11 @@ public class UserController {
         }else{
             model.addAttribute("user",user);
             session.setAttribute("user",user);
+            String dest = (String)session.getAttribute("dest");
+            String redirect = (dest == null) ? "/" : dest;
+
             System.out.println("로그인 성공");
-            return "redirect:/";
+            return "redirect:"+redirect;
         }
     }
 

@@ -31,14 +31,16 @@ public class LoginIntercepter implements HandlerInterceptor {
             String destQuery = request.getQueryString();
             String dest = (destQuery == null) ? destUri : destUri+"?"+destQuery;
             request.getSession().setAttribute("dest",dest);
+
+            response.sendRedirect("/login");
+            return false;
         }
-        response.sendRedirect("/login");
-        return false;
+
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-
+        System.err.println("postHandle 작동");
     }
 
     @Override
