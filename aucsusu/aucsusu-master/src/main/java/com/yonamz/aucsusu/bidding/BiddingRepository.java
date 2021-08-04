@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface BiddingRepository extends JpaRepository<Bidding, Long> {
-    Bidding findByItemNo(Long itemNo);
+    Bidding findByItemNo(@Param("itemNo") Long itemNo);
 
     @Query("select new com.yonamz.aucsusu.bidding.BiddingDto(bidding.biddingId, bidding.itemNo, bidding.uid, max(bidding.biddingPrice)) " +
             "from Bidding bidding where bidding.uid = :uid group by bidding.itemNo")

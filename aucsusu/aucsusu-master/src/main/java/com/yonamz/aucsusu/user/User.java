@@ -1,12 +1,16 @@
 package com.yonamz.aucsusu.user;
 
 
+import com.yonamz.aucsusu.item.Item;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -32,14 +36,22 @@ public class User {
     @Column
     private String phoneNumber;
 
+    @Column
+    @ColumnDefault("0")
+    private int report;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Item> item = new ArrayList<>();
+
 
     @Builder
-    public User(String uid, String name, String password,String email, String phoneNumber){
+    public User(String uid, String name, String password,String email, String phoneNumber, int report){
         this.uid=uid;
         this.name=name;
         this.password=password;
         this.email=email;
         this.phoneNumber=phoneNumber;
+        this.report=report;
     }
 
     public void update(String name,String password,String email) {

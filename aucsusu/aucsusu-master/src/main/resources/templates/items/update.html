@@ -1,21 +1,81 @@
-
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!-- Required meta tags -->
+  <div th:replace="/fragments/header.html :: fragment-header"></div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+    var fileNoArr = new Array();
+    function delImg(fno){
+      fileNoArr.push(fno);
+      $('#btnDelFile').closest('div').remove();
+      $('#delFno').attr("value", fileNoArr);
+    }
+  </script>
+
+  <title>수정 페이지</title>
+</head>
+
 <body>
+<div th:replace="/fragments/subLogo.html :: fragment-nav"></div>
 <h2> 수정 페이지 </h2>
-<form th:action="@{'/items/edit/' + ${itemForm.item_no}}" method="post">
+
+<form th:action="@{'/items/edit/' + ${itemForm.item_no}}" method="post" enctype="multipart/form-data">
   <input type="hidden" name="_method" value="put"/>
-  <input type="hidden" name="item_no" th:value="${itemForm.item_no}"/>
+  <!-- <input type="hidden" name="item_no" th:value="${itemForm.item_no}"/>-->
+  <input type="hidden" id="delFno" name="delFno" value=""> <!--삭제를 위해 x버튼 누른 사진들의 fno 넘김-->
 
-  제목 : <input type="text" name="title" th:value="${itemForm.title}"> <br>
-  작성자 : <input type="text" name="writer" th:value="${itemForm.writer}"> <br>
-  시작가 : <input type="number" name="starting_bid" th:value="${itemForm.starting_bid}"> <br>
-  마감기한 : <input type="date" name="deadline" th:value="${itemForm.deadline}"> <br>
+  <label class="form-label" for="files"> 이미지 </label>
+  <div th:each="file : ${files}" id="files">
+    <div>
+      <input type="hidden" id="fno" name="fno" th:value="${file.fno}">
+      <input type="hidden" id="fileName" name="fileName" th:value="${file.fileName}">
+      <a id="fileOriName" th:text="${file.fileOriName}"></a>
+      <button class="class-control" type="button" id="btnDelFile" th:onclick="|javascript:delImg(${file.fno})|">x</button><br>
+    </div>
+  </div>
+  <input type="file" name="files" multiple="multiple"><br><br>
 
-  <textarea name="content" th:text="${itemForm.content}"></textarea><br>
+  <label class="form-label" for="title">제목</label>
+  <input type="text" class="form-control" id="title" name="title" placeholder="상품명"th:value="${itemForm.title}"/>
+  <br>
 
-  <input type="submit" value="수정">
+  <label class="form-label" for="starting_bid">시작가</label>
+  <input type="number" class="form-control" id="starting_bid" name="starting_bid" th:value="${itemForm.starting_bid}"/>
+  <br>
+
+  <label class="form-label" for="deadline">마감기한</label>
+  <input type="date" class="form-control" id="deadline" name="deadline" th:value="${itemForm.deadline}"/>
+  <br>
+
+  <label class="form-label" for="category">분류 선택</label>
+  <select name="category" id="category">
+    <option class="form-control" value="digital">디지털 기기</option>
+    <option class="form-control" value="appliance">가전 제품</option>
+    <option class="form-control" value="book">도서</option>
+    <option class="form-control" value="clothing">의류</option>
+    <option class="form-control" value="etc">기타 물품</option>
+  </select>
+  <br>
+
+  <label class="form-label" for="content">내용</label>
+  <textarea class="form-control"  id="content" name="content" rows="3" th:text="${itemForm.content}"></textarea>
+  <br>
+
+  <input type="submit" class="btn btn-outline-warning" value="수정" />
+
 </form>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
 
 </body>
 </html>

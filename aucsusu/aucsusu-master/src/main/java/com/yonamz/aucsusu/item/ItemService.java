@@ -221,6 +221,10 @@ public class ItemService {
         return itemRepository.count();
     }
 
+    public void itemReport(Long itemNo) {
+        itemRepository.itemReport(itemNo);
+    }
+
     @Transactional
     public Long getSearchCount(String keyword, String category){
         Long count;
@@ -247,7 +251,7 @@ public class ItemService {
     }
 
     @Transactional
-    public void setSoldOut(Long itemNo) { itemRepository.setSoldOut(itemNo); }
+    public void setSoldOut(Long itemNo, boolean soldOut) { itemRepository.setSoldOut(itemNo, soldOut); }
 
     public List<ItemForm> searchItems(String keyword, String category){
         List<Item> items;

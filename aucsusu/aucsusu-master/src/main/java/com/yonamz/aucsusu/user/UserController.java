@@ -24,9 +24,7 @@ public class UserController {
         HttpSession session = req.getSession();
         User user = userService.login(uid,password);
 
-/*        String dest = (String)session.getAttribute("dest");
-        String redirect = (dest == null)?"/index":dest;
-        return "redirect:"+redirect;*/
+/*        */
 
         if(user == null){
             session.setAttribute("user",null);
@@ -37,7 +35,7 @@ public class UserController {
             model.addAttribute("user",user);
             session.setAttribute("user",user);
             String dest = (String)session.getAttribute("dest");
-            String redirect = (dest == null) ? "/" : dest;
+            String redirect = (dest == null)?"/":dest;
 
             System.out.println("로그인 성공");
             return "redirect:"+redirect;
@@ -49,6 +47,13 @@ public class UserController {
         User user=(User) httpSession.getAttribute("user");
         model.addAttribute(user);
         return "update-userInfo";
+    }
+
+    @PostMapping(value = "/report")
+    public String report(String uid){
+        System.out.println(uid);
+        userService.userReport(uid);
+        return "redirect:/";
     }
 
 

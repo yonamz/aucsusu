@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script>
-
-    </script>
+    <title th:text="|${user.name}의 채팅방 리스트|"></title>
 
 </head>
 <body>
+<div th:replace="/fragments/subLogo.html :: fragment-nav"></div>
 <div>
     <ul th:each="room:${message}">
         <li><a href="#" th:onclick="window.open('/chat/croom?roomId='+[[${room.roomId}]],'_blank','width=700px,height=800px')">[[${room.user1}]]</a></li>

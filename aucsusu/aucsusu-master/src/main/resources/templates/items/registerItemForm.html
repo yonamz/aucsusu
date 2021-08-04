@@ -1,32 +1,83 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!-- Required meta tags -->
+  <div th:replace="/fragments/header.html :: fragment-header"></div>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+    function report(reportNum){
+      if(reportNum >= 1){
+        alert('신고처리 된 이용자는 상품을 등록할 수 없습니다..');
+        history.back();
+        return false;
+      }
+    }
+  </script>
+
+  <title>상품등록</title>
+</head>
+
+
 <body>
-<h2> 상품 등록 </h2>
+<div th:replace="/fragments/subLogo.html :: fragment-nav"></div>
+
 <div class="container">
+  <br>
+  <h2> 상품 등록 </h2>
   <form action="/items/new" method="post" enctype="multipart/form-data">
     <div class="form-group">
       <!--
                   <input type="text" id="writer" name="writer" placeholder="writer"><br>
       -->
-      <input type="file" id="files" name="files" multiple="multiple"/><br>
-      <input type="text" id="title" name="title" placeholder="상품명"/><br>
-      <input type="text" id="starting_bid" name="starting_bid" placeholder="시작가"/><br>
-      <input type="text" id="deadline" name="deadline" placeholder="경매기한"/><br>
-      <select name="category">
-        <option value="digital">디지털 기기</option>
-        <option value="appliance">가전 제품</option>
-        <option value="book">도서</option>
-        <option value="clothing">의류</option>
-        <option value="etc">기타 물품</option>
-      </select>
-      <textarea id="content" name="content" placeholder="상품 설명"></textarea>
+      <label class="form-label" for="title"> 제목 </label>
+      <input type="text" class="form-control" id="title" name="title" placeholder="상품명" />
       <br>
+
+      <label class="form-label" for="files"> 첨부파일 </label>
+      <input type="file" class="form-control" id="files" name="files" multiple="multiple" />
+      <br>
+
+      <label class="form-label" for="starting_bid"> 시작가 </label>
+      <input type="number" class="form-control" id="starting_bid" name="starting_bid" placeholder="시작가" />
+      <br>
+
+      <label class="form-label" for="deadline"> 경매기한 </label>
+      <input type="date" class="form-control" id="deadline" name="deadline" placeholder="경매기한" />
+      <br>
+
+      <label class="form-label" for="content"> 내용 </label>
+      <textarea class="form-control" id="content" name="content" rows="3" placeholder="내용 입력" ></textarea>
+      <br>
+
+      <label class="form-label" for="category"> 분류 선택 </label>
+      <select name="category" id="category">
+        <option class="form-control" value="digital">디지털 기기</option>
+        <option class="form-control" value="appliance">가전 제품</option>
+        <option class="form-control" value="book">도서</option>
+        <option class="form-control" value="clothing">의류</option>
+        <option class="form-control" value="etc">기타 물품</option>
+      </select>
+      <br>
+
     </div>
-    <button type="submit">save</button>
+
+    <button class="btn btn-outline-warning" th:onclick="|javascript:report('${userReport}')|" type="submit">save</button>
     <!--
             <button type="button" th:onclick="'location.href=\''+@{${/items}}+'\''">이전으로</button>
     -->
+
   </form>
 </div> <!-- /container -->
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+
 </body>
 </html>

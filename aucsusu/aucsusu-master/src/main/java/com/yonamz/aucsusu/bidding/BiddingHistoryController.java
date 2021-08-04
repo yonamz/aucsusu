@@ -28,6 +28,7 @@ public class BiddingHistoryController {
         String uid = user.getUid();
         List<ItemForm> biddingHistory = itemService.getBiddingHistory(uid);
         List<BiddingDto> biddingPrice = biddingService.getBidding(uid);
+        model.addAttribute("user", uid);
         model.addAttribute("items", biddingHistory); //from item table
         model.addAttribute("biddings", biddingPrice); //from bidding table
         return "/biddingHistory";

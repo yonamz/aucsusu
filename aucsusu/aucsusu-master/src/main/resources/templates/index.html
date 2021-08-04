@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html
-        xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
+<!--
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link rel = "stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+-->
+  <div th:replace="/fragments/header.html :: fragment-header"></div>
 
-<title>AUCSUSU MARKET</title>
+  <title>AUCSUSU MARKET</title>
   <style>
         .logo{
             margin-top:50px;
@@ -56,8 +58,64 @@
         #dropdown:hover #dropbtn {background-color: #3e8e41;}
 
     </style>
+</head>
 
-  <script>
+
+<body>
+<div th:if="${user==null}">
+  <button type="button" class="btn btn-warning" onclick="return login();">로그인</button>
+</div>
+<div th:unless="${user==null}">
+  <p th:text="|${user.name}님, 환영합니다.|"></p>
+  <button type="button" class="btn btn-warning" onclick="return logout();">로그아웃</button>
+</div>
+
+<h2 class="logo"><a href="/">옥수수 마켓</a></h2>
+
+<!-- 카테고리 -->
+
+<nav class="navbar navbar-expand-sm navbar-dark bg-warning">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+
+  <div class="collapse navbar-collapse" id="navbarsExample03">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/items" onclick="return val();">전체 상품</a>
+      </li>
+      <li>
+        <a class="nav-link" onclick="return val();" th:href="@{/items/new}">상품 등록</a>
+      </li>
+      <li id="dropdown">
+        <a class="nav-link">마이페이지</a>
+        <div id="dropdown-content">
+          <a class="nav-link" href="/myItemHistory" onclick="return val();">등록 내역</a>
+          <a class="nav-link" href="/biddingHistory" onclick="return val();">입찰 내역</a>
+          <a class="nav-link" href="/userInfo" onclick="return val();">내 정보</a>
+        </div>
+      </li>
+      <li>
+        <a class="nav-link" href="/faq" onclick="return val();">FAQ</a>
+      </li>
+      <li>
+        <a class="nav-link" href="/chat/myChat" onclick="return val();">채팅</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-md-0" action="/items/search" method="GET">
+      <select name="search_category">
+        <option value="writer">글쓴이</option>
+        <option value="title">제목</option>
+      </select>
+      <input name="keyword" class="form-control" type="text" placeholder="상품 검색">
+      <button class="btn btn-warning">검색하기</button>
+    </form>
+  </div>
+</nav>
+
+
+<script>
     function login(){
       location.href="/login";
     }
@@ -74,59 +132,5 @@
        }
 
   </script>
-</head>
-<body>
-<div th:if="${user==null}">
-  <button type="button" class="btn btn-warning" onclick="return login();">로그인</button>
-</div>
-<div th:unless="${user==null}">
-  <p th:text="|${user.name}님, 환영합니다.|"></p>
-  <button type="button" class="btn btn-warning" onclick="return logout();">로그아웃</button>
-</div>
-
-<h2 class="logo"><a href="/">옥수수 마켓</a></h2>
-
-<!-- 카테고리 -->
-
-  <nav class="navbar navbar-expand-sm navbar-dark bg-warning">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03" aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-
-    <div class="collapse navbar-collapse" id="navbarsExample03">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="/items" onclick="return val();">전체 상품</a>
-        </li>
-        <li>
-          <a class="nav-link" onclick="return val();" th:href="@{/items/new}">상품 등록</a>
-        </li>
-        <li id="dropdown">
-          <a class="nav-link">마이페이지</a>
-          <div id="dropdown-content">
-            <a class="nav-link" href="/myItemHistory" onclick="return val();">등록 내역</a>
-            <a class="nav-link" href="/biddingHistory" onclick="return val();">입찰 내역</a>
-            <a class="nav-link" href="/userInfo" onclick="return val();">내 정보</a>
-          </div>
-        </li>
-        <li>
-          <a class="nav-link" href="/faq" onclick="return val();">FAQ</a>
-        </li>
-        <li>
-          <a class="nav-link" href="/chat/myChat" onclick="return val();">채팅</a>
-        </li>
-      </ul>
-      <form class="form-inline my-2 my-md-0" action="/items/search" method="GET">
-        <select name="search_category">
-          <option value="writer">글쓴이</option>
-          <option value="title">제목</option>
-        </select>
-        <input name="keyword" class="form-control" type="text" placeholder="상품 검색">
-        <button class="btn btn-warning">검색하기</button>
-      </form>
-    </div>
-  </nav>
-
 </body>
 </html>

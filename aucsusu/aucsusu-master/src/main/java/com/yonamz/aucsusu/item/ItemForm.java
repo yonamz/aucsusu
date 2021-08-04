@@ -24,6 +24,7 @@ public class ItemForm {
     private Timestamp reg_date;
     private String fileName;
     private boolean soldOut;
+    private int report;
     private String category;
     private int cnt;
 
@@ -43,6 +44,7 @@ public class ItemForm {
                 .fileName(fileName)
                 .soldOut(soldOut)
                 .category(category)
+                .report(report)
                 .cnt(cnt)
                 .build();
         return build;
@@ -50,7 +52,7 @@ public class ItemForm {
 
     @Builder
     public ItemForm(long item_no, String writer, String title, String content, Date deadline,
-                    int starting_bid, int winning_bid, String bidder, Timestamp reg_date, String category, String fileName, boolean soldOut, int cnt) {
+                    int starting_bid, int winning_bid, String bidder, Timestamp reg_date, String category, String fileName, boolean soldOut, int cnt,int report) {
         this.item_no = item_no;
         this.writer = writer;
         this.title = title;
@@ -63,6 +65,7 @@ public class ItemForm {
         this.fileName = fileName;
         this.soldOut = soldOut;
         this.category=category;
+        this.report=report;
         this.cnt=cnt;
     }
 }

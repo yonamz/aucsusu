@@ -15,6 +15,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,38 +40,41 @@ public class ItemController {
     }
 
     @PostMapping(value = "/items/new")
-    public String register(ItemForm itemForm, @RequestParam List<MultipartFile> files, HttpServletRequest rq) throws Exception {
+    public String register(ItemForm itemForm, @RequestParam(required = false) List<MultipartFile> files, HttpServletRequest rq) throws Exception {
 
         HttpSession session = rq.getSession();
         User user = (User) session.getAttribute("user");
 
         Long itemNo = itemService.create(itemForm,user.getUid());
-        for(MultipartFile multipartFile : files) {
-            Files file = new Files();
+        if(!files.isEmpty()) {
+            for (MultipartFile multipartFile : files) {
+                Files file = new Files();
 
-            //String sourceFileName = file.getFileName();
-            File destinationFile;
-            String destinationFileName;
-            String fileUrl = "D:/aucsusu/aucsusu-master/src/main/resources/static/images/";
+                String sourceFileName = multipartFile.getOriginalFilename();
+                File destinationFile;
+                String destinationFileName;
+                String fileUrl = "D:/aucsusu/aucsusu-master/resources/static/images/";
 
-            do {
-                destinationFileName = RandomStringUtils.randomAlphanumeric(32);
-                destinationFile = new File(fileUrl + destinationFileName);
-            } while (destinationFile.exists());
+                do {
+                    destinationFileName = RandomStringUtils.randomAlphanumeric(32);
+                    destinationFile = new File(fileUrl + destinationFileName);
+                } while (destinationFile.exists());
 
-            destinationFile.getParentFile().mkdirs();
-            multipartFile.transferTo(destinationFile);
-            //files.transFerTo(destinationFile);
+                destinationFile.getParentFile().mkdirs();
+                multipartFile.transferTo(destinationFile);
+                //files.transFerTo(destinationFile);
 
-            file.setFileName(destinationFileName);
-            file.setFileUrl(fileUrl);
-            file.setItemNo(itemNo);
+                file.setFileName(destinationFileName);
+                file.setFileOriName(sourceFileName);
+                file.setFileUrl(fileUrl);
+                file.setItemNo(itemNo);
 
-            filesService.save(file);
+                filesService.save(file);
 
-            //대표이미지 저장
-            if(multipartFile.equals(files.get(0)))
-                itemService.saveFisrtFile(file.getFileName(), itemNo);
+                //대표이미지 저장
+                if (multipartFile.equals(files.get(0)))
+                    itemService.saveFisrtFile(file.getFileName(), itemNo);
+            }
         }
 
         return "redirect:/items";
@@ -219,14 +223,63 @@ public class ItemController {
     }
 
     @RequestMapping(value = "/items/edit/{item_no}", method = RequestMethod.PUT)
-    public String update(ItemForm itemForm, HttpServletRequest rq){
+    public String update(ItemForm itemForm, @RequestParam(required = false) List<MultipartFile> files,
+                         @RequestParam(value = "delFno") int[] delFnos, HttpServletRequest rq) throws IOException {
         HttpSession session = rq.getSession();
         User user = (User) session.getAttribute("user");
-        itemService.create(itemForm,user.getUid());
+        Long itemNo = itemService.create(itemForm,user.getUid());
+
+        //기존 사진 삭제
+        for (int fno : delFnos) {
+            filesService.deleteImageByFno(fno);
+        }
+        //filesService.deleteImageByItemNo(itemNo);
+
+        //수정된 사진 저장
+        if(!files.isEmpty()) {
+            for (MultipartFile multipartFile : files) {
+                Files file = new Files();
+
+                String sourceFileName = multipartFile.getOriginalFilename();
+                File destinationFile;
+                String destinationFileName;
+                String fileUrl = "C:/aucsusu/src/main/resources/static/images/";
+
+                do {
+                    destinationFileName = RandomStringUtils.randomAlphanumeric(32);
+                    destinationFile = new File(fileUrl + destinationFileName);
+                } while (destinationFile.exists());
+
+                destinationFile.getParentFile().mkdirs();
+                multipartFile.transferTo(destinationFile);
+                //files.transFerTo(destinationFile);
+
+                file.setFileName(destinationFileName);
+                file.setFileOriName(sourceFileName);
+                file.setFileUrl(fileUrl);
+                file.setItemNo(itemNo);
+
+                filesService.save(file);
+
+                //대표이미지 저장
+                if (multipartFile.equals(files.get(0)))
+                    itemService.saveFisrtFile(file.getFileName(), itemNo);
+                if (!multipartFile.equals(files.get(0)))
+                    itemService.saveFisrtFile(filesService.findFirstByItemNo(itemNo),itemNo);
+            }
+        }
+
+        return "redirect:/items";
+    }
+
+    @PostMapping("/items/report")
+    public String report(Long itemNo){
+        itemService.itemReport(itemNo);
         return "redirect:/";
     }
 
-    @DeleteMapping("/items/{item_no}")
+    //@DeleteMapping("/items/{item_no}") --postMapping 삭제하고 이거 다시 사용하기
+    @PostMapping("/items/{item_no}")
     public String delete(@PathVariable("item_no") Long item_no){
         itemService.deletePost(item_no);
         return "redirect:/";

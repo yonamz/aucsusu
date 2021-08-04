@@ -2,11 +2,12 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>경매 참가 내역</title>
+  <div th:replace="/fragments/header.html :: fragment-header"></div>
+  <title>입찰 내역</title>
 </head>
 <body>
-<h2><p>나의 경매 참가 내역</p></h2>
+<div th:replace="/fragments/subLogo.html :: fragment-nav"></div>
+<h2><p th:text="${user}+'의 입찰 내역'"></p></h2>
 <div class="container">
   <table>
     <thead>

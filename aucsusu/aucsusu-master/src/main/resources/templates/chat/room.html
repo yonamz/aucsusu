@@ -26,8 +26,6 @@
             stomp.connect({},function(){
                 console.log("STOMP Connection");
 
-
-
                 stomp.subscribe("/sub/chat/room/"+roomId, function(chat){
                     var content = JSON.parse(chat.body);
                     var message = content.message;

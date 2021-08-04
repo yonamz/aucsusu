@@ -2,13 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title th:text="|${user.name}의 상세정보|"></title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <link rel = "stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-
-
+  <div th:replace="/fragments/header.html :: fragment-header"></div>
 
 </head>
 <body>
+<div th:replace="/fragments/subLogo.html :: fragment-nav"></div>
   <label for="name">이름</label>
     <input type="text" id="name" th:value="${user.name}"/><br>
 

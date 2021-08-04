@@ -3,6 +3,7 @@ package com.yonamz.aucsusu.File;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -13,6 +14,7 @@ public class FilesService {
     public void save(Files files) {
         Files file = new Files();
         file.setFileName(files.getFileName());
+        file.setFileOriName(files.getFileOriName());
         file.setFileUrl(files.getFileUrl());
         file.setItemNo(files.getItemNo());
 
@@ -35,8 +37,25 @@ public class FilesService {
         return filesList;
     }
 
-     public List<Files> getFilesList() {
+    public List<Files> getFilesList() {
         List<Files> files = filesRepository.findAll();
-        return  files;
+        return files;
+    }
+
+    @Transactional
+    public void deleteImageByItemNo(Long itemNo) {
+        Files files = filesRepository.findByItemNo(itemNo);
+        filesRepository.delete(files);
+    }
+
+    @Transactional
+    public void deleteImageByFno(int fno) {
+        Files files = filesRepository.findByFno(fno);
+        filesRepository.delete(files);
+    }
+
+    @Transactional
+    public String findFirstByItemNo(Long itemNo) {
+        return filesRepository.findFirstByItemNo(itemNo).getFileName();
     }
 }
