@@ -69,6 +69,7 @@ var main = {
 
         update : function () {
                 var id = $('#uid').val();
+
                 var data = {
                     name: $('#name').val(),
                     password: $('#password').val(),

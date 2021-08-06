@@ -2,7 +2,9 @@ package com.yonamz.aucsusu.item;
 
 import com.yonamz.aucsusu.File.Files;
 import com.yonamz.aucsusu.File.FilesService;
+import com.yonamz.aucsusu.chat.ChatRoomRepository;
 import com.yonamz.aucsusu.user.User;
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,14 +49,15 @@ public class ItemController {
         User user = (User) session.getAttribute("user");
 
         Long itemNo = itemService.create(itemForm,user.getUid());
+
         if(!files.isEmpty()) {
             for (MultipartFile multipartFile : files) {
                 Files file = new Files();
 
-                String sourceFileName = multipartFile.getOriginalFilename();
-                File destinationFile;
-                String destinationFileName;
-                String fileUrl = "C:/spring/aucsusu/src/main/resources/static/images/";
+                String sourceFileName = multipartFile.getOriginalFilename(); //원래 파일명
+                File destinationFile; //MultipartFile을 넣을 File
+                String destinationFileName; //새로운 파일명
+                String fileUrl = "C:/spring/aucsusu_market/src/main/resources/static/images/"; //File이 저장될 곳
 
                 do {
                     destinationFileName = RandomStringUtils.randomAlphanumeric(32);
@@ -62,8 +65,7 @@ public class ItemController {
                 } while (destinationFile.exists());
 
                 destinationFile.getParentFile().mkdirs();
-                multipartFile.transferTo(destinationFile);
-                //files.transFerTo(destinationFile);
+                multipartFile.transferTo(destinationFile); //실질적인 File 생성;
 
                 file.setFileName(destinationFileName);
                 file.setFileOriName(sourceFileName);
@@ -91,7 +93,7 @@ public class ItemController {
 
         model.addAttribute("pageList",pageList);
         model.addAttribute("items", items);
-        //model.addAttribute("file", file);
+
 
         return "items/itemsList";
     }
@@ -140,27 +142,84 @@ public class ItemController {
         HttpSession session = hsrq.getSession();
         User user = (User)session.getAttribute("user");
 
-        ItemForm itemForm = itemService.getPost(item_no);
-        //Files files = filesService.findByItemNo(item_no);
+        ItemForm itemForm = itemService.getPost(item_no, user.getUid());
         List<Files> filesList = filesService.findAllByItemNo(item_no);
         String writer = itemService.getWriter(item_no);
         Date deadline = itemService.getDeadline(item_no);
 
-        model.addAttribute("writer", writer);
-        model.addAttribute("user",user);
         model.addAttribute("itemForm",itemForm);
         model.addAttribute("filesList", filesList);
-        model.addAttribute("soldOut", itemForm.isSoldOut());
+        model.addAttribute("count", itemService.updateCount(item_no));
+        model.addAttribute("user", user);
+        model.addAttribute("writer", writer);
         model.addAttribute("deadline", deadline);
-        model.addAttribute("count",itemService.updateCount(item_no));
+        model.addAttribute("soldOut", itemForm.isSoldOut());
 
         return "items/detail";
     }
 
-    @GetMapping("/items/edit/{item_no}")
-    public String edit(@PathVariable("item_no") Long item_no, Model model){
+    @GetMapping("/items/latest")
+    public String latest(Model model, @RequestParam(value = "page", defaultValue = "1") Integer pageNum){
+        List<ItemForm> items = itemService.getItemList(pageNum);
 
-        ItemForm itemForm = itemService.getPost(item_no);
+        Integer[] pageList = itemService.getPageList(pageNum);
+
+        List<Files> files = filesService.getFilesList();
+
+        model.addAttribute("pageList",pageList);
+        model.addAttribute("items", itemService.findAllDesc(items));
+
+        return "items/itemsList";
+    }
+
+    @GetMapping("/items/orderByView")
+    public String orderByView(Model model, @RequestParam(value = "page", defaultValue = "1") Integer pageNum){
+        List<ItemForm> items = itemService.getItemList(pageNum);
+
+        Integer[] pageList = itemService.getPageList(pageNum);
+
+        List<Files> files = filesService.getFilesList();
+
+        model.addAttribute("pageList",pageList);
+        model.addAttribute("items",itemService.findAllByCnt(items));
+
+        return "items/itemsList";
+    }
+
+    @GetMapping("/items/orderByDeadline")
+    public String orderByDeadline(Model model, @RequestParam(value = "page", defaultValue = "1") Integer pageNum){
+        List<ItemForm> items = itemService.getItemList(pageNum);
+
+        Integer[] pageList = itemService.getPageList(pageNum);
+
+        List<Files> files = filesService.getFilesList();
+
+        model.addAttribute("pageList",pageList);
+        model.addAttribute("items",itemService.findAllByDeadline(items));
+
+        return "items/itemsList";
+    }
+
+    @GetMapping("/items/view")
+    public String view(Model model, @RequestParam(value = "page", defaultValue = "1") Integer pageNum){
+        List<ItemForm> items = itemService.getItemList(pageNum);
+
+        Integer[] pageList = itemService.getPageList(pageNum);
+
+        List<Files> files = filesService.getFilesList();
+
+        model.addAttribute("pageList",pageList);
+        model.addAttribute("items", itemService.findAllDesc(items));
+
+        return "items/itemsList";
+    }
+
+
+    @GetMapping("/items/edit/{item_no}")
+    public String edit(@PathVariable("item_no") Long item_no,HttpServletRequest hsrq, Model model){
+        HttpSession session = hsrq.getSession();
+        User user = (User)session.getAttribute("user");
+        ItemForm itemForm = itemService.getPost(item_no, user.getUid());
         List<Files> files = filesService.findAllByItemNo(item_no);
 
         model.addAttribute("itemForm",itemForm);
@@ -168,7 +227,7 @@ public class ItemController {
         return "items/update";
     }
 
-    @RequestMapping(value = "/items/edit/{item_no}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/items/edit/{item_no}", method = RequestMethod.POST) //PUT
     public String update(ItemForm itemForm, @RequestParam(required = false) List<MultipartFile> files,
                          @RequestParam(value = "delFno") int[] delFnos, HttpServletRequest rq) throws IOException {
         HttpSession session = rq.getSession();
@@ -189,7 +248,7 @@ public class ItemController {
                 String sourceFileName = multipartFile.getOriginalFilename();
                 File destinationFile;
                 String destinationFileName;
-                String fileUrl = "C:/aucsusu/src/main/resources/static/images/";
+                String fileUrl = "C:/spring/aucsusu_market/src/main/resources/static/images/";
 
                 do {
                     destinationFileName = RandomStringUtils.randomAlphanumeric(32);
@@ -208,26 +267,27 @@ public class ItemController {
                 filesService.save(file);
 
                 //대표이미지 저장
-                if (multipartFile.equals(files.get(0)))
-                    itemService.saveFisrtFile(file.getFileName(), itemNo);
-                if (!multipartFile.equals(files.get(0)))
-                    itemService.saveFisrtFile(filesService.findFirstByItemNo(itemNo),itemNo);
+                //if (multipartFile.equals(files.get(0)))
+                //    itemService.saveFisrtFile(file.getFileName(), itemNo);
+                //if (!multipartFile.equals(files.get(0)))
+                //    itemService.saveFisrtFile(filesService.findFirstByItemNo(itemNo),itemNo);
             }
         }
 
         return "redirect:/items";
     }
 
-    @DeleteMapping("/items/{item_no}")
-    public String delete(@PathVariable("item_no") Long item_no){
-        itemService.deletePost(item_no);
-        filesService.deleteImageByItemNo(item_no);
-        return "redirect:/";
-    }
-
     @PostMapping("/items/report")
     public String report(Long itemNo){
         itemService.itemReport(itemNo);
+        return "redirect:/";
+    }
+
+    //@DeleteMapping("/items/{item_no}") //postMapping 삭제하고 이거 다시 사용하기
+    @PostMapping("/items/{item_no}")
+    public String delete(@PathVariable("item_no") Long item_no){
+        itemService.deletePost(item_no);
+        filesService.deleteImageByItemNo(item_no);
         return "redirect:/";
     }
 
@@ -251,5 +311,7 @@ public class ItemController {
 
         return "items/itemsList";
     }
+
+
 
 }

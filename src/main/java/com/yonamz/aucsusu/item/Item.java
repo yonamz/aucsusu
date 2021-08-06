@@ -2,7 +2,10 @@ package com.yonamz.aucsusu.item;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.yonamz.aucsusu.user.User;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -12,21 +15,20 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 
 
-@Getter @Setter
+@Getter
 @Entity
-@NoArgsConstructor
-@Table(name = "item")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long item_no;
 
-    @Column(length = 100, nullable = false)
+    @Column
     private String title;
-    @Column(length = 100, nullable = false)
+    @Column
     private String writer;
-    @Column(length = 100, nullable = false)
+    @Column
     private String content;
     @Column
     @ColumnDefault("0")
@@ -38,7 +40,7 @@ public class Item {
     private String bidder;
     @Column
     private Date deadline;
-    @Column(length = 100, nullable = false, updatable = false)
+    @Column
     @CreationTimestamp
     private Timestamp reg_date;
     @Column
@@ -46,13 +48,17 @@ public class Item {
     @Column
     @ColumnDefault("false")
     private boolean soldOut;
+
+    @Column(length = 100, nullable = false, updatable = false)
+    @ColumnDefault("0")
+    private int cnt;
+
     @Column
     private String category;
+
     @Column
     @ColumnDefault("0")
     private int report;
-    @Column(length = 100, nullable = false, updatable = false)
-    private int cnt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

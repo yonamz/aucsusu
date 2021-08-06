@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
     <title>자주 묻는 질문</title>
 </head>
 <body>
+<div th:replace="/fragments/subLogo.html :: fragment-nav"></div>
 <h2>자주 묻는 질문</h2>
 사용자들이 자주 묻는 질문을 확인해보세요.
 
@@ -31,6 +32,7 @@
         </ul>
     </li>
 </ul>
+
 
 <br><br><br>
 그래도 해결이 안되신다면

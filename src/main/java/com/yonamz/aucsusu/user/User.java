@@ -5,7 +5,6 @@ import com.yonamz.aucsusu.item.Item;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -13,10 +12,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
 public class User {
 
     @Id
@@ -44,6 +42,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Item> item = new ArrayList<>();
+
 
     @Builder
     public User(String uid, String name, String password,String email, String phoneNumber, int report){

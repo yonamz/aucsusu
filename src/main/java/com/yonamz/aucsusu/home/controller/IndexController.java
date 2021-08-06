@@ -60,4 +60,9 @@ public class IndexController {
     public String faq(){
         return "faq";
     }
+
+    @GetMapping("/chat/go")
+    public String goChat(){
+        return "chat/rooms";
+    }
 }

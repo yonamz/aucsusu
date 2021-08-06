@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.io.File;
 import java.util.List;
 
 @Service
@@ -40,23 +39,21 @@ public class FilesService {
 
     public List<Files> getFilesList() {
         List<Files> files = filesRepository.findAll();
-        return  files;
+        return files;
     }
 
     @Transactional
     public void deleteImageByItemNo(Long itemNo) {
-        Files files = filesRepository.findByItemNo(itemNo);
-        filesRepository.delete(files);
+        filesRepository.deleteImageByItemNo(itemNo);
     }
 
     @Transactional
     public void deleteImageByFno(int fno) {
-        Files files = filesRepository.findByFno(fno);
-        filesRepository.delete(files);
+        filesRepository.deleteImageByFno(fno);
     }
 
     @Transactional
-    public String findFirstByItemNo(Long itemNo){
+    public String findFirstByItemNo(Long itemNo) {
         return filesRepository.findFirstByItemNo(itemNo).getFileName();
     }
 }

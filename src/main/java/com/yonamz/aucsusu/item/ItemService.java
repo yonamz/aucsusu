@@ -1,5 +1,6 @@
 package com.yonamz.aucsusu.item;
 
+
 import com.yonamz.aucsusu.File.Files;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -53,11 +54,9 @@ public class ItemService {
                     .starting_bid(item.getStarting_bid())
                     .winning_bid(item.getWinning_bid())
                     .reg_date(item.getReg_date())
-                    .soldOut(item.isSoldOut())
                     .fileName(item.getFileName())
-                    .category(item.getCategory())
-                    .report(item.getReport())
                     .cnt(item.getCnt())
+                    .category(item.getCategory())
                     .build();
 
             itemForms.add(itemForm);
@@ -79,11 +78,9 @@ public class ItemService {
                     .starting_bid(item.getStarting_bid())
                     .winning_bid(item.getWinning_bid())
                     .reg_date(item.getReg_date())
-                    .soldOut(item.isSoldOut())
                     .fileName(item.getFileName())
-                    .category(item.getCategory())
-                    .report(item.getReport())
                     .cnt(item.getCnt())
+                    .category(item.getCategory())
                     .build();
 
             itemForms.add(itemForm);
@@ -105,11 +102,9 @@ public class ItemService {
                     .starting_bid(item.getStarting_bid())
                     .winning_bid(item.getWinning_bid())
                     .reg_date(item.getReg_date())
-                    .soldOut(item.isSoldOut())
                     .fileName(item.getFileName())
-                    .category(item.getCategory())
-                    .report(item.getReport())
                     .cnt(item.getCnt())
+                    .category(item.getCategory())
                     .build();
 
             itemForms.add(itemForm);
@@ -131,11 +126,9 @@ public class ItemService {
                     .deadline(item.getDeadline())
                     .starting_bid(item.getStarting_bid())
                     .reg_date(item.getReg_date())
-                    .soldOut(item.isSoldOut())
                     .fileName(item.getFileName())
-                    .category(item.getCategory())
-                    .report(item.getReport())
                     .cnt(item.getCnt())
+                    .category(item.getCategory())
                     .build();
 
             itemForms.add(itemForm);
@@ -144,7 +137,7 @@ public class ItemService {
     }
 
     @Transactional
-    public ItemForm getPost(Long item_no){
+    public ItemForm getPost(Long item_no,String sessionUser){
 
         Optional<Item> itemWrapper = itemRepository.findById(item_no);
         Item item = itemWrapper.get();
@@ -152,18 +145,23 @@ public class ItemService {
         ItemForm itemForm = ItemForm.builder()
                 .item_no(item.getItem_no())
                 .title(item.getTitle())
-                .writer(item.getWriter())
+                .writer(sessionUser)
                 .content(item.getContent())
                 .deadline(item.getDeadline())
                 .starting_bid(item.getStarting_bid())
                 .winning_bid(item.getWinning_bid())
                 .reg_date(item.getReg_date())
                 .soldOut(item.isSoldOut())
-                .category(item.getCategory())
-                .report(item.getReport())
+                .fileName(item.getFileName())
                 .cnt(item.getCnt())
+                .category(item.getCategory())
                 .build();
         return itemForm;
+    }
+
+    @Transactional
+    public int updateCount(Long item_no){
+        return itemRepository.updateCount(item_no);
     }
 
     @Transactional
@@ -223,6 +221,10 @@ public class ItemService {
         return itemRepository.count();
     }
 
+    public void itemReport(Long itemNo) {
+        itemRepository.itemReport(itemNo);
+    }
+
     @Transactional
     public Long getSearchCount(String keyword, String category){
         Long count;
@@ -239,6 +241,9 @@ public class ItemService {
     public void deletePost(Long item_no){
         itemRepository.deleteById(item_no);
     }
+
+
+    public Date getDeadline(long item_no){ return itemRepository.findByItem_no(item_no).getDeadline();}
 
     @Transactional
     public void saveFisrtFile(String fileName, Long itemNo) {
@@ -285,23 +290,29 @@ public class ItemService {
                 .deadline(item.getDeadline())
                 .starting_bid(item.getStarting_bid())
                 .reg_date(item.getReg_date())
-                .category(item.getCategory())
-                .report(item.getReport())
+                .fileName(item.getFileName())
                 .cnt(item.getCnt())
+                .category(item.getCategory())
                 .build();
     }
 
+    @Transactional
+    public List<Item> findAllDesc(List<ItemForm> items){
 
-    public void itemReport(Long itemNo) {
-        itemRepository.itemReport(itemNo);
+        return itemRepository.findAllDesc();
     }
 
     @Transactional
-    public int updateCount(Long item_no){
-        return itemRepository.updateCount(item_no);
+    public List<Item> findAllByCnt(List<ItemForm> items){
+        List<Item> item = itemRepository.findAll(Sort.by(Sort.Direction.DESC,"cnt"));
+        return item;
     }
 
+    @Transactional
+    public List<Item> findAllByDeadline(List<ItemForm> items){
+        List<Item> item = itemRepository.findAll(Sort.by(Sort.Direction.ASC,"deadline"));
+        return item;
+    }
 
-    public Date getDeadline(long item_no){ return itemRepository.findByItem_no(item_no).getDeadline();}
 
 }

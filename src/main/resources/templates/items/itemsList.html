@@ -1,69 +1,106 @@
 <!DOCTYPE HTML>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <div th:replace="/fragments/header.html :: fragment-header"></div>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script>
-  function report(reportNum){
-    if(reportNum >= 2){
-      alert('숨김처리된 게시글입니다.');
-      history.back();
-      return false;
+  <script>
+    $(document).ready(function() {
+      $("div.list_detail").mouseover(function() {
+        $(this).css("background-color", "gainsboro");
+      });
+      $("div.list_detail").mouseout(function() {
+        $(this).css("background-color", "white");
+      });
+    });
+  </script>
+
+  <style>
+    .sortBtn{
+      float:right;
+      margin-right:15%;
+      margin-bottom:20px;
     }
-  }
-</script>
+    .categoryBtn{
+      margin-bottom:5%;
+    }
+
+    .list_start {
+      text-align: center;
+    }
+
+    .list_detail {
+      display: inline-block;
+      width: 220px;
+      height: 260px;
+      padding-top: 8px;
+      /*border: 1px solid;*/
+      margin-bottom: 5px;
+    }
+
+  </style>
+</head>
+
+
 <body>
+<div th:replace="/fragments/subLogo.html :: fragment-nav"></div>
 
-
-
-<div class="category">
-  <button value="digital"><a th:href="@{/items}">전체</a></button>
-  <button type="button" value="digital" id="digital">디지털 기기</button>
-  <button type="button" value="appliance" id="appliance">가전 제품</button>
-  <button type="button" value="clothing" id="clothing">의류</button>
-  <button type="button" value="book" id="book">도서</button>
-  <button type="button" value="etc" id="etc">기타 물품</button>
+<div class="categoryBtn" style="text-align: center">
+  <button class="btn btn-outline-warning"><a th:href="@{/items}">전체</a></button>
+  <button class="btn btn-outline-warning" id="digital"><a th:href="@{/items/digital}">디지털 기기</a></button>
+  <button class="btn btn-outline-warning" id="appliance"><a th:href="@{/items/appliance}">가전 제품</a></button>
+  <button class="btn btn-outline-warning" id="clothing"><a th:href="@{/items/clothing}">의류</a></button>
+  <button class="btn btn-outline-warning" id="book"><a th:href="@{/items/book}">도서</a></button>
+  <button class="btn btn-outline-warning" id="etc"><a th:href="@{/items/etc}">기타 물품</a></button>
+</div>
+<div class="sortBtn">
+  <button class="btn btn-outline-warning"><a href="/items/latest">최신순</a></button>
+  <button class="btn btn-outline-warning"><a href="/items/orderByView">조회순</a></button>
+  <button class="btn btn-outline-warning"><a href="/items/orderByDeadline">마감임박순</a></button>
 </div>
 
-<div class="container">
 
-  <table>
-    <thead>
-    <tr>
-      <th>item list</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="item : ${items}">
-      <td th:text="${item.item_no}"></td>
-      <td th:if="${item.fileName}">
-          <img th:src="@{'/images/'}+${item.fileName}" style="width: 50px; height:50px;">
-      </td>
-      <td th:unless="${item.fileName}">
-        <img th:src="@{'/images/noImage.jpg'}" style="width: 50px; height:50px;">
-      </td>
-      <td>
-        <a th:href="@{'/userItemHistory/' + ${item.writer}}">
-          <span th:text="${item.writer}"> </span>
-        </a>
-      </td>
-      <td>
-        <a id="title" th:href="@{'/items/'+${item.item_no}}" th:onclick="|javascript:return report('${item.report}')|" >
-         <div th:if="${item.soldOut}">
+<div class="container">
+  <h4>상품 목록</h4>
+  <div class="main_title">
+    <br>
+  </div>
+  <!-- 리스트 -->
+  <div class="list_start">
+    <div class="list_detail" th:each="item : ${items}">
+      <!--상품 이미지-->
+      <a th:href="@{'/items/'+${item.item_no}}" th:onclick="|javascript:return report('${item.report}')|">
+        <div th:if="${item.fileName}">
+          <img th:src="@{'/images/'}+${item.fileName}" style="width: 150px; height:150px;" />
+        </div>
+        <div th:unless="${item.fileName}">
+          <img th:src="@{'/images/noImage.jpg'}" style="width: 150px; height:150px;" />
+        </div>
+      </a>
+      <!--상품명-->
+      <div>
+        <a id="title" th:href="@{'/items/'+${item.item_no}}" th:onclick="|javascript:return report('${item.report}')|">
+          <div th:if="${item.soldOut}">
             <span th:text="${item.title}"></span>[판매완료]
           </div>
           <div th:unless="${item.soldOut}">
             <span th:text="${item.title}"></span>
           </div>
         </a>
-        <!--<td th:text="${item.title}" th:href="@{'/items/'+${item.item_no}}">-->
-      </td>
-      <!--<td><textarea th:text="${item.category}"></textarea></td>-->
-      <td th:text="${item.deadline}"></td>
-      <td th:text="${item.starting_bid}"></td>
-      <td th:text="${item.reg_date}"></td>
-      <td th:text="${item.cnt}"></td>
-    </tr>
-    </tbody>
-  </table>
+      </div>
+      <!--시작가-->
+      <div>
+        시작가  <span th:text="${#numbers.formatInteger(item.starting_bid, 0, 'COMMA')}"></span>원
+      </div>
+      <!--현재가-->
+      <div>
+        현재가  <strong><span th:text="${#numbers.formatInteger(item.winning_bid, 0, 'COMMA')}"></span></strong>원
+      </div>
+      <!--마감기한-->
+      <div>
+        마감기한  <span th:text="${item.deadline}"></span>
+      </div>
+    </div>
+  </div>
 
   <div th:if="${searchMode!=true}">
     <span th:each="pageNum : ${pageList}" th:inline="text">
@@ -76,6 +113,25 @@
     </span>
   </div>
 </div>
+</div>
+<script>
+  function report(reportNum){
+    if(reportNum >= 2){
+      alert('숨김처리된 게시글입니다.');
+      history.back();
+      return false;
+    }
+  }
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="/js/app/item.js"></script>
 </body>
