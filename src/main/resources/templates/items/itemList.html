@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <div th:replace="/fragments/header.html :: fragment-header"></div>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <style>
+    .sortBtn{
+      float:right;
+      margin-right:15%;
+      margin-bottom:20px;
+    }
+    .categoryBtn{
+      margin-bottom:5%;
+    }
+  </style>
+</head>
+
+
+<body>
+<div th:replace="/fragments/subLogo.html :: fragment-nav"></div>
+
+<div class="categoryBtn">
+  <button class="btn btn-outline-warning"><a th:href="@{/items}">전체</a></button>
+  <button class="btn btn-outline-warning" id="digital"><a th:href="@{/items/digital}">디지털 기기</a></button>
+  <button class="btn btn-outline-warning" id="appliance"><a th:href="@{/items/appliance}">가전 제품</a></button>
+  <button class="btn btn-outline-warning" id="clothing"><a th:href="@{/items/clothing}">의류</a></button>
+  <button class="btn btn-outline-warning" id="book"><a th:href="@{/items/book}">도서</a></button>
+  <button class="btn btn-outline-warning" id="etc"><a th:href="@{/items/etc}">기타 물품</a></button>
+</div>
+<div class="sortBtn">
+  <button class="btn btn-outline-warning"><a href="/items/latest">최신순</a></button>
+  <button class="btn btn-outline-warning"><a href="/items/orderByView">조회순</a></button>
+  <button class="btn btn-outline-warning"><a href="/items/orderByDeadline">마감임박순</a></button>
+</div>
+
+
+<div class="container">
+  <h4>상품 목록</h4>
+  <table class="table table-striped table-hover">
+    <thead>
+    <tr>
+      <th scope="col"> 번호 </th>
+      <th scope="col"> 상품사진 </th>
+      <th scope="col"> 작성자 </th>
+      <th scope="col"> 제목 </th>
+      <th scope="col"> 마감기한 </th>
+      <th scope="col"> 등록일자 </th>
+      <th scope="col"> 시작가 </th>
+      <th scope="col"> 조회수 </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${items}">
+      <td th:text="${item.item_no}"></td>
+      <td th:if="${item.fileName}">
+        <img th:src="@{'/images/'}+${item.fileName}" style="width: 50px; height:50px;" />
+      </td>
+      <td th:unless="${item.fileName}">
+        <img th:src="@{'/images/noImage.jpg'}" style="width: 50px; height:50px;" />
+      </td>
+      <td>
+        <a th:href="@{'/userItemHistory/' + ${item.writer}}">
+          <span th:text="${item.writer}"> </span>
+        </a>
+      </td>
+      <td>
+        <a id="title" th:href="@{'/items/'+${item.item_no}}" th:onclick="|javascript:return report('${item.report}')|" >
+          <div th:if="${item.soldOut}">
+            <span th:text="${item.title}"></span>[판매완료]
+          </div>
+          <div th:unless="${item.soldOut}">
+            <span th:text="${item.title}"></span>
+          </div>
+        </a>
+        <!--<td th:text="${item.title}" th:href="@{'/items/'+${item.item_no}}">-->
+      </td>
+      <!--<td><textarea th:text="${item.category}"></textarea></td>-->
+      <td th:text="${item.deadline}"></td>
+      <td th:text="${#dates.format(item.reg_date, 'yyyy-MM-dd')}"></td>
+      <td th:text="${#numbers.formatInteger(item.starting_bid, 0, 'COMMA')}"></td>
+      <td th:text="${item.cnt}"></td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div th:if="${searchMode!=true}">
+    <span th:each="pageNum : ${pageList}" th:inline="text">
+      <a th:href="@{'/items/?page='+${pageNum}}">[[${pageNum}]]</a>
+    </span>
+  </div>
+  <div th:if="${searchMode==true}">
+    <span th:each="pageNum : ${pageList}" th:inline="text">
+      <a th:href="@{'/items/search/?page='+${pageNum}+'&keyword='+${keyword}+'&search_category='+${category}}">[[${pageNum}]]</a>
+    </span>
+  </div>
+</div>
+</div>
+<script>
+  function report(reportNum){
+    if(reportNum >= 2){
+      alert('숨김처리된 게시글입니다.');
+      history.back();
+      return false;
+    }
+  }
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="/js/app/item.js"></script>
+</body>
+</html>
