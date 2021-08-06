@@ -1,5 +1,6 @@
 package com.yonamz.aucsusu.user;
 
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,13 +20,19 @@ public class UserApiController {
     }
 
     @GetMapping(value = "/{uid}/exists")
-    public boolean saveCheck(@PathVariable String uid){
-        return userService.saveCheck(uid);
+    public boolean saveIDCheck(@PathVariable("uid") String uid){
+        return userService.saveIDCheck(uid);
+    }
+
+    @GetMapping(value = "/exists/{email}")
+    public boolean saveEmailCheck(@PathVariable("email") String email){
+        return userService.saveEmailCheck(email);
     }
 
     @PostMapping(value = "/update/{uid}")
     public String update(@PathVariable String uid, @RequestBody UserUpdateDto updateDto){
         userService.update(uid, updateDto);
+
         return uid;
     }
 

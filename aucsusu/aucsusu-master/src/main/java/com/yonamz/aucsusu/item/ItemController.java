@@ -53,7 +53,7 @@ public class ItemController {
                 String sourceFileName = multipartFile.getOriginalFilename();
                 File destinationFile;
                 String destinationFileName;
-                String fileUrl = "D:/aucsusu/aucsusu-master/resources/static/images/";
+                String fileUrl = "D:/aucsusu/aucsusu-master/src/main/resources/static/images/";
 
                 do {
                     destinationFileName = RandomStringUtils.randomAlphanumeric(32);
@@ -222,7 +222,7 @@ public class ItemController {
         return "items/update";
     }
 
-    @RequestMapping(value = "/items/edit/{item_no}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/items/edit/{item_no}", method = RequestMethod.POST)
     public String update(ItemForm itemForm, @RequestParam(required = false) List<MultipartFile> files,
                          @RequestParam(value = "delFno") int[] delFnos, HttpServletRequest rq) throws IOException {
         HttpSession session = rq.getSession();

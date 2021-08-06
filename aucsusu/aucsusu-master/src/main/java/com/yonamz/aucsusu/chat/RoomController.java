@@ -59,15 +59,14 @@ public class RoomController {
 
         log.info("#Create Chat Room, name : "+writer);
 
-
         System.err.println("exist : "+messageService.exist(user1.getUid(),user2.getUid()));
-
 
         Message exist = messageService.exist(user1.getUid(),user2.getUid());
 
         if(exist==null){
             System.err.println("exist 실행");
             roomId = UUID.randomUUID().toString();
+            session.setAttribute(roomId,roomId);
             rttr.addFlashAttribute("roomName", repository.createChatRoomDTO(writer,roomId));
             String name = writer+"와 "+user1.getUid()+"의 채팅";
             msg = new Message(roomId,name,user1.getUid(),user2.getUid());
@@ -93,7 +92,9 @@ public class RoomController {
         }
 
 
-        model.addAttribute("room",repository.findRoomById(roomId));
+
+        session.setAttribute("roomid",roomId);
+        model.addAttribute("room",messageService.findByRoomId(roomId));
         model.addAttribute("user",user1);
         return "chat/room";
 
@@ -138,9 +139,12 @@ public class RoomController {
             rttr.addFlashAttribute("roomName", repository.createChatRoomDTO(writer,roomId));
         }
         ChatRoomDTO room=repository.findRoomById(roomId);
-        //room.setName(msg.getName());
-        model.addAttribute("room",repository.findRoomById(roomId));
+        //room.sADDetName(msg.getName());
+        //repository.findRoomById(roomId); -> 수정
+        model.addAttribute("room",messageService.findByRoomId(roomId));
         model.addAttribute("user",user1);
+
+
         return "chat/room";
 
     }
@@ -150,7 +154,6 @@ public class RoomController {
         HttpSession session  = rq.getSession();
         User user = (User)session.getAttribute("user");
         model.addAttribute("user",user);
-
 
 
         model.addAttribute("list",messageService.findRoomByUid1(user.getUid()));

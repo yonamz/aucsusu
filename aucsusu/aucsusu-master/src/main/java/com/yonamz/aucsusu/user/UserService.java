@@ -1,5 +1,7 @@
 package com.yonamz.aucsusu.user;
 
+import com.yonamz.aucsusu.chat.Message;
+import com.yonamz.aucsusu.chat.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final MessageRepository msgRepository;
 
     @Transactional
     public Long save(UserSaveRequestDto userSaveRequestDto){
@@ -16,7 +19,7 @@ public class UserService {
     }
 
     @Transactional
-    public boolean saveCheck(String uid){
+    public boolean saveIDCheck(String uid){
         return userRepository.existsByUid(uid);
     }
 
@@ -24,17 +27,25 @@ public class UserService {
         User user = userRepository.findByUid(uid);
         return userRepository.findByPassword(uid,password);
     }
+    @Transactional
+    boolean saveEmailCheck(String email){
+        return userRepository.existsByEmail(email);
+    }
 
     @Transactional
-    public void update(String uid,UserUpdateDto updateDto){
+    public void update(String uid, UserUpdateDto updateDto){
         User user=userRepository.findByUid(uid);
+
         user.update(updateDto.getName(), updateDto.getPassword(), updateDto.getEmail());
+
     }
 
     @Transactional
     public void delete(String uid){
         User user = userRepository.findByUid(uid);
+        Message msg = msgRepository.findByUser1AndUser2(uid);
         userRepository.delete(user);
+        msgRepository.delete(msg);
     }
 
     @Transactional
@@ -46,4 +57,6 @@ public class UserService {
     public int getUserReportNum(String uid) {
         return userRepository.getUserReportNum(uid);
     }
+
+
 }

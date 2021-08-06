@@ -26,8 +26,13 @@ public class Message {
     @Column(name = "roomId")
     private String roomId;
 
+    @Column(name = "user1")
     private String user1;
+
+    @Column(name = "user2")
     private String user2;
+
+    @Column(name = "name")
     private String name;
 
     public Message toEntity(){
@@ -38,5 +43,8 @@ public class Message {
                 .name(name)
                 .build();
     }
+
+
+
 
 }

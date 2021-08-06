@@ -4,7 +4,8 @@ var main = {
 
                 $('#btnSignup').on('click', function () {
                     if(_this.save1()!=false){
-                        _this.saveChk();
+                        _this.saveIDChk();
+                        _this.saveEmailChk();
                         _this.save2();
                     }
 
@@ -14,9 +15,14 @@ var main = {
                      _this.cancel();
                 });
 
+                $("#chkEmail").on('click', function () {
+                    _this.idChk();
+                });
+
                 $('#chkID').on('click', function (){
                     _this.idChk();
                 });
+
 
                 $('#phoneNumber').bind("keyup",function(event){
                     var regNumber=/^[0-9]*$/;
@@ -26,6 +32,7 @@ var main = {
                         $("#phoneNumber").val(temp.replace(/[^0-9]/g,""));
                     }
                 });
+
 
 
         },
@@ -143,7 +150,25 @@ var main = {
                             	alert(JSON.stringify(error));
                             });
              },
-             saveChk : function(){     //https://1-7171771.tistory.com/78 참고
+             emailCheck : function(){
+                var email = $('#email').val();
+
+                $.ajax({
+                        type : "GET",
+                        url : "/user/exists/"+email,
+                        data:{email}
+                      }).done(function(result){
+                               if(result==false){
+                                     alert('사용 가능한 이메일 입니다');
+                               }else{
+                                     alert('중복된 이메일 입니다');
+                               }
+                      }).fail(function(error) {
+                              alert(JSON.stringify(error));
+                      });
+
+             },
+             saveIDChk : function(){     //https://1-7171771.tistory.com/78 참고
                                    var id = $('#uid').val();
 
                                     $.ajax({
@@ -163,6 +188,26 @@ var main = {
                                          	alert(JSON.stringify(error));
                                          });
                           },
+              saveEmailChk : function(){     //https://1-7171771.tistory.com/78 참고
+                                                                var email = $('#email').val();
+
+                                                                 $.ajax({
+                                                                          type : "GET",
+                                                                      	url : "/user/"+email,
+                                                                      	data:{email},
+                                                                      	async:false
+                                                                      }).done(function(result){
+                                                                          if(result==false){
+                                                                              return true;
+                                                                          }else{
+                                                                              alert('중복된 이메일 입니다');
+                                                                              $('#email').focus();
+                                                                              return fail;
+                                                                          }
+                                                                      }).fail(function(error) {
+                                                                      	alert(JSON.stringify(error));
+                                                                      });
+                                                       },
 
             cancel : function(){
                 $('#uid').val('');
