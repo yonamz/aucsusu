@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "bidding")
 public class Bidding {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

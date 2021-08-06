@@ -1,24 +1,28 @@
+<!--<button class="btn btn-outline-warning" onclick="return chatPopup();">판매자와 대화하기</button>-->
+<!--  <script>
+    function chatPopup(){
+        window.open('/chat/room?writer=[[${writer}]]&itemNo=[[${itemForm.item_no}]]',"판매자에게 연락하기",'width=700px,height=800px');
+      }
+  </script>-->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <div th:replace="/fragments/header.html :: fragment-header"></div>
+  <title>AUCSUSU MARKET - 물품 상세</title>
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-  <!-- <link href="starter-template.css" th:href="@{/starter-template.css}" rel="stylesheet"> -->
-
-
-  <title>상세조회</title>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+    function chatPopup(){
+        window.open('/chat/room?writer=[[${writer}]]&itemNo=[[${itemForm.item_no}]]',"판매자에게 연락하기",'width=700px,height=800px');
+      }
+  </script>
+
   <script type="text/javascript">
     $(document).ready(function (){
       $('button#btnBidding').on('click', function (){
         var biddingPrice = $('input#biddingPrice').val();
         if(biddingPrice == ""){
           alert('제시할 금액을 입력하세요');
-          history.back();
           return false;
         }
         var winningBid = $('input#winningBid').val();
@@ -36,6 +40,13 @@
         }
       });
 
+      $('button#delete-btn').on('click', function (){
+        var check = confirm('삭제하시겠습니까?');
+        if(!check){
+          return false;
+        }
+      });
+
       /*$('#btnSell').on('click', function () {
         $('#btnBidding').attr('disabled', true);
         $('#btnSell').attr('disabled', true);
@@ -43,90 +54,168 @@
     });
 
   </script>
+
+  <style>
+    .divBottom {
+      display: inline-block;
+      margin-right:15%;
+      margin-bottom:20px;
+    }
+  </style>
 </head>
+
 <body>
-<h2 th:text="${itemForm.title}"></h2>
-<p>작성일 : <span th:text="${itemForm.reg_date}" /> </p>
-<p>작성자 : <span th:text="${writer}"/></p>
-
-<p id="deadline_data" data-th-align="${itemForm.deadline}" th:type="hidden"></p>
-<div th:id="contentArea"></div>
-
-<p>
-시작가 : <span th:text="${itemForm.starting_bid}"/> <br>
-현재가 : <span th:text="${itemForm.winning_bid}"/>
-<div th:if="${itemForm.soldOut}">
-  <button type="button">판매완료</button>
-  <div th:if="${user.getUid()==writer}">
-  <form action="/sellCancel" method="post">
-    <input type="hidden" name="itemNo" th:value="${itemForm.item_no}"/>
-    <input type="hidden" name="soldOut" value="false"/>
-    <button type="submit" id="btnSellCancel">낙찰 취소</button>
-  </form>
-  </div>
-</div>
-</p>
-
-<div th:if="${user.getUid()==writer} and ${itemForm.soldOut==false}" >
-  <form action="/sell" method="post">
-    <input type="hidden" name="itemNo" th:value="${itemForm.item_no}"/>
-    <input type="hidden" name="soldOut" value="true"/>
-    <button type="submit" id="btnSell">낙찰</button>
-  </form>
-
-</div>
-
-<div th:if="!${user.getUid()==writer} and ${itemForm.soldOut==false}">
-  <input type="hidden" id="winningBid" th:value="${itemForm.winning_bid}">
-  <form action="/bidding" method="post">
-    <input type="hidden" name="itemNo" th:value="${itemForm.item_no}"/>
-    <input type="hidden" name="uid" th:value="${user.uid}"/>
-    <input type="text" name="biddingPrice" id="biddingPrice" placeholder="제안할 가격"/>
-    <button type="submit" id="btnBidding">제시</button>
-  </form>
-</div>
-
-<!--<img th:src="@{'/images/'}+${file.fileName}" style="width: 300px; height:auto;">-->
-
-  <table>
-    <tr th:each="file : ${filesList}">
+<div th:replace="/fragments/subLogo.html :: fragment-nav"></div>
+<div class="container">
+  <table class="table">
+    <tr>
+      <td style="font-weight: bold">
+        물품 상세
+        <span th:if="${itemForm.soldOut}" style="text-align: right">
+        <button class="btn btn-outline-warning">판매완료</button>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td rowspan="5">
+        <center>
+          <img th:src="@{'/images/'}+${itemForm.fileName}" style="width: 220px; height:220;">
+        </center>
+      </td>
+      <td> 상품명 </td>
+      <td th:text="${itemForm.title}"></td>
+    </tr>
+    <tr>
+      <td> 판매자 </td>
+      <td><a th:href="@{'/userItemHistory/' + ${writer}}"><span th:text="${writer}"></span></a></td>
+      <td th:if="!${user.getUid()==writer}">
+        <button class="btn btn-outline-warning" onclick="return chatPopup();">판매자와 대화하기</button>
+      </td>
+    </tr>
+    <tr>
+      <td> 시작가 <br> 현재가 </td>
       <td>
-        <img th:src="@{'/images/'}+${file.fileName}" style="width: 300px; height:auto;">
+        <span th:text="${#numbers.formatInteger(itemForm.starting_bid, 0, 'COMMA')}"></span>
+          <br>
+          <span th:text="${#numbers.formatInteger(itemForm.winning_bid, 0, 'COMMA')}" style="font-weight: bold"></span>
+      </td>
+      <td th:if="${user.getUid()==writer} and ${itemForm.soldOut==true}" colspan="2">
+        <form action="/sellCancel" method="post">
+          <input type="hidden" name="itemNo" th:value="${itemForm.item_no}"/>
+          <input type="hidden" name="soldOut" value="false"/>
+          <button class="btn btn-outline-warning" type="submit" id="btnSellCancel">낙찰 취소</button>
+        </form>
+      </td>
+      <td th:if="${user.getUid()==writer} and ${itemForm.soldOut==false}">
+        <form action="/sell" method="post">
+          <input type="hidden" name="itemNo" th:value="${itemForm.item_no}"/>
+          <input type="hidden" name="soldOut" value="true"/>
+          <button class="btn btn-outline-warning" type="submit" id="btnSell">낙찰</button>
+        </form>
+      </td>
+      <td th:if="!${user.getUid()==writer} and ${itemForm.soldOut==false}">
+        <form action="/bidding" method="post">
+          <input type="hidden" name="itemNo" th:value="${itemForm.item_no}"/>
+          <input type="hidden" name="uid" th:value="${user.uid}"/>
+          <input type="text" name="biddingPrice" id="biddingPrice" placeholder="제안할 가격"/>
+          <button class="btn btn-outline-warning" type="submit" id="btnBidding">제시</button>
+        </form>
+      </td>
+      <td th:if="!${user.getUid()==writer} and ${itemForm.soldOut==true}">
+        <!--아무것도 없음-->
+      </td>
+    </tr>
+    </tr>
+    <tr>
+      <td> 등록일 </td>
+      <td th:colspan="2" th:text="${#dates.format(itemForm.reg_date, 'yyyy-MM-dd')}"></td>
+    </tr>
+    <tr>
+      <td id="deadline_data" data-th-align="${itemForm.deadline}" th:type="hidden"> 마감기한 </td>
+      <td th:id="contentArea"></td>
+      <td th:text="${itemForm.deadline}"></td>
+    </tr>
+    <!--<tr th:if="${itemForm.soldOut}">
+      <td colspan="2" style="text-align: right">
+        <button class="btn btn-outline-warning">판매완료</button>
+      </td>
+      <td th:if="${user.getUid()==writer}" colspan="2">
+        <form action="/sellCancel" method="post">
+          <input type="hidden" name="itemNo" th:value="${itemForm.item_no}"/>
+          <input type="hidden" name="soldOut" value="false"/>
+          <button class="btn btn-outline-warning" type="submit" id="btnSellCancel">낙찰 취소</button>
+        </form>
+      </td>
+    </tr>-->
+    <!--<tr th:if="${user.getUid()==writer} and ${itemForm.soldOut==false}">
+      <td colspan="4" style="text-align: right">
+        <form action="/sell" method="post">
+          <input type="hidden" name="itemNo" th:value="${itemForm.item_no}"/>
+          <input type="hidden" name="soldOut" value="true"/>
+          <button class="btn btn-outline-warning" type="submit" id="btnSell">낙찰</button>
+        </form>
+      </td>
+    </tr>-->
+    <!--<tr th:if="!${user.getUid()==writer} and ${itemForm.soldOut==false}">
+      <td>
+        <form action="/bidding" method="post">
+          <input type="hidden" name="itemNo" th:value="${itemForm.item_no}"/>
+          <input type="hidden" name="uid" th:value="${user.uid}"/>
+          <input type="text" name="biddingPrice" id="biddingPrice" placeholder="제안할 가격"/>
+          <button class="btn btn-outline-warning" type="submit" id="btnBidding">제시</button>
+        </form>
+        <button class="btn btn-outline-warning" onclick="return chatPopup();">판매자와 대화하기</button>
+      </td>
+    </tr>-->
+    <tr>
+      <td> 상세설명 </td>
+      <td colspan="3">
+        <div style="white-space:pre;"  th:text="${itemForm.content}">
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td> 상품사진 </td>
+      <td colspan="3" >
+        <div  th:each="file : ${filesList}">
+          <img th:src="@{'/images/'}+${file.fileName}" style="width: 300px; height:auto;">
+        </div>
       </td>
     </tr>
   </table>
 
-<p th:text="${itemForm.content}"></p>
+  <div class="divBottom">
+    <div class="divBottom_right">
+    <div th:unless="${user.getUid()==writer}">
+        <form action="/items/report" method="post">
+          <input type="hidden" name="itemNo" th:value="${itemForm.item_no}"/>
+          <button class="btn btn-outline-warning" type="submit" id="btnReport">신고</button>
+        </form>
+    </div>
 
-<div th:unless="${user.getUid()==writer}">
-  <form action="/items/report" method="post">
-    <input type="hidden" name="itemNo" th:value="${itemForm.item_no}"/>
-    <button type="submit" id="btnReport">신고</button>
-  </form>
+    <!-- 수정/삭제 -->
+    <div th:if="${user.getUid()==writer}">
+      <a th:href="@{'/items/edit/' + ${itemForm.item_no}}">
+        <button class="btn btn-outline-warning">수정</button>
+      </a>
+
+      <!--삭제 버튼 form에서 hidden의 delete 인식하지 못해서 잠시 지웠음-->
+      <form id="delete-form" th:action="@{'/items/' + ${itemForm.item_no}}" method="post">
+      <!--<input type="hidden" name="_method" value="delete" />-->
+        <button class="btn btn-outline-warning" id="delete-btn">삭제</button>
+      </form>
+    </div>
+    </div>
+
+    <div>
+      <a th:href="@{'/items/'}">
+        <button class="btn btn-outline-warning">뒤로가기</button>
+      </a>
+    </div>
+  </div>
+
 </div>
-<!-- 수정/삭제 -->
-<div th:if="${user.getUid()==writer}">
-  <a th:href="@{'/items/edit/' + ${itemForm.item_no}}">
-    <button class="btn btn-outline-warning">수정</button>
-  </a>
-  <form id="delete-form" th:action="@{'/items/' + ${itemForm.item_no}}" method="post">
-    <input type="hidden" name="_method" value="delete" />
-    <button class="btn btn-outline-warning" id="delete-btn">삭제</button>
-  </form>
-</div>
 
-
-<!--<script src="/js/app/sell.js"></script>-->
-
-<!--<script type="text/javascript">
-        function sell(){
-        const btnBidding = document.getElementById('btnBidding');
-        const btnSell = document.getElementById('btnSell');
-        alert(btnBidding);
-        btnBidding.disabled = 'disabled';
-        btnSell.disabled = 'disabled';
-      }
-</script>-->
 <script>
   $(document).ready(function () {
     var deadline1 = document.getElementById("deadline_data");
@@ -161,5 +250,14 @@
     },1000);
   })
 </script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
 </body>
 </html>

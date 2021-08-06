@@ -1,6 +1,6 @@
 package com.yonamz.aucsusu.item;
 
-import com.yonamz.aucsusu.bidding.BiddingDto;
+
 import com.yonamz.aucsusu.user.User;
 import com.yonamz.aucsusu.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class ItemHistoryController {
         model.addAttribute("seller", uid);
         model.addAttribute("userReportNum",userReportNum);
         model.addAttribute("items", itemHistory);
-        return "/items/itemHistory";
+        return "items/itemHistory";
     }
 
     @GetMapping("/userItemHistory/{uid}")
@@ -39,6 +39,6 @@ public class ItemHistoryController {
         model.addAttribute("seller", uid);
         model.addAttribute("userReportNum",userReportNum);
         model.addAttribute("items", itemHistory);
-        return "/items/itemHistory";
+        return "items/itemHistory";
     }
 }
