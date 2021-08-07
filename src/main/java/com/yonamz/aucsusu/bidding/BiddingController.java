@@ -25,9 +25,8 @@ public class BiddingController {
             //시작가와 현재가보다 높은 금액만 제안 가능
             if(biddingDto.getBiddingPrice() > winningBid & biddingDto.getBiddingPrice() >= startingBid)
                 biddingService.save(biddingDto);
-            else
-                System.out.println("현재가보다 높은 금액만 제안 가능합니다.");
-            //biddingService.update(itemNo, biddingDto);
+            /*else
+                System.out.println("현재가보다 높은 금액만 제안 가능합니다.");*/
             return "redirect:/items/"+biddingDto.getItemNo();
         }
 
