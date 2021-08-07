@@ -25,9 +25,21 @@
           alert('제시할 금액을 입력하세요');
           return false;
         }
+
         var winningBid = $('input#winningBid').val();
         if(biddingPrice<=winningBid){
           alert('현재가보다 높은 금액만 제안할 수 있습니다.');
+          return false;
+        }
+
+        var deadline1 = document.getElementById("deadline_data");
+        var deadline = deadline1.getAttribute("align");
+        var end = new Date(deadline);
+        end.setHours(0);
+        var now = new Date();
+        var distance = end - now;
+        if(distance<0){
+          alert('마감된 상품에는 제시할 수 없습니다.');
           return false;
         }
       });
@@ -114,6 +126,7 @@
         </form>
       </td>
       <td th:if="!${user.getUid()==writer} and ${itemForm.soldOut==false}">
+        <input type="hidden" id="winningBid" th:value="${itemForm.winning_bid}"/>
         <form action="/bidding" method="post">
           <input type="hidden" name="itemNo" th:value="${itemForm.item_no}"/>
           <input type="hidden" name="uid" th:value="${user.uid}"/>

@@ -78,11 +78,11 @@
       </a>
       <!--상품명-->
       <div>
-        <a id="title" th:href="@{'/items/'+${item.item_no}}" th:onclick="|javascript:return report('${item.report}')|">
-          <div th:if="${item.soldOut}">
-            <span th:text="${item.title}"></span>[판매완료]
+        <a th:href="@{'/items/'+${item.item_no}}" th:onclick="|javascript:return report('${item.report}')|">
+          <div th:if="${item.soldOut==true}">
+            <span th:text="${item.title + '[판매완료]'}"></span>
           </div>
-          <div th:unless="${item.soldOut}">
+          <div th:if="${item.soldOut==false}">
             <span th:text="${item.title}"></span>
           </div>
         </a>
@@ -114,6 +114,7 @@
   </div>
 </div>
 </div>
+
 <script>
   function report(reportNum){
     if(reportNum >= 2){

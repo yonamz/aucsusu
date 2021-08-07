@@ -53,10 +53,13 @@ public class ItemService {
                     .deadline(item.getDeadline())
                     .starting_bid(item.getStarting_bid())
                     .winning_bid(item.getWinning_bid())
+                    .bidder(item.getBidder())
+                    .soldOut(item.isSoldOut())
                     .reg_date(item.getReg_date())
                     .fileName(item.getFileName())
                     .cnt(item.getCnt())
                     .category(item.getCategory())
+                    .report(item.getReport())
                     .build();
 
             itemForms.add(itemForm);
@@ -77,10 +80,13 @@ public class ItemService {
                     .deadline(item.getDeadline())
                     .starting_bid(item.getStarting_bid())
                     .winning_bid(item.getWinning_bid())
+                    .bidder(item.getBidder())
+                    .soldOut(item.isSoldOut())
                     .reg_date(item.getReg_date())
                     .fileName(item.getFileName())
                     .cnt(item.getCnt())
                     .category(item.getCategory())
+                    .report(item.getReport())
                     .build();
 
             itemForms.add(itemForm);
@@ -101,10 +107,13 @@ public class ItemService {
                     .deadline(item.getDeadline())
                     .starting_bid(item.getStarting_bid())
                     .winning_bid(item.getWinning_bid())
+                    .bidder(item.getBidder())
+                    .soldOut(item.isSoldOut())
                     .reg_date(item.getReg_date())
                     .fileName(item.getFileName())
                     .cnt(item.getCnt())
                     .category(item.getCategory())
+                    .report(item.getReport())
                     .build();
 
             itemForms.add(itemForm);
@@ -125,10 +134,14 @@ public class ItemService {
                     .writer(item.getWriter())
                     .deadline(item.getDeadline())
                     .starting_bid(item.getStarting_bid())
+                    .winning_bid(item.getWinning_bid())
+                    .bidder(item.getBidder())
+                    .soldOut(item.isSoldOut())
                     .reg_date(item.getReg_date())
                     .fileName(item.getFileName())
                     .cnt(item.getCnt())
                     .category(item.getCategory())
+                    .report(item.getReport())
                     .build();
 
             itemForms.add(itemForm);
@@ -145,16 +158,18 @@ public class ItemService {
         ItemForm itemForm = ItemForm.builder()
                 .item_no(item.getItem_no())
                 .title(item.getTitle())
-                .writer(sessionUser)
                 .content(item.getContent())
+                .writer(item.getWriter())
                 .deadline(item.getDeadline())
                 .starting_bid(item.getStarting_bid())
                 .winning_bid(item.getWinning_bid())
-                .reg_date(item.getReg_date())
+                .bidder(item.getBidder())
                 .soldOut(item.isSoldOut())
+                .reg_date(item.getReg_date())
                 .fileName(item.getFileName())
                 .cnt(item.getCnt())
                 .category(item.getCategory())
+                .report(item.getReport())
                 .build();
         return itemForm;
     }
@@ -289,10 +304,14 @@ public class ItemService {
                 .content(item.getContent())
                 .deadline(item.getDeadline())
                 .starting_bid(item.getStarting_bid())
+                .winning_bid(item.getWinning_bid())
+                .bidder(item.getBidder())
                 .reg_date(item.getReg_date())
                 .fileName(item.getFileName())
+                .soldOut(item.isSoldOut())
                 .cnt(item.getCnt())
                 .category(item.getCategory())
+                .report(item.getReport())
                 .build();
     }
 

@@ -57,7 +57,7 @@ public class ItemController {
                 String sourceFileName = multipartFile.getOriginalFilename(); //원래 파일명
                 File destinationFile; //MultipartFile을 넣을 File
                 String destinationFileName; //새로운 파일명
-                String fileUrl = "C:/spring/aucsusu_market/src/main/resources/static/images/"; //File이 저장될 곳
+                String fileUrl = "C:/spring/aucsusu/src/main/resources/static/images/"; //File이 저장될 곳
 
                 do {
                     destinationFileName = RandomStringUtils.randomAlphanumeric(32);
@@ -83,21 +83,16 @@ public class ItemController {
         return "redirect:/items";
     }
 
-
     @GetMapping("/items")
     public String list(Model model, @RequestParam(value = "page", defaultValue = "1") Integer pageNum){
         List<ItemForm> items = itemService.getItemList(pageNum);
         Integer[] pageList = itemService.getPageList(pageNum);
 
-        //List<Files> files = filesService.getFilesList();
-
         model.addAttribute("pageList",pageList);
         model.addAttribute("items", items);
 
-
         return "items/itemsList";
     }
-
 
     @GetMapping("/items/appliance")
     public String appliance(Model model){
@@ -112,7 +107,6 @@ public class ItemController {
         model.addAttribute("items",items);
         return "items/itemsList";
     }
-
 
     @GetMapping("/items/etc")
     public String etc(Model model){
@@ -135,7 +129,6 @@ public class ItemController {
         return "items/itemsList";
     }
 
-
     @GetMapping("/items/{item_no}")
     public String detail(@PathVariable("item_no") Long item_no, HttpServletRequest hsrq, Model model){
 
@@ -153,7 +146,6 @@ public class ItemController {
         model.addAttribute("user", user);
         model.addAttribute("writer", writer);
         model.addAttribute("deadline", deadline);
-        model.addAttribute("soldOut", itemForm.isSoldOut());
 
         return "items/detail";
     }
@@ -214,7 +206,6 @@ public class ItemController {
         return "items/itemsList";
     }
 
-
     @GetMapping("/items/edit/{item_no}")
     public String edit(@PathVariable("item_no") Long item_no,HttpServletRequest hsrq, Model model){
         HttpSession session = hsrq.getSession();
@@ -248,7 +239,7 @@ public class ItemController {
                 String sourceFileName = multipartFile.getOriginalFilename();
                 File destinationFile;
                 String destinationFileName;
-                String fileUrl = "C:/spring/aucsusu_market/src/main/resources/static/images/";
+                String fileUrl = "C:/spring/aucsusu/src/main/resources/static/images/";
 
                 do {
                     destinationFileName = RandomStringUtils.randomAlphanumeric(32);
@@ -283,15 +274,13 @@ public class ItemController {
         return "redirect:/";
     }
 
-    //@DeleteMapping("/items/{item_no}") //postMapping 삭제하고 이거 다시 사용하기
-    @PostMapping("/items/{item_no}")
+    @DeleteMapping("/items/{item_no}") //postMapping 삭제하고 이거 다시 사용하기
+    //@PostMapping("/items/{item_no}")
     public String delete(@PathVariable("item_no") Long item_no){
         itemService.deletePost(item_no);
         filesService.deleteImageByItemNo(item_no);
         return "redirect:/";
     }
-
-
 
     @GetMapping("/items/search")
     public String search(@RequestParam(value = "keyword") String keyword,
@@ -311,7 +300,5 @@ public class ItemController {
 
         return "items/itemsList";
     }
-
-
 
 }
