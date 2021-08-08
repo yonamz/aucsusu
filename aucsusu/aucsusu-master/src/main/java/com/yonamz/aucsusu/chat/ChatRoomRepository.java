@@ -10,7 +10,6 @@ import java.util.*;
 @Repository
 public class ChatRoomRepository {
     private Map<String, ChatRoomDTO> chatRoomDTOMap;
-    private HttpServletRequest rq;
 
     @PostConstruct
     private void init(){

@@ -17,6 +17,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -30,26 +33,12 @@ public class RoomController {
     private final ChatRoomRepository repository;
     private final MessageService messageService;
     private final UserRepository userRepository;
-    private final ItemRepository itemRepository;
-
-
-    //채팅방 목록 조회
-    @GetMapping(value = "/rooms")
-    public ModelAndView rooms(){
-        log.info("#All chat rooms");
-        ModelAndView mv = new ModelAndView("chat/rooms");
-
-        mv.addObject("list",repository.findAllRooms());
-
-        return mv;
-    }
-
 
 
     @GetMapping("/room")
     public String create(RedirectAttributes rttr,
                          @RequestParam(value = "writer") String writer,
-                         Model model, HttpServletRequest rq){
+                         Model model, HttpServletRequest rq) throws IOException {
         HttpSession session  = rq.getSession();
         User user1 = (User)session.getAttribute("user");    //user1 = 내 계정
         User user2 = userRepository.findByUid(writer);          //user2 = 채팅 보낼 사람
@@ -91,11 +80,35 @@ public class RoomController {
             }
         }
 
+        boolean isExist=Files.exists(Path.of("D:/aucsusu/aucsusu-master/src/main/resources/static/chat/"+roomId+".txt"));
+        if(isExist==true) {
 
+            long lineCount = Files.lines(Path.of("D:/aucsusu/aucsusu-master/src/main/resources/static/chat/" + roomId + ".txt")).count();
 
+            System.err.println("user : " + user1);
+
+            String[] message = new String[(int) lineCount];
+            String[] auser = new String[(int) lineCount];
+
+            for (int i = 0; i < lineCount; i++) {
+                /*message.setMessage(message.getWriter()+"님이 입장했습니다");*/
+                String totalMsg = readFile(roomId)[i];
+                String storedUser = totalMsg.split(":")[0];
+
+                message[i] = totalMsg.split(":")[1];
+                auser[i] = storedUser;
+
+                /*template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);*/
+            }
+            model.addAttribute("message", message);
+            model.addAttribute("auser", auser);
+            model.addAttribute("count", lineCount);
+        }
         session.setAttribute("roomid",roomId);
         model.addAttribute("room",messageService.findByRoomId(roomId));
         model.addAttribute("user",user1);
+
+
         return "chat/room";
 
     }
@@ -103,7 +116,7 @@ public class RoomController {
     @GetMapping("/croom")
     public String croom(RedirectAttributes rttr,
                          @RequestParam(value = "roomId") String roomId,
-                         Model model, HttpServletRequest rq){
+                         Model model, HttpServletRequest rq) throws IOException {
         HttpSession session  = rq.getSession();
         User sessionUser=(User)session.getAttribute("user");
         User user1;
@@ -139,10 +152,35 @@ public class RoomController {
             rttr.addFlashAttribute("roomName", repository.createChatRoomDTO(writer,roomId));
         }
         ChatRoomDTO room=repository.findRoomById(roomId);
-        //room.sADDetName(msg.getName());
-        //repository.findRoomById(roomId); -> 수정
+
+        boolean isExist=Files.exists(Path.of("D:/aucsusu/aucsusu-master/src/main/resources/static/chat/"+roomId+".txt"));
+        if(isExist==true) {
+
+            long lineCount = Files.lines(Path.of("D:/aucsusu/aucsusu-master/src/main/resources/static/chat/" + roomId + ".txt")).count();
+
+            System.err.println("user : " + user1);
+
+            String[] message = new String[(int) lineCount];
+            String[] auser = new String[(int) lineCount];
+
+            for (int i = 0; i < lineCount; i++) {
+                String totalMsg = readFile(roomId)[i];
+                String storedUser = totalMsg.split(":")[0];
+
+                message[i] = totalMsg.split(":")[1];
+                auser[i] = storedUser;
+
+            }
+            model.addAttribute("message", message);
+            model.addAttribute("auser", auser);
+            model.addAttribute("count", lineCount);
+        }
+
         model.addAttribute("room",messageService.findByRoomId(roomId));
         model.addAttribute("user",user1);
+        session.setAttribute("roomid",roomId);
+
+
 
 
         return "chat/room";
@@ -162,15 +200,23 @@ public class RoomController {
         return "chat/myChatList";
     }
 
+    private String[] readFile(String roomId) throws IOException {
+        File file = new File("D:/aucsusu/aucsusu-master/src/main/resources/static/chat/"+roomId+".txt");
+        FileReader fileReader = new FileReader(file);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-    /*//채팅방 조회
-    @GetMapping("/room")
-    public void getRoom(Model model, HttpServletRequest rq){
-        HttpSession session  = rq.getSession();
-        User user = (User)session.getAttribute("user");
-        log.info("#get chat Room, roomID : "+name);
+        String rLine[] = new String[bufferedReader.read()];
 
-        model.addAttribute("user",user);
-        model.addAttribute("room",repository.findRoomById(roomId));
-    }*/
+        int count=0;
+        String line="";
+        while((line=bufferedReader.readLine())!=null){
+            rLine[count] = line;
+            count++;
+        }
+
+        return rLine;
+
+    }
+
+
 }

@@ -11,7 +11,7 @@ import org.springframework.web.socket.server.support.HttpSessionHandshakeInterce
 
 @EnableWebSocketMessageBroker
 @Configuration
-public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
+public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer{
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/stomp/chat")
@@ -25,8 +25,6 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.enableSimpleBroker("/sub");
 
     }
-
-
 
 
 

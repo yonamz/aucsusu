@@ -5,7 +5,9 @@ import com.yonamz.aucsusu.item.Item;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -36,6 +38,11 @@ public class User {
     @Column
     private String phoneNumber;
 
+    @Setter
+    @Column
+    @ColumnDefault("0")
+    private int status;
+
     @Column
     @ColumnDefault("0")
     private int report;
@@ -45,13 +52,14 @@ public class User {
 
 
     @Builder
-    public User(String uid, String name, String password,String email, String phoneNumber, int report){
+    public User(String uid, String name, String password,String email, String phoneNumber, int report, int status){
         this.uid=uid;
         this.name=name;
         this.password=password;
         this.email=email;
         this.phoneNumber=phoneNumber;
         this.report=report;
+        this.status=status;
     }
 
     public void update(String name,String password,String email) {
@@ -59,4 +67,5 @@ public class User {
         this.password=password;
         this.email=email;
     }
+
 }

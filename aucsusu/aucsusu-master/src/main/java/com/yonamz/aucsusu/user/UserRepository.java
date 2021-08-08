@@ -10,6 +10,8 @@ import javax.transaction.Transactional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    User findByName(@Param("name") String name);
+
     User findByUid(@Param("uid")String uid);
 
     boolean existsByUid(@Param("uid")String uid);
@@ -19,6 +21,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("select u from User u where uid=:uid and password=:password")
     User findByPassword(@Param("uid") String uid,@Param("password") String password);
+
+    @Transactional
+    @Modifying
+    @Query("update User u set status=1 where uid=:uid")
+    void enterUser(@Param("uid") String uid);
+
+    @Transactional
+    @Modifying
+    @Query("update User u set status=0 where uid=:uid")
+    void exitUser(@Param("uid") String uid);
 
     @Query("update User user set user.report = user.report+1 where user.uid = :uid")
     @Modifying

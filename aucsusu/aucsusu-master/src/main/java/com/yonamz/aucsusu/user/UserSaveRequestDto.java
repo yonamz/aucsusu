@@ -35,4 +35,8 @@ public class UserSaveRequestDto {
                 .password(password).phoneNumber(phoneNumber).build();
     }
 
+    public User enter(){
+        return User.builder().status(1).build();
+    }
+
 }

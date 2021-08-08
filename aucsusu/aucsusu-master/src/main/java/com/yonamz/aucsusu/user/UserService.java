@@ -58,5 +58,11 @@ public class UserService {
         return userRepository.getUserReportNum(uid);
     }
 
+    @Transactional
+    public User findByUid(String uid){
+        return userRepository.findByUid(uid);
+    }
+
+
 
 }
