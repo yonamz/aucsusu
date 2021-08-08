@@ -96,13 +96,27 @@
       </td>
       <td> 상품명 </td>
       <td th:text="${itemForm.title}"></td>
+      <td></td>
     </tr>
     <tr>
       <td> 판매자 </td>
+      <span th:unless="${itemForm.isDeleted()}">
       <td><a th:href="@{'/userItemHistory/' + ${writer}}"><span th:text="${writer}"></span></a></td>
+
+        <td th:if="!${user.getUid()==writer}">
+          <button class="btn btn-outline-warning" onclick="return chatPopup();">판매자와 대화하기</button>
+        </td>
+        <td></td>
+      </span>
+      <span th:if="${itemForm.isDeleted()}">
+        <td><span th:text="${writer}"></span></td>
+        <td><b>탈퇴한 사용자입니다</b></td>
+      </span>
+
+      <!--<td><a th:href="@{'/userItemHistory/' + ${writer}}"><span th:text="${writer}"></span></a></td>
       <td th:if="!${user.getUid()==writer}">
         <button class="btn btn-outline-warning" onclick="return chatPopup();">판매자와 대화하기</button>
-      </td>
+      </td>-->
     </tr>
     <tr>
       <td> 시작가 <br> 현재가 </td>
@@ -199,12 +213,14 @@
 
   <div class="divBottom">
     <div class="divBottom_right">
-    <div th:unless="${user.getUid()==writer}">
-        <form action="/items/report" method="post">
-          <input type="hidden" name="itemNo" th:value="${itemForm.item_no}"/>
-          <button class="btn btn-outline-warning" type="submit" id="btnReport">신고</button>
-        </form>
-    </div>
+    <span th:if="${itemForm.isDeleted()}">
+        <div th:unless="${user.getUid()==writer}">
+            <form action="/items/report" method="post">
+              <input type="hidden" name="itemNo" th:value="${itemForm.item_no}"/>
+              <button class="btn btn-outline-warning" type="submit" id="btnReport">신고</button>
+            </form>
+        </div>
+      </span>
 
     <!-- 수정/삭제 -->
     <div th:if="${user.getUid()==writer}">

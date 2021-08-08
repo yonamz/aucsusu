@@ -10,10 +10,20 @@
 <div th:replace="/fragments/subLogo.html :: fragment-nav"></div>
 <div>
     <ul th:each="room:${message}">
-        <li><a href="#" th:onclick="window.open('/chat/croom?roomId='+[[${room.roomId}]],'_blank','width=700px,height=800px')">[[${room.user1}]]</a></li>
+        <span th:if="${room.deleted==true}">
+            <li><a href="#" th:onclick="window.open('/chat/croom?roomId='+[[${room.roomId}]],'_blank','width=700px,height=800px')">[[${room.user1}]] (탈퇴한 사용자입니다)</a></li>
+        </span>
+        <span th:unless="${room.deleted==true}">
+            <li><a href="#" th:onclick="window.open('/chat/croom?roomId='+[[${room.roomId}]],'_blank','width=700px,height=800px')">[[${room.user1}]]</a></li>
+        </span>
     </ul>
     <ul th:each="room:${list}">
-        <li><a href="#" th:onclick="window.open('/chat/croom?roomId='+[[${room.roomId}]],'_blank','width=700px,height=800px')">[[${room.user2}]]</a></li>
+        <span th:if="${room.deleted==true}">
+            <li><a href="#" th:onclick="window.open('/chat/croom?roomId='+[[${room.roomId}]],'_blank','width=700px,height=800px')">[[${room.user2}]] (탈퇴한 사용자입니다)</a></li>
+        </span>
+        <span th:unless="${room.deleted==true}">
+            <li><a href="#" th:onclick="window.open('/chat/croom?roomId='+[[${room.roomId}]],'_blank','width=700px,height=800px')">[[${room.user2}]]</a></li>
+        </span>
     </ul>
 </div>
 </body>

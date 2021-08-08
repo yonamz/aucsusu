@@ -3,21 +3,53 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 </head>
+
 <body>
-<!-- toastr js 라이브러리 -->
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<style>
+    .input-group{
+        margin-bottom:20px;
+    }
+    #enterMsg{
+        text-align:center;
+    }
+
+</style>
 
 <script th:inline="javascript">
+
 
 
         $(document).ready(function(){
             var roomName = [[${room.name}]];
             var roomId = [[${room.roomId}]];
-            var username = [[${user.name}]];
+            var username = [[${user.uid}]];
+            var message = [[${message}]];
+            var auser = [[${auser}]];
+            var count = [[${count}]];
+
+
+         for(var i=0;i<count;i++){
+            if(auser[i]==username){
+                        str = "<div class='col' style='width:40%; margin-left: auto;'>";
+                        str += "<div class='alert alert-secondary'>";
+                        str += "<b>"+message[i]+"</b>";
+                        str += "</div></div>";
+                        $("#msgArea").append(str);
+                        $(document).scrollTop($(document).height());
+                    }else{
+                        //alert("username!=writer");
+                        str = "<div class='col' style='width : 40%; align:left;'>";
+                        str += "<b>"+auser[i]+"<b>";
+                        str += "<div class='alert alert-warning'>";
+                        str += "<b>"+message[i]+"</b>";
+                        str += "</div></div>";
+                        $("#msgArea").append(str);
+                        $(document).scrollTop($(document).height());
+                }
+            }
 
 
             var sockJs = new SockJS("/stomp/chat");
@@ -26,27 +58,39 @@
             stomp.connect({},function(){
                 console.log("STOMP Connection");
 
+
                 stomp.subscribe("/sub/chat/room/"+roomId, function(chat){
                     var content = JSON.parse(chat.body);
                     var message = content.message;
                     var writer = content.writer;
                     var str = '';
-                    var toast='';
 
+                    if(message==null){
+                        str="<div class='col'>";
+                        str += "<p id='enterMsg'>------------------"+writer+"님이 입장했습니다------------------</p>";
+                        str += "</div>";
+                        $("#msgArea").append(str);
+                        $(document).scrollTop($(document).height());
+                    }
+
+                if(message!=null){
                     if(writer==username){
-                        str = "<div class='col-6'>";
+                        str = "<div class='col' style='width:40%; margin-left: auto;'>";
                         str += "<div class='alert alert-secondary'>";
-                        str += "<b>"+writer+" : "+message+"</b>";
+                        str += "<b>"+message+"</b>";
                         str += "</div></div>";
                         $("#msgArea").append(str);
+                        $(document).scrollTop($(document).height());
                     }else{
                         //alert("username!=writer");
-                        str = "<div class='col-6'>";
+                        str = "<div class='col' style='width:40%; margin-right: auto;'>";
+                        str += "<b>"+writer+"<b>";
                         str += "<div class='alert alert-warning'>";
-                        str += "<b>"+writer+" : "+message+"</b>";
+                        str += "<b>"+message+"</b>";
                         str += "</div></div>";
                         $("#msgArea").append(str);
-
+                        $(document).scrollTop($(document).height());
+                    }
                         self.addEventListener('notificationclick', function(event) {
                             let url = 'https://localhost:8080/chat/myChat';
                             console.log("event 실행");
@@ -70,15 +114,11 @@
                         });
                     }
 
-                        Notification.requestPermission();
-                        new Notification(writer+"에게 메시지 도착", {body:content.message});
-
                 });
 
-                   stomp.send('/pub/chat/enter',{},JSON.stringify({roomId:roomId, writer:username}));
-
-
+                stomp.send('/pub/chat/enter',{},JSON.stringify({roomId:roomId, writer:username}));
             });
+
 
 
 
@@ -89,30 +129,54 @@
                 stomp.send('/pub/chat/message',{},JSON.stringify({roomId:roomId,message:msg.value, writer:username}));
                 msg.value='';
             });
+
+            $("#msg").keydown(function(key){
+                if(key.keyCode == 13){
+                    var msg = document.getElementById("msg");
+                    //console.log(username+":"+msg.value);
+
+                    stomp.send('/pub/chat/message',{},JSON.stringify({roomId:roomId,message:msg.value, writer:username}));
+                    msg.value='';
+                }
+            });
         });
 
 
 
     </script>
-    <div class="container">
-        <div class="col-6">
-            <h1>[[${room.name}]]</h1>
-        </div>
-        <div>
-            <div id="msgArea" class="col"></div>
-            <div class="col-6">
-                <div class="input-group mb-3">
-                    <input type="text" id="msg" class="form-control">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="button-send">전송</button>
+<div class="container" id="chatContent">
+    <div class="col-6">
+        <h5>[[${room.name}]]</h5>
+    </div>
+    <div>
+        <div id="msgArea" class="col"></div>
+        <div class="col">
+
+                <span th:if="${room.deleted!=true}">
+                    <div class="input-group">
+                        <input type="text" id="msg" class="form-control">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="button-send">전송</button>
+                        </div>
                     </div>
-                </div>
+                </span>
+
+                <span th:if="${room.deleted==true}">
+                    <div class="input-group">
+                        <input type="text" id="deleted" class="form-control" placeholder="탈퇴한 사용자입니다" readonly>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary">전송</button>
+                        </div>
+                    </div>
+                </span>
             </div>
         </div>
-            <div class="col-6"></div>
-    </div>
-<div id="msgStack"></div>
+
+
+</div>
+
 </body>
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </html>
+

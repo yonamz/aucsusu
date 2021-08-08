@@ -2,6 +2,7 @@ package com.yonamz.aucsusu.user;
 
 import com.yonamz.aucsusu.chat.Message;
 import com.yonamz.aucsusu.chat.MessageRepository;
+import com.yonamz.aucsusu.item.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final MessageRepository msgRepository;
+    private final ItemRepository itemRepository;
 
     @Transactional
     public Long save(UserSaveRequestDto userSaveRequestDto){
@@ -37,10 +39,11 @@ public class UserService {
     @Transactional
     public void delete(String uid){
         User user = userRepository.findByUid(uid);
-        Message msg = msgRepository.findByUser1AndUser2(uid);
         userRepository.delete(user);
-        msgRepository.delete(msg);
+        msgRepository.deletedChat(uid);
+        itemRepository.deletedUser(uid);
     }
+
 
     @Transactional
     public void userReport(String uid) {

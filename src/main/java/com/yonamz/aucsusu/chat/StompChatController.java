@@ -1,15 +1,15 @@
 package com.yonamz.aucsusu.chat;
 
-
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.web.server.Http2;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.socket.WebSocketSession;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -19,14 +19,33 @@ public class StompChatController {
 
 
     @MessageMapping(value = "/chat/enter")
-    public void enter(ChatMessageDTO message){
-        message.setMessage(message.getWriter()+"님이 채팅방에 참여했습니다.");
+    public void enter(ChatMessageDTO message) throws IOException {
 
-        template.convertAndSend("/sub/chat/room/"+message.getRoomId(),message);
+        template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
     }
 
     @MessageMapping(value = "/chat/message")
     public void message(ChatMessageDTO message){
+        saveFile(message.getWriter(),message.getMessage(),message.getRoomId());
         template.convertAndSend("/sub/chat/room/"+message.getRoomId(),message);
     }
+
+
+    // 파일를 저장하는 함수
+    private void saveFile(String user,String message,String roomId) {
+        String msg = message;
+
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream("~/spring/aucsusu/src/main/resources/static/chat/"+roomId+".txt", true), "UTF-8"))) {
+            if(!msg.isBlank()) {//공백 입력시 채팅 이력에 저장되지 않게 함
+                writer.write(user + ":" + msg);
+                writer.newLine();
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+    }
 }
+
+

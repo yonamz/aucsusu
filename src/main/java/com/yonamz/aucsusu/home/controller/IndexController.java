@@ -44,14 +44,14 @@ public class IndexController {
     public String userInfo(Model model){
         User user = (User) httpSession.getAttribute("user");
         model.addAttribute(user);
-        return "user-info";
+        return "user/user-info";
     }
 
     @GetMapping(value = "/deleteForm")
     public String deleteForm(Model model){
         User user = (User) httpSession.getAttribute("user");
         model.addAttribute(user);
-        return "delete-user";
+        return "user/delete-user";
     }
 
     @GetMapping("/faq")

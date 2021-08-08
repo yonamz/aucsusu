@@ -60,6 +60,7 @@ public class ItemService {
                     .cnt(item.getCnt())
                     .category(item.getCategory())
                     .report(item.getReport())
+                    .deleted(item.isDeleted())
                     .build();
 
             itemForms.add(itemForm);
@@ -312,6 +313,7 @@ public class ItemService {
                 .cnt(item.getCnt())
                 .category(item.getCategory())
                 .report(item.getReport())
+                .deleted(item.isDeleted())
                 .build();
     }
 

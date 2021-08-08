@@ -3,14 +3,11 @@ package com.yonamz.aucsusu.chat;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Repository
 public class ChatRoomRepository {
     private Map<String, ChatRoomDTO> chatRoomDTOMap;
-    private HttpServletRequest rq;
 
     @PostConstruct
     private void init(){

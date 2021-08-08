@@ -57,6 +57,10 @@ public class Item {
     private String category;
 
     @Column
+    @ColumnDefault("false")
+    private boolean deleted;
+
+    @Column
     @ColumnDefault("0")
     private int report;
 
@@ -66,7 +70,7 @@ public class Item {
 
     @Builder
     public Item(Long item_no, String title, String writer, String content, int starting_bid, int winning_bid,
-                String bidder, Date deadline, Timestamp reg_date, String category, String fileName, Boolean soldOut, int report, int cnt) {
+                String bidder, Date deadline, Timestamp reg_date, String category, String fileName, Boolean soldOut, int report, int cnt,boolean deleted) {
 
         this.item_no = item_no;
         this.title = title;
@@ -82,5 +86,6 @@ public class Item {
         this.category = category;
         this.report = report;
         this.cnt = cnt;
+        this.deleted=deleted;
     }
 }

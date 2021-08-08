@@ -24,7 +24,7 @@ public class UserController {
         HttpSession session = req.getSession();
         User user = userService.login(uid,password);
 
-/*        */
+        /*        */
 
         if(user == null){
             session.setAttribute("user",null);
@@ -46,7 +46,7 @@ public class UserController {
     public String modify(Model model){
         User user=(User) httpSession.getAttribute("user");
         model.addAttribute(user);
-        return "update-userInfo";
+        return "user/update-userInfo";
     }
 
     @PostMapping(value = "/report")
