@@ -258,10 +258,10 @@ public class ItemController {
                 filesService.save(file);
 
                 //대표이미지 저장
-                //if (multipartFile.equals(files.get(0)))
-                //    itemService.saveFisrtFile(file.getFileName(), itemNo);
-                //if (!multipartFile.equals(files.get(0)))
-                //    itemService.saveFisrtFile(filesService.findFirstByItemNo(itemNo),itemNo);
+                if (multipartFile.equals(files.get(0)))
+                    itemService.saveFisrtFile(file.getFileName(), itemNo);
+                if (!multipartFile.equals(files.get(0)))
+                    itemService.saveFisrtFile(filesService.findFirstByItemNo(itemNo),itemNo);
             }
         }
 
@@ -274,8 +274,8 @@ public class ItemController {
         return "redirect:/";
     }
 
-    @DeleteMapping("/items/{item_no}") //postMapping 삭제하고 이거 다시 사용하기
     //@PostMapping("/items/{item_no}")
+    @PostMapping("/items/{item_no}")
     public String delete(@PathVariable("item_no") Long item_no){
         itemService.deletePost(item_no);
         filesService.deleteImageByItemNo(item_no);
