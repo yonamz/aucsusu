@@ -66,4 +66,6 @@ www.aucsusu.com
       <img src = "https://user-images.githubusercontent.com/58590696/129451021-6787469a-e0cc-4751-8c79-e16e1b03cf4a.png"
       width="80%" height="80%"> <!--채팅 목록-->
 
-6. 물폼/사용자 신고
+6. 물품/사용자 신고
+      - 일정 횟수 이상 신고된 사용자는 상품 등록 불가
+      - 일정 횟수 이상 신고된 물품은 숨김 처리(상세 조회 불가)
