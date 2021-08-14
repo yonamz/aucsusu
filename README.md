@@ -19,7 +19,7 @@ www.aucsusu.com
 <br>
 네이버 클라우드 플랫폼의 Global DNS 활용(2021년 8월 말 만료예정)
 
-### 기능/사용법
+### 기능
 1. 회원 가입/수정/탈퇴<br>
       - 회원가입<br>
       <img src = "https://user-images.githubusercontent.com/58590696/129450708-63da70e8-ab94-4ed0-bffe-e537180b6dfd.png"
