@@ -81,10 +81,10 @@ public class RoomController {
             }
         }
 
-        boolean isExist=Files.exists(Path.of(String.valueOf(resourceLoader.getResource("classpath:/src/main/resource/static/chat/" + roomId + ".txt"))));
+        boolean isExist=Files.exists(Path.of("/root/spring/aucsusu/src/main/resource/static/chat/" + roomId + ".txt"));
         if(isExist==true) {
 
-            long lineCount = Files.lines(Path.of(String.valueOf(resourceLoader.getResource("classpath:/src/main/resource/static/chat/" + roomId + ".txt")))).count();
+            long lineCount = Files.lines(Path.of("/root/spring/aucsusu/src/main/resource/static/chat/" + roomId + ".txt")).count();
 
             System.err.println("user : " + user1);
 
@@ -137,10 +137,10 @@ public class RoomController {
             user2 = userRepository.findByUid(writer);
         }
 
-        boolean isExist=Files.exists(Path.of(String.valueOf(resourceLoader.getResource("classpath:/src/main/resource/static/chat/" + roomId + ".txt"))));
+        boolean isExist=Files.exists(Path.of("/root/spring/aucsusu/src/main/resource/static/chat/" + roomId + ".txt"));
         if(isExist==true) {
 
-            long lineCount = Files.lines(Path.of(String.valueOf(resourceLoader.getResource("classpath:/src/main/resource/static/chat/" + roomId + ".txt")))).count();
+            long lineCount = Files.lines(Path.of("/root/spring/aucsusu/src/main/resource/static/chat/" + roomId + ".txt")).count();
 
             System.err.println("user : " + user1);
 
@@ -185,7 +185,7 @@ public class RoomController {
     }
 
     private String[] readFile(String roomId) throws IOException {
-        File file = new File(String.valueOf(resourceLoader.getResource("classpath:/src/main/resource/static/chat/"+roomId+".txt")));
+        File file = new File("/root/spring/aucsusu/src/main/resource/static/chat/"+roomId+".txt");
         FileReader fileReader = new FileReader(file);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
 
