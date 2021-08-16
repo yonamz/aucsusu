@@ -15,7 +15,7 @@ Issues 참고
 (쿠버네티스 성공하면 나중에 추가)
 
 ### 접속 방법
-aucsusu.kro.kr
+www.aucsusu.kro.kr
 <br>
 
 <br>
