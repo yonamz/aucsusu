@@ -57,7 +57,7 @@ public class ItemController {
                 String sourceFileName = multipartFile.getOriginalFilename(); //원래 파일명
                 File destinationFile; //MultipartFile을 넣을 File
                 String destinationFileName; //새로운 파일명
-                String fileUrl = "D:/aucsusu/src/main/resources/static/images/"; //File이 저장될 곳
+                String fileUrl = "/root/spring/aucsusu/src/main/resources/static/images/"; //File이 저장될 곳
 
                 do {
                     destinationFileName = RandomStringUtils.randomAlphanumeric(32);
@@ -239,7 +239,7 @@ public class ItemController {
                 String sourceFileName = multipartFile.getOriginalFilename();
                 File destinationFile;
                 String destinationFileName;
-                String fileUrl = "D:/aucsusu/src/main/resources/static/images/";
+                String fileUrl = "/root/spring/aucsusu/src/main/resources/static/images/";
 
                 do {
                     destinationFileName = RandomStringUtils.randomAlphanumeric(32);
