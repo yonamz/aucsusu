@@ -5,7 +5,8 @@ var main = {
                 $('#btnSignup').on('click', function () {
                     if(_this.save1()!=false){
                         _this.saveChk();
-                        _this.save2();
+                        _this.emailChk();
+                        _this.save();
                     }
 
                 });
@@ -15,7 +16,23 @@ var main = {
                 });
 
                 $('#chkID').on('click', function (){
+                    var uid = $('#uid').val();
+                    var korean = uid.search(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/gi);
+
+                    if(uid.search(/\s/) != -1||uid==''){
+                       alert("아이디를 입력해주세요");
+                       return false;
+                    }
+
+                    if (korean > 0) {
+                       alert("아이디는 영문,숫자만 입력해주세요.");
+                       return false;
+                    }
                     _this.idChk();
+                });
+
+                $('#chkEMAIL').on('click', function (){
+                        _this.emailChk();
                 });
 
                 $('#phoneNumber').bind("keyup",function(event){
@@ -29,79 +46,99 @@ var main = {
 
 
         },
+        save1 : function(){
+                  var idTest = /^[a-zA-Z0-9]{4,12}$/;
+
+
+                  var uid = $('#uid').val();
+                  var name = $('#name').val();
+                  var password = $('#password').val();
+                  var confirmpw = $('#confirmpw').val();
+                  var phoneNumber = $('#phoneNumber').val();
+                  var email = $('#email').val();
+
+                  if(uid.search(/\s/) != -1||uid==''){
+                      alert("아이디를 입력해주세요");
+                      $('#uid').focus();
+                      return false;
+                  }else if(name.search(/\s/) != -1||name==''){
+                      alert("이름을 입력해주세요");
+                      $('#name').focus();
+                      return false;
+                  }else if(password.search(/\s/) != -1||password==''){
+                         alert("비밀번호를 입력해주세요");
+                         $('#password').focus();
+                         return false;
+                  }else if(email.search(/\s/) != -1||email==''){
+                         alert("이메일을 입력해주세요");
+                         $('#email').focus();
+                         return false;
+                  }
+                  if(!this.check(idTest,uid,"아이디는 4~12자의 영문 대소문자와 숫자로만 입력")){
+                      $('#uid').focus();
+                      return false;
+                  }
+
+
+                                                                if(password.length<4){
+                                                                    alert("비밀번호는 4자 이상으로 설정해주세요");
+                                                                    $('#password').value="";
+                                                                    $('#password').focus();
+                                                                    return false;
+                                                                }
+
+
+
+                                                                if(password!=confirmpw){
+                                                                    alert("비밀번호가 다릅니다.");
+                                                                    $('#confirmpw').value="";
+                                                                    $('#confirmpw').focus();
+                                                                    return false;
+                                                                }
+
+
+                                                                if(phoneNumber.length!=11){
+                                                                    alert("폰번호는 - 제외 입력해주세요");
+                                                                    $('#phoneNumber').focus();
+                                                                    return false;
+                                                                }
+
+                },
+
+        emailChk : function(){
+            var email = $('#email').val();
+            var emailTest = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+            if(!this.check(emailTest,email,"이메일 형식이 올바르지 않습니다.")){
+               $('#email').focus();
+               return false;
+            }
+
+                                   $.ajax({
+                                            type : "GET",
+                                        	url : "/user/exists/"+email,
+                                        	data:{email}
+                                        }).done(function(result){
+                                            if(result==false){
+                                                return true;
+                                            }else{
+                                                alert('중복된 이메일입니다');
+                                                $('#email').focus();
+                                                return false;
+                                            }
+                                        }).fail(function(error) {
+                                        	alert(JSON.stringify(error));
+                                        });
+        },
         check: function(re, what, message){
                if(re.test(what.value)){
                     return true;
                }
                alert(message);
                what.value="";
-               what.focus();
-        },
-        save1 : function(){
-                                            var idTest = /^[a-zA-Z0-9]{4,12}$/;
-                                            var emailTest = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
-
-
-                                            var data = {
-                                                uid: $('#uid').val(),
-                                                name: $('#name').val(),
-                                                password: $('#password').val(),
-                                                confirmpw: $('#confirmpw').val(),
-                                                phoneNumber: $('#phoneNumber').val(),
-                                                email: $('#email').val()
-                                            };
-
-                                            if(!this.check(idTest,uid,"아이디는 4~12자의 영문 대소문자와 숫자로만 입력")){
-                                                                  return false;
-                                            }
-
-                                                        if(password.value==""||password.value==" "){
-                                                                  alert("비밀번호를 입력해주세요");
-                                                                  password.value="";
-                                                                  password.focus();
-                                                                  return false;
-                                                        }
-                                                        if(password.value.length<4){
-                                                            alert("비밀번호가 너무 짧습니다.");
-                                                            password.value="";
-                                                            password.focus();
-                                                            return false;
-                                                        }
-
-                                                        if(name.value==""||name.value==" "){
-                                                            alert("이름을 입력해주세요");
-                                                            name.value="";
-                                                            name.focus();
-                                                            return false;
-                                                        }
-
-                                                        if(email.value==""||email.value==" "){
-                                                              alert("이메일을 입력해주세요");
-                                                              email.value="";
-                                                              email.focus();
-                                                              return false;
-                                                        }
-
-                                                        if(password.value!=confirmpw.value){
-                                                            alert("비밀번호가 다릅니다.");
-                                                            confirmpw.value="";
-                                                            confirmpw.focus();
-                                                            return false;
-                                                        }
-
-
-                                                        if(phoneNumber.value.length!=11){
-                                                            alert("폰번호는 - 제외 입력해주세요");
-                                                            phoneNumber.focus();
-                                                            return false;
-                                                        }
-                                                        if(!this.check(emailTest,email,"이메일 형식이 올바르지 않습니다.")){
-                                                            email.focus();
-                                                            return false;
-                                                        }
         },
 
-        save2 : function () {
+
+        save : function () {
                 var data = {
                     uid: $('#uid').val(),
                     name: $('#name').val(),
@@ -127,7 +164,13 @@ var main = {
             },
 
             idChk : function(){     //https://1-7171771.tistory.com/78 참고
-                      var id = $('#uid').val();
+                    var id = $('#uid').val();
+                    var idTest = /^[a-zA-Z0-9]{4,12}$/;
+
+                    if(!this.check(idTest,id,"아이디는 4~12자의 영문 대소문자와 숫자로만 입력")){
+                       id.focus();
+                       return false;
+                    }
 
                        $.ajax({
                                 type : "GET",
@@ -135,7 +178,7 @@ var main = {
                             	data:{id}
                             }).done(function(result){
                                 if(result==false){
-                                    alert('사용 가능한 아이디 입니다');
+                                    alert('사용 가능한 아이디입니다');
                                 }else{
                                     alert('중복된 아이디 입니다');
                                 }
@@ -145,6 +188,7 @@ var main = {
              },
              saveChk : function(){     //https://1-7171771.tistory.com/78 참고
                                    var id = $('#uid').val();
+
 
                                     $.ajax({
                                              type : "GET",
@@ -163,6 +207,8 @@ var main = {
                                          	alert(JSON.stringify(error));
                                          });
                           },
+
+
 
             cancel : function(){
                 $('#uid').val('');

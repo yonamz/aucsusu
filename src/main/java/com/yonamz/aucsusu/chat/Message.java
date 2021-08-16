@@ -15,11 +15,12 @@ import javax.persistence.Id;
 public class Message {
 
     @Builder
-    public Message(String roomId,String name,String user1, String user2){
+    public Message(String roomId,String name,String user1, String user2, boolean notify){
         this.roomId=roomId;
         this.name = name;
         this.user1=user1;
         this.user2=user2;
+        this.notify=notify;
     }
 
     @Id
@@ -35,6 +36,10 @@ public class Message {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "notify")
+    @ColumnDefault("false")
+    private boolean notify;
+
     @Column(name = "deleted")
     @ColumnDefault("false")
     private boolean deleted;
@@ -45,6 +50,7 @@ public class Message {
                 .user1(user1)
                 .user2(user2)
                 .name(name)
+                .notify(notify)
                 .build();
     }
 

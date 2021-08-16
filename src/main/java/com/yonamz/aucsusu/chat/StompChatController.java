@@ -1,6 +1,8 @@
 package com.yonamz.aucsusu.chat;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.repository.init.ResourceReader;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -16,7 +18,8 @@ import java.io.OutputStreamWriter;
 public class StompChatController {
     //특정 브로커로 메시지 전달
     private final SimpMessagingTemplate template;
-
+    private final MessageRepository messageRepository;
+    private final ResourceLoader resourceLoader;
 
     @MessageMapping(value = "/chat/enter")
     public void enter(ChatMessageDTO message) throws IOException {
@@ -36,10 +39,12 @@ public class StompChatController {
         String msg = message;
 
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream("~/spring/aucsusu/src/main/resources/static/chat/"+roomId+".txt", true), "UTF-8"))) {
+                new FileOutputStream(String.valueOf(resourceLoader.getResource("classpath:chat/"+roomId+".txt")), true), "UTF-8"))) {
             if(!msg.isBlank()) {//공백 입력시 채팅 이력에 저장되지 않게 함
                 writer.write(user + ":" + msg);
                 writer.newLine();
+            }else{
+                messageRepository.enterChat(roomId);
             }
         } catch (Throwable e) {
             e.printStackTrace();

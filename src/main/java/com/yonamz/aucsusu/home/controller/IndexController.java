@@ -1,5 +1,9 @@
 package com.yonamz.aucsusu.home.controller;
 
+import com.yonamz.aucsusu.File.Files;
+import com.yonamz.aucsusu.File.FilesService;
+import com.yonamz.aucsusu.item.ItemForm;
+import com.yonamz.aucsusu.item.ItemService;
 import com.yonamz.aucsusu.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -8,16 +12,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
 public class IndexController {
 
     private final HttpSession httpSession;
+    private final ItemService itemService;
+    private final FilesService filesService;
 
     @RequestMapping(value = "/")
     public String index(Model model){
         User user = (User)httpSession.getAttribute("user");
+
+            List<ItemForm> items = itemService.getItemList();
+            List<Files> files = filesService.getFilesList();
+            model.addAttribute("items", items);
+
+
         if(user!=null){
             model.addAttribute("user",user);
         }

@@ -57,6 +57,20 @@
 
         #dropdown:hover #dropbtn {background-color: #3e8e41;}
 
+        .list_detail {
+          display: inline-block;
+          width: 220px;
+          height: 260px;
+          padding-top: 8px;
+          margin-bottom: 5px;
+          margin : 50px;
+        }
+
+        .list_start {
+          text-align: center;
+        }
+
+
     </style>
 </head>
 
@@ -113,6 +127,46 @@
     </form>
   </div>
 </nav>
+
+
+
+<div class="list_start" th:if="${items}!=null">
+  <div class="list_detail" th:each="item : ${items}">
+      <!--상품 이미지-->
+      <a th:href="@{'/items/'+${item.item_no}}" th:onclick="|javascript:return report('${item.report}')|">
+        <div th:if="${item.fileName}">
+          <img th:src="@{'/images/'+${item.fileName}}" style="width: 150px; height:150px;" />
+        </div>
+        <div th:unless="${item.fileName}">
+          <img th:src="@{'/images/noImage.jpg'}" style="width: 150px; height:150px;" />
+        </div>
+      </a>
+  <!--상품명-->
+      <div>
+        <a th:href="@{'/items/'+${item.item_no}}" th:onclick="|javascript:return report('${item.report}')|">
+          <div th:if="${item.soldOut==true}">
+            <span th:text="${item.title + '[판매완료]'}"></span>
+          </div>
+          <div th:if="${item.soldOut==false}">
+            <span th:text="${item.title}"></span>
+          </div>
+        </a>
+      </div>
+  <!--시작가-->
+      <div>
+        시작가  <span th:text="${#numbers.formatInteger(item.starting_bid, 0, 'COMMA')}"></span>원
+      </div>
+  <!--현재가-->
+      <div>
+        현재가  <strong><span th:text="${#numbers.formatInteger(item.winning_bid, 0, 'COMMA')}"></span></strong>원
+      </div>
+  <!--마감기한-->
+      <div>
+        마감기한  <span th:text="${item.deadline}"></span>
+      </div>
+
+  </div>
+</div>
 
 
 <script>

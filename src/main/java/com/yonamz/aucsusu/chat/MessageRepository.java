@@ -26,10 +26,20 @@ public interface MessageRepository extends JpaRepository<Message,String> {
     @Query("select m from Message m where user2=:uid")
     List<Message> findRoomByUid2(@Param("uid") String uid);
 
-    @Query("update Message m set deleted=true where user1=:uid or user2=:uid")
+    @Query("update Message m set m.deleted=true where user1=:uid or user2=:uid")
     @Transactional
     @Modifying
     void deletedChat(@Param("uid") String uid);
+
+    @Query("update Message m set m.notify=true where roomId=:roomId")
+    @Transactional
+    @Modifying
+    void enterChat(@Param("roomId") String roomId);
+
+    @Query("update Message m set m.notify=false where roomId=:roomId")
+    @Transactional
+    @Modifying
+    void exitChat(@Param("roomId") String roomId);
 
     Message findByRoomId(@Param("roomId") String roomId);
 }

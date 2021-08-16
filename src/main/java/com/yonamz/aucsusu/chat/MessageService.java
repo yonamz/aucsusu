@@ -51,4 +51,14 @@ public class MessageService {
     public Message findByRoomId(String roomId){
         return messageRepository.findByRoomId(roomId);
     }
+
+    @Transactional
+    public void enterChat(String roomId){
+        messageRepository.enterChat(roomId);
+    }
+
+    @Transactional
+    public void exitChat(String roomId){
+        messageRepository.exitChat(roomId);
+    }
 }

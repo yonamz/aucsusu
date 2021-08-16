@@ -12,15 +12,17 @@
         $(this).css("background-color", "white");
       });
     });
+
+
   </script>
 
   <style>
-    .sortBtn{
+    #sortBtn{
       float:right;
       margin-right:15%;
       margin-bottom:20px;
     }
-    .categoryBtn{
+    #categoryBtn{
       margin-bottom:5%;
     }
 
@@ -37,6 +39,15 @@
       margin-bottom: 5px;
     }
 
+    .paging-div {
+     padding: 15px 0 5px 10px;
+     display: table;
+     margin-left: auto;
+     margin-right: auto;
+     text-align: center;
+      }
+
+
   </style>
 </head>
 
@@ -44,7 +55,7 @@
 <body>
 <div th:replace="/fragments/subLogo.html :: fragment-nav"></div>
 
-<div class="categoryBtn" style="text-align: center">
+<div id="categoryBtn" style="text-align: center">
   <button class="btn btn-outline-warning"><a th:href="@{/items}">전체</a></button>
   <button class="btn btn-outline-warning" id="digital"><a th:href="@{/items/digital}">디지털 기기</a></button>
   <button class="btn btn-outline-warning" id="appliance"><a th:href="@{/items/appliance}">가전 제품</a></button>
@@ -52,7 +63,7 @@
   <button class="btn btn-outline-warning" id="book"><a th:href="@{/items/book}">도서</a></button>
   <button class="btn btn-outline-warning" id="etc"><a th:href="@{/items/etc}">기타 물품</a></button>
 </div>
-<div class="sortBtn">
+<div id="sortBtn">
   <button class="btn btn-outline-warning"><a href="/items/latest">최신순</a></button>
   <button class="btn btn-outline-warning"><a href="/items/orderByView">조회순</a></button>
   <button class="btn btn-outline-warning"><a href="/items/orderByDeadline">마감임박순</a></button>
@@ -68,12 +79,15 @@
   <div class="list_start">
     <div class="list_detail" th:each="item : ${items}">
 
-      <!--탈퇴한 사용자가 올린 상품-->
+      <!--탈퇴하지 않은 사용자가 올린 상품
+        탈퇴 시 deleted값 true
+      -->
       <span th:unless="${item.deleted}">
       <!--상품 이미지-->
+
       <a th:href="@{'/items/'+${item.item_no}}" th:onclick="|javascript:return report('${item.report}')|">
         <div th:if="${item.fileName}">
-          <img th:src="@{'/images/'}+${item.fileName}" style="width: 150px; height:150px;" />
+          <img th:src="@{'/images/'+${item.fileName}}" style="width: 150px; height:150px;" />
         </div>
         <div th:unless="${item.fileName}">
           <img th:src="@{'/images/noImage.jpg'}" style="width: 150px; height:150px;" />
@@ -104,10 +118,13 @@
       </div>
       </span>
 
-      <!--탈퇴하지 않은 사용자가 올린 상품-->
+
+
+      <!--탈퇴한 사용자가 올린 상품-->
       <span th:if="${item.deleted}">
         <div th:if="${item.fileName}">
-          <img th:src="@{'/images/'}+${item.fileName}" style="width: 150px; height:150px;" />
+          <!--<img src="'/images/'+[[${item.fileName}]]" style="width: 50px; height:50px;" />-->
+          <!--<img th:src="@{'/images/'}+${item.fileName}" style="width: 150px; height:150px;" />-->
         </div>
         <div th:unless="${item.fileName}">
           <img th:src="@{'/images/noImage.jpg'}" style="width: 150px; height:150px;" />
@@ -141,17 +158,25 @@
   </div>
 
   <div th:if="${searchMode!=true}">
+    <ul class="pagination justify-content-center">
     <span th:each="pageNum : ${pageList}" th:inline="text">
-      <a th:href="@{'/items/?page='+${pageNum}}">[[${pageNum}]]</a>
+      <span th:if="${pageNum!=null}">
+        <li class="page-item"><a class="page-link" th:href="@{'/items/?page='+${pageNum}}">[[${pageNum}]]</a></li>
+      </span>
     </span>
+    </ul>
   </div>
   <div th:if="${searchMode==true}">
-    <span th:each="pageNum : ${pageList}" th:inline="text">
-      <a th:href="@{'/items/search/?page='+${pageNum}+'&keyword='+${keyword}+'&search_category='+${category}}">[[${pageNum}]]</a>
-    </span>
+    <ul class="pagination justify-content-center">
+      <span th:each="pageNum : ${pageList}" th:inline="text">
+        <span th:if="${pageNum!=null}">
+          <li class="page-item"><a class="page-link" th:href="@{'/items/search/?page='+${pageNum}+'&keyword='+${keyword}+'&search_category='+${category}}">[[${pageNum}]]</a></li>
+        </span>
+        </span>
+    </ul>
   </div>
-</div>
-</div>
+
+
 
 <script>
   function report(reportNum){
@@ -172,6 +197,6 @@
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
         crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="/js/app/item.js"></script>
+
 </body>
 </html>

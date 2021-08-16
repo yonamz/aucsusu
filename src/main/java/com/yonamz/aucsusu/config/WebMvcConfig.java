@@ -2,6 +2,7 @@ package com.yonamz.aucsusu.config;
 
 import com.yonamz.aucsusu.user.LoginIntercepter;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.CacheControl;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -12,10 +13,6 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    private static final String[] RESOURCE_LOCATIONS = {
-            "classpath:/static/"
-    };
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         LoginIntercepter loginIntercepter = new LoginIntercepter();
@@ -25,12 +22,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry
-                .addResourceHandler("/**")
-                .addResourceLocations(RESOURCE_LOCATIONS)
-                .setCachePeriod(3600)
-                .resourceChain(true)
-                .addResolver(new PathResourceResolver());
+    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**")
+                .addResourceLocations("file:src/main/resources/templates/", "file:src/main/resources/static/","classpath:/templates/","classpath:/static/");
     }
+
 }

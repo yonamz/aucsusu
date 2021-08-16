@@ -1,9 +1,11 @@
 package com.yonamz.aucsusu.chat;
 
+import com.yonamz.aucsusu.item.ItemRepository;
 import com.yonamz.aucsusu.user.User;
 import com.yonamz.aucsusu.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,11 +32,13 @@ public class RoomController {
     private final ChatRoomRepository repository;
     private final MessageService messageService;
     private final UserRepository userRepository;
+    private final ResourceLoader resourceLoader;
 
 
     @GetMapping("/room")
     public String create(RedirectAttributes rttr,
                          @RequestParam(value = "writer") String writer,
+                         @RequestParam(value="itemNo") Long item_no,
                          Model model, HttpServletRequest rq) throws IOException {
         HttpSession session  = rq.getSession();
         User user1 = (User)session.getAttribute("user");    //user1 = 내 계정
@@ -55,7 +59,7 @@ public class RoomController {
             session.setAttribute(roomId,roomId);
             rttr.addFlashAttribute("roomName", repository.createChatRoomDTO(writer,roomId));
             String name = writer+"와 "+user1.getUid()+"의 채팅";
-            msg = new Message(roomId,name,user1.getUid(),user2.getUid());
+            msg = new Message(roomId,name,user1.getUid(),user2.getUid(),false);
             messageService.save(msg);
             System.err.println(roomId);
         }else{
@@ -77,10 +81,10 @@ public class RoomController {
             }
         }
 
-        boolean isExist=Files.exists(Path.of("~/spring/aucsusu/src/main/resources/static/chat/"+roomId+".txt"));
+        boolean isExist=Files.exists(Path.of(String.valueOf(resourceLoader.getResource("classpath:/src/main/resource/static/chat/" + roomId + ".txt"))));
         if(isExist==true) {
 
-            long lineCount = Files.lines(Path.of("~/spring/aucsusu/src/main/resources/static/chat/"+roomId+".txt")).count();
+            long lineCount = Files.lines(Path.of(String.valueOf(resourceLoader.getResource("classpath:/src/main/resource/static/chat/" + roomId + ".txt")))).count();
 
             System.err.println("user : " + user1);
 
@@ -121,6 +125,8 @@ public class RoomController {
         String writer;
         User user2;
 
+        messageService.exitChat(roomId);
+
         if(msg.getUser1()==sessionUser.getUid()) {
             writer = msg.getUser2();
             user2 = sessionUser;
@@ -131,10 +137,10 @@ public class RoomController {
             user2 = userRepository.findByUid(writer);
         }
 
-        boolean isExist=Files.exists(Path.of("~/spring/aucsusu/src/main/resources/static/chat/"+roomId+".txt"));
+        boolean isExist=Files.exists(Path.of(String.valueOf(resourceLoader.getResource("classpath:/src/main/resource/static/chat/" + roomId + ".txt"))));
         if(isExist==true) {
 
-            long lineCount = Files.lines(Path.of("~/spring/aucsusu/src/main/resources/static/chat/"+roomId+".txt")).count();
+            long lineCount = Files.lines(Path.of(String.valueOf(resourceLoader.getResource("classpath:/src/main/resource/static/chat/" + roomId + ".txt")))).count();
 
             System.err.println("user : " + user1);
 
@@ -144,9 +150,11 @@ public class RoomController {
             for (int i = 0; i < lineCount; i++) {
                 String totalMsg = readFile(roomId)[i];
                 String storedUser = totalMsg.split(":")[0];
-
-                message[i] = totalMsg.split(":")[1];
                 auser[i] = storedUser;
+
+                System.err.println("auser : "+auser[i]);
+                message[i] = totalMsg.split(":")[1];
+
 
             }
             model.addAttribute("message", message);
@@ -177,11 +185,11 @@ public class RoomController {
     }
 
     private String[] readFile(String roomId) throws IOException {
-        File file = new File("~/spring/aucsusu/src/main/resources/static/chat/"+roomId+".txt");
+        File file = new File(String.valueOf(resourceLoader.getResource("classpath:/src/main/resource/static/chat/"+roomId+".txt")));
         FileReader fileReader = new FileReader(file);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-        String rLine[] = new String[bufferedReader.read()];
+        String rLine[] = new String[9999999];
 
         int count=0;
         String line="";
@@ -189,6 +197,7 @@ public class RoomController {
             rLine[count] = line;
             count++;
         }
+
 
         return rLine;
 

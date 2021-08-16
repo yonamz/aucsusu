@@ -36,6 +36,48 @@ public class ItemService {
     }
 
     @Transactional
+    public List<ItemForm> getItemList(){
+
+        List<Item> items = itemRepository.findNotDeleted();
+        List<ItemForm> itemForms = new ArrayList<>();
+        System.err.println("item size : "+items.size());
+        int count=0;
+
+        if(items.size()>=8){
+            count=8;
+        }else if(items.size()<8){
+            count=items.size();
+        }
+
+
+                for (int i = 0; i < count; i++) {
+                    Item item = items.get(i);
+                    ItemForm itemForm = ItemForm.builder()
+                            .item_no(item.getItem_no())
+                            .title(item.getTitle())
+                            .content(item.getContent())
+                            .writer(item.getWriter())
+                            .deadline(item.getDeadline())
+                            .starting_bid(item.getStarting_bid())
+                            .winning_bid(item.getWinning_bid())
+                            .bidder(item.getBidder())
+                            .soldOut(item.isSoldOut())
+                            .reg_date(item.getReg_date())
+                            .fileName(item.getFileName())
+                            .cnt(item.getCnt())
+                            .category(item.getCategory())
+                            .report(item.getReport())
+                            .build();
+
+                    itemForms.add(itemForm);
+                }
+
+        return itemForms;
+
+
+    }
+
+    @Transactional
     public List<ItemForm> getItemList(Integer pageNum){
 
         Page<Item> page = itemRepository.findAll(PageRequest.of(pageNum-1,PAGE_POST_COUNT));
@@ -60,7 +102,7 @@ public class ItemService {
                     .cnt(item.getCnt())
                     .category(item.getCategory())
                     .report(item.getReport())
-                    .deleted(item.isDeleted())
+
                     .build();
 
             itemForms.add(itemForm);
@@ -313,7 +355,7 @@ public class ItemService {
                 .cnt(item.getCnt())
                 .category(item.getCategory())
                 .report(item.getReport())
-                .deleted(item.isDeleted())
+
                 .build();
     }
 

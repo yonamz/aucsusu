@@ -4,12 +4,12 @@
   <div th:replace="/fragments/header.html :: fragment-header"></div>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <style>
-    .sortBtn{
+    #sortBtn{
       float:right;
       margin-right:15%;
       margin-bottom:20px;
     }
-    .categoryBtn{
+    #categoryBtn{
       margin-bottom:5%;
     }
   </style>
@@ -19,15 +19,15 @@
 <body>
 <div th:replace="/fragments/subLogo.html :: fragment-nav"></div>
 
-<div class="categoryBtn">
-  <button class="btn btn-outline-warning"><a th:href="@{/items}">전체</a></button>
-  <button class="btn btn-outline-warning" id="digital"><a th:href="@{/items/digital}">디지털 기기</a></button>
-  <button class="btn btn-outline-warning" id="appliance"><a th:href="@{/items/appliance}">가전 제품</a></button>
-  <button class="btn btn-outline-warning" id="clothing"><a th:href="@{/items/clothing}">의류</a></button>
-  <button class="btn btn-outline-warning" id="book"><a th:href="@{/items/book}">도서</a></button>
-  <button class="btn btn-outline-warning" id="etc"><a th:href="@{/items/etc}">기타 물품</a></button>
+<div id="categoryBtn">
+  <button class="btn-warning"><a th:href="@{/items}">전체</a></button>
+  <button class="btn-warning" id="digital">디지털 기기</button>
+  <button class="btn-warning" id="appliance">가전 제품</button>
+  <button class="btn-warning" id="clothing">의류</button>
+  <button class="btn-warning" id="book">도서</button>
+  <button class="btn-warning" id="etc">기타 물품</button>
 </div>
-<div class="sortBtn">
+<div id="sortBtn">
   <button class="btn btn-outline-warning"><a href="/items/latest">최신순</a></button>
   <button class="btn btn-outline-warning"><a href="/items/orderByView">조회순</a></button>
   <button class="btn btn-outline-warning"><a href="/items/orderByDeadline">마감임박순</a></button>
@@ -52,8 +52,9 @@
     <tbody>
     <tr th:each="item : ${items}">
       <td th:text="${item.item_no}"></td>
+      [[${item.fileName}]]
       <td th:if="${item.fileName}">
-        <img th:src="@{'/images/'}+${item.fileName}" style="width: 50px; height:50px;" />
+        <img th:src="@{'/images/'+${item.fileName}}" style="width: 50px; height:50px;" />
       </td>
       <td th:unless="${item.fileName}">
         <img th:src="@{'/images/noImage.jpg'}" style="width: 50px; height:50px;" />

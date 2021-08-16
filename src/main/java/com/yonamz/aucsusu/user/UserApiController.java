@@ -23,6 +23,11 @@ public class UserApiController {
         return userService.saveCheck(uid);
     }
 
+    @GetMapping(value = "/exists/{email}")
+    public boolean checkEmail(@PathVariable String email){
+        return userService.checkEmail(email);
+    }
+
     @PostMapping(value = "/update/{uid}")
     public String update(@PathVariable String uid, @RequestBody UserUpdateDto updateDto){
         userService.update(uid, updateDto);

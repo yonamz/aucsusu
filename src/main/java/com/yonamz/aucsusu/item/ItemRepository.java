@@ -47,6 +47,10 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     @Query("select i from Item i where category=:category")
     List<Item> findByCategory(@Param("category")String category);
 
+    @Transactional
+    @Query("select i from Item i order by item_no desc")
+    List<Item> findNotDeleted();
+
     List<Item> findByWriterContaining(@Param("keyword")String keyword);
     List<Item> findByTitleContaining(@Param("keyword")String keyword);
 

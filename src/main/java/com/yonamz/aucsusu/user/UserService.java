@@ -54,4 +54,8 @@ public class UserService {
     public int getUserReportNum(String uid) {
         return userRepository.getUserReportNum(uid);
     }
+
+    public boolean checkEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
 }
