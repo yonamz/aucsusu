@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <div th:replace="/fragments/header.html :: fragment-header"></div>
+  <div th:replace="fragments/header.html :: fragment-header"></div>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script>
     $(document).ready(function() {
@@ -53,7 +53,7 @@
 
 
 <body>
-<div th:replace="/fragments/subLogo.html :: fragment-nav"></div>
+<div th:replace="fragments/subLogo.html :: fragment-nav"></div>
 
 <div id="categoryBtn" style="text-align: center">
   <button class="btn btn-outline-warning"><a th:href="@{/items}">전체</a></button>
