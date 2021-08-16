@@ -12,9 +12,6 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    private static final String[] RESOURCE_LOCATIONS = {
-            "classpath:/static/"
-    };
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -28,9 +25,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
                 .addResourceHandler("/**")
-                .addResourceLocations(RESOURCE_LOCATIONS)
-                .setCachePeriod(3600)
-                .resourceChain(true)
-                .addResolver(new PathResourceResolver());
+                .addResourceLocations("classpath:/templates/", "classpath:/static/","file:/root/spring/aucsusu/src/main/resources/templates/", "file:/root/spring/aucsusu/src/main/resources/static/");
     }
 }
