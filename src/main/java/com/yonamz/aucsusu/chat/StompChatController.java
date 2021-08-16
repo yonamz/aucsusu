@@ -39,7 +39,7 @@ public class StompChatController {
         String msg = message;
 
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(String.valueOf(resourceLoader.getResource("classpath:chat/"+roomId+".txt")), true), "UTF-8"))) {
+                new FileOutputStream("classpath:chat/"+roomId+".txt", true), "UTF-8"))) {
             if(!msg.isBlank()) {//공백 입력시 채팅 이력에 저장되지 않게 함
                 writer.write(user + ":" + msg);
                 writer.newLine();
@@ -52,5 +52,4 @@ public class StompChatController {
 
     }
 }
-
 
