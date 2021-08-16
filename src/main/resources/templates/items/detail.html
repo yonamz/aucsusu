@@ -230,7 +230,7 @@
 
       <!--삭제 버튼 form에서 hidden의 delete 인식하지 못해서 잠시 지웠음-->
       <form id="delete-form" th:action="@{'/items/' + ${itemForm.item_no}}" method="post">
-      <!--<input type="hidden" name="_method" value="delete" />-->
+        <input type="hidden" name="_method" value="delete" />
         <button class="btn btn-outline-warning" id="delete-btn">삭제</button>
       </form>
     </div>
