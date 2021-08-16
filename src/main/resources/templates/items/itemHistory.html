@@ -2,7 +2,7 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-  <div th:replace="/fragments/header.html :: fragment-header"></div>
+  <div th:replace="fragments/header.html :: fragment-header"></div>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script type="text/javascript">
         $(document).ready(function (){
@@ -21,7 +21,7 @@
 </head>
 
 <body>
-<div th:replace="/fragments/subLogo.html :: fragment-nav"></div>
+<div th:replace="fragments/subLogo.html :: fragment-nav"></div>
 <div class="container">
   <h2><p th:text="${seller}+'의 경매 등록 내역'"></p></h2>
   <div th:if="${userReportNum >= 2}">
