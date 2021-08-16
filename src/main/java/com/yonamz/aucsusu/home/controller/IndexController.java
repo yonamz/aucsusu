@@ -54,10 +54,10 @@ public class IndexController {
         return "user/delete-user";
     }
 
-    @GetMapping("/faq")
+    /* @GetMapping("/faq")
     public String faq(){
         return "faq";
-    }
+    }*/ 
 
     @GetMapping("/chat/go")
     public String goChat(){
