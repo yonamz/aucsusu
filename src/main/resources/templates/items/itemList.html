@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <div th:replace="/fragments/header.html :: fragment-header"></div>
+  <div th:replace="fragments/header.html :: fragment-header"></div>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <style>
     #sortBtn{
@@ -17,7 +17,7 @@
 
 
 <body>
-<div th:replace="/fragments/subLogo.html :: fragment-nav"></div>
+<div th:replace="fragments/subLogo.html :: fragment-nav"></div>
 
 <div id="categoryBtn">
   <button class="btn-warning"><a th:href="@{/items}">전체</a></button>
