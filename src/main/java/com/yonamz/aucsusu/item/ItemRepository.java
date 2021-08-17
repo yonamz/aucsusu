@@ -57,7 +57,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     @Query("select i from Item i order by i.reg_date desc")
     List<Item> findAllDesc();
 
-    @Query(value = "update Item i set deleted=true where writer=:uid", nativeQuery = true)
+    @Query(value = "update item i set deleted=true where writer=:uid", nativeQuery = true)
     @Modifying
     @Transactional
     void deletedUser(@Param("uid") String uid);
