@@ -15,8 +15,9 @@ Issues 참고
 (쿠버네티스 성공하면 나중에 추가)
 
 ### 접속 방법
-www.aucsusu.kro.kr
-<br>
+http://www.aucsusu.kro.kr
+<br>또는<br>
+http://110.165.17.34/
 
 <br>
 네이버 클라우드 플랫폼의 Global DNS 활용(2021년 8월 말 만료예정)
