@@ -9,7 +9,9 @@
 
 ### 프로젝트 설명
 네이버 클라우드, 스프링부트와 JPA로 개발한 컨테이너 기반의 경매 방식의 중고 거래 사이트
-
+<img src= "https://user-images.githubusercontent.com/58590696/129670438-63aa724b-479b-4640-b9ee-2ebb6cc2fbeb.JPG" width="80%" height="80%">
+<br>                                                                                                                                  
+                                                                                                 
 ### 프로젝트 실행
 Issues - 네이버 클라우드 플랫폼 서버 연결 참고
 
