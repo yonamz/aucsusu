@@ -28,6 +28,6 @@ public class BiddingHistoryController {
         model.addAttribute("user", uid);
         model.addAttribute("items", biddingHistory); //from item table
         model.addAttribute("biddings", biddingPrice); //from bidding table
-        return "/items/biddingHistory";
+        return "items/biddingHistory";
     }
 }
